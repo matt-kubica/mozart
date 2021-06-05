@@ -1,0 +1,10 @@
+
+# macOS
+.DS_Store
+
+# lex, yacc
+lex.yy.c
+y.output
+y.tab.c
+y.tab.h
+
