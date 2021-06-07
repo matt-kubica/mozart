@@ -51,6 +51,12 @@
         }
     }
 
+    Node* construct(char* id, Node* node){
+        node->id = id;
+        node->next = NULL;
+        return node;
+    }
+
     Node *constructInteger(const char *id, int value) {
         Node * node = (Node *) malloc(sizeof(Node));
         node -> id = id;

@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h> 
 #include <string.h>
+#include "y.tab.h"
 
 /* helper function */
 bool convertToBoolean(const char *str) {
@@ -20,10 +21,10 @@ bool convertToBoolean(const char *str) {
 DIGIT 		[0-9]
 INTEGER 	{DIGIT}*
 FLOAT 		{INTEGER}\.?{DIGIT}+
-ID 			[A-Za-z][A-Za-z{DIGIT}]*
 STRING 		\"(\\.|[^"\\])*\"
 BOOLEAN 	(tune|outOfTune)
 LOOP 		\*{INTEGER}|{ID}\:\|  
+ID 			[A-Za-z][A-Za-z{DIGIT}]*
 
 
 /* Rules Section*/
@@ -44,11 +45,11 @@ stop 		{ return ENDOFSCOPE; }
 \. 			{ return ENDOFSTMT; }
 
  /* types */
-integer 	{ return INTTYPE; }
-float 		{ return FLOATTYPE; }
-boolean 	{ return BOOLEANTYPE; }
-string 		{ return STRINGTYPE; }
-scale 		{ return SCALETYPE; }
+integer 	{ return INTKEYWORD; }
+float 		{ return FLOATKEYWORD; }
+boolean 	{ return BOOLEANKEYWORD; }
+string 		{ return STRINGKEYWORD; }
+scale 		{ return SCALEKEYWORD; }
 
  /* arithmetic operators */
 \+ 			{ return PLUS; }
@@ -77,11 +78,12 @@ chord 		{ return FUNCTIONDECL; }
 \# 			{ return RETURNSTMT; }
 
  /* literals */
+
+{INTEGER} 	{ yylval.NODE.value.i = atoi(yytext); yylval.NODE.type = INTEGER;  return INTEGERTYPE; }  
+{FLOAT} 	{ yylval.NODE.value.f = atof(yytext); yylval.NODE.type = FLOAT; return FLOATTYPE; }
+{BOOLEAN}	{ yylval.NODE.value.b = convertToBoolean(yytext); yylval.NODE.type = BOOLEAN; return BOOLEANTYPE; }
+{STRING} 	{yylval.NODE.value.s = strdup(yytext); yylval.NODE.type = STRING; return STRINGTYPE; }
 {ID} 		{ yylval.LEXEME = strdup(yytext); return ID; }
-{INTEGER} 	{ yylval.VALUE.i = atoi(yytext); return INTEGER; }  
-{FLOAT} 	{ yylval.VALUE.f = atof(yytext); return FLOAT; }
-{BOOLEAN}	{ yylval.VALUE.b = convertToBoolean(yytext); return BOOLEAN; }
-{STRING} 	{ yylval.VALUE.s = strdup(yytext); return STRING; }
 %%
 
 int yywrap() { return(1); }

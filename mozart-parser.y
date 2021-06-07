@@ -5,7 +5,15 @@
 #include <ctype.h>
 #include <stdbool.h>
 
-
+char * stringConcat(char * str1, char * str2);
+Node* trueVal();
+Node* falseVal();
+Node* greater(Node* node1, Node* node2);
+Node* add(Node* node1, Node* node2);
+Node* subtract(Node* node1, Node* node2);
+Node* multiply(Node* node1, Node* node2);
+Node* divide(Node* node1, Node* node2);
+void yyerror(char * s);
 %}
 
 %token VAR
@@ -45,26 +53,26 @@
 %token FALSEVAL
 
 
-%token INTTYPE
-%token FLOATTYPE
-%token BOOLEANTYPE
-%token STRINGTYPE
-%token SCALETYPE
+%token INTKEYWORD
+%token FLOATKEYWORD
+%token BOOLEANKEYWORD
+%token STRINGKEYWORD
+%token SCALEKEYWORD
 
 %token FUNCTIONDECL
 %token RETURNSTMT
 
 %union{
     char* LEXEME;
-    Value VALUE;
+    Node* NODE;
     // struct Node* LINKTOSYM;
 }
 
 %token <LEXEME> ID 
-%token <VALUE> INTEGER, FLOAT, BOOLEAN, STRING
+%token <NODE> INTEGERTYPE FLOATTYPE BOOLEANTYPE STRINGTYPE
 
-%type <VALUE> EXPR
-%type <VALUE> VARDECL
+%type <NODE> EXPR
+%type <NODE> LOGICEXPR 
 %start LINE;
 
 
@@ -73,46 +81,44 @@ LINE    :
         | LINE VARDECL ENDOFSTMT                    { ; }
         | LINE EXPR ENDOFSTMT
         | LINE LOOPSTMT ENDOFSTMT
-        | LINE LOGICEXPR
-        | LINE IFSTMT
-        | LINE FUNCTION
+        | LINE LOGICEXPR ENDOFSTMT
+        | LINE IFSTMT ENDOFSTMT
+        | LINE FUNCTION ENDOFSTMT
 
-VARDECL : VAR ID COLON INTTYPE ASSIGNMENT EXPR      { insert(constructInteger($2, $6)); }
-        | VAR ID COLON FLOATTYPE ASSIGNMENT EXPR    { insert(constructFloat($2, $6)); }
-        | VAR ID COLON BOOLEANTYPE ASSIGNMENT EXPR  { insert(constructBoolean($2, $6)); }
-        | VAR ID COLON STRINGTYPE ASSIGNMENT EXPR   { insert(constructString($2, $6)); }
+VARDECL : VAR ID COLON INTKEYWORD ASSIGNMENT EXPR      { insert(construct($2, $6)); /*TODO type checking in construction*/}
+        | VAR ID COLON FLOATKEYWORD ASSIGNMENT EXPR    { insert(construct($2, $6)); }
+        | VAR ID COLON BOOLEANKEYWORD ASSIGNMENT EXPR  { insert(construct($2, $6)); }
+        | VAR ID COLON STRINGKEYWORD ASSIGNMENT EXPR   { insert(construct($2, $6)); }
 
-LOOPSTMT :  INTEGER PER LOOP START LINE END         { /*insert number of times loop get executed into symbolTable*/;} 
-           |ID PER LOOP START LINE END
+LOOPSTMT :  INTEGERTYPE PER LOOP START LINE END         { /*insert number of times loop get executed into symbolTable*/;} 
+           |ID PER LOOP START LINE END 
 
-IFSTMT : IF LPARENTHESIS LOGICEXPR RPARENTHESIS START LINE ELSE LINE END    {/*line should execute only if LOGICEXPR is true, so attribute of ifstmt should be setted from $6 if LOGICEXPR is true, otherwise from $8*/}
-        |IF LPARENTHESIS LOGICEXPR RPARENTHESIS START LINE END
+IFSTMT : IF LPARENTHESIS LOGICEXPR RPARENTHESIS START LINE ELSE LINE END    {}
+        |IF LPARENTHESIS LOGICEXPR RPARENTHESIS START LINE END         
 
 FUNCTION : FUNCTIONDECL LPARENTHESIS VARDECL RPARENTHESIS START LINE END    {/*should all be stored in symbolTable and be made accessible to the rest of the program to execute*/;} 
+           |FUNCTIONDECL LPARENTHESIS RPARENTHESIS START LINE END
 
 LOGICEXPR : 
-            TRUEVAL                                 {/*the most basic LOGICEXPRs are TRUEVAL and FALSEVAL*/}
-           |FALSEVAL
-           |EXPR GREATER EXPR                       { /*expression compared to other expression, return type boolean*/}
-           |EXPR GREATEREQUAL EXPR
-           |EXPR LOWER EXPR
-           |EXPR LOWEREQUAL EXPR
-           |EXPR EQUAL EXPR
-           |EXPR NOTEQUAL EXPR
-           |NOT LOGICEXPR                           {/*not , or , and are called on LOGICEXPR itself, for example NOT 5=5 should return false*/}
-           |OR LOGICEXPR
-           |AND LOGICEXPR                       
+            TRUEVAL                                 { $$ = trueVal()}
+           |FALSEVAL                                { $$ = falseVal()}
+           |EXPR GREATER EXPR                       { $$ = greater($1, $3)}
+ 
            
 
-EXPR    : EXPR PLUS EXPR                            { $$ = $1 + $3; }
-        | EXPR MINUS EXPR                           { $$ = $1 - $3; }
-        | EXPR PER EXPR                             { $$ = $1 * $3; }
-        | EXPR DIV EXPR                             { $$ = $1 / $3; }
-        | EXPR MOD EXPR                             { $$ = $1- (($1 / $3)* $3); }
-        | LPARENTHESIS EXPR RPARENTHESIS            { $$ = $2; }
-        | TYPEVAL                                   { $$ = $1; }
+EXPR    : EXPR PLUS EXPR                            { $$ = add($1, $3); }
+        | EXPR MINUS EXPR                           {  }
+        | EXPR PER EXPR                             {  }
+        | EXPR DIV EXPR                             {  }
+        | EXPR MOD EXPR                             { }
+        | LPARENTHESIS EXPR RPARENTHESIS            {}
+        | TYPEVAL                                   {  }
+        | ID                                        {}
 
-TYPEVAL : INTEGER|FLOAT|BOOLEAN|STRING
+TYPEVAL : INTEGERTYPE                                   {}
+          |FLOATTYPE
+          |BOOLEANTYPE
+          |STRINGTYPE
 
 
 
@@ -122,16 +128,136 @@ TYPEVAL : INTEGER|FLOAT|BOOLEAN|STRING
               
 %%
 
+char * stringConcat(char * str1, char * str2){
+        char newString[strlen(str1) + strlen(str2) + 1];
+        strcpy(newString, str1);
+        strcpy(newString, str2);
+        return strdup(newString);
+}
+
+Node* trueVal(){
+        Node* result =(Node *) malloc(sizeof(Node));
+        result->type = BOOLEAN;
+        result->value.b = true;
+        return result;
+}
+Node* falseVal(){
+        Node* result =(Node *) malloc(sizeof(Node));
+        result->type = BOOLEAN;
+        result->value.b = false;
+        return result;
+}
+
+Node* greater(Node* node1, Node* node2){
+        if (node1->type != node2->type) 
+                yyerror("incompatibile");
+        else{
+                Node* result =(Node *) malloc(sizeof(Node));
+                result->type = BOOLEAN;
+                switch(node1->type){
+                        case INTEGER : result->value.b = node1->value.i > node2->value.i;
+                                       return result; 
+                        case FLOAT   : result->value.b = node1->value.f > node2->value.f;
+                                        return result;
+                        case BOOLEAN : yyerror("operator not supported.");
+                                        break;
+                        case STRING  : result->value.b = strlen(node1->value.s) > strlen(node2->value.s);
+                                        return result;
+                }
+        }
+}
+
+Node* add(Node* node1, Node* node2){
+
+        if (node1->type != node2->type) 
+                yyerror("incompatibile");
+        else{
+                Node* result =(Node *) malloc(sizeof(Node));
+                switch(node1->type){
+                        case INTEGER : result->value.i = node1->value.i + node2->value.i; 
+                                       result->type = INTEGER;
+                                       return result;
+                        case FLOAT   : result->value.f = node1->value.f + node2->value.f;
+                                       result->type = FLOAT;
+                                       return result;
+                        case BOOLEAN : yyerror("operator not supported.");
+                                       break;
+                        case STRING  : result->value.s = stringConcat(node1->value.s, node2->value.s);
+                                       result->type = STRING;
+                                       return result;
+                }
+
+        }
+}
+/*
+Node* subtract(Node* node1, Node* node2){
+        if (node1.type != node2.type) 
+                yyerror("incompatibile");
+        else{
+                Node* result =(Node *) malloc(sizeof(Node));
+                switch(node1.type){
+                        case INTEGER : return node1.value.i - node2.value.i; 
+                                       break;
+                        case FLOAT   : return node1.value.f - node2.value.f;
+                                       break;
+                        case BOOLEAN : yyerror("operator not supported.");
+                                       break;
+                        case STRING  : yyerror("operator not supported.");
+                                       break;
+                }
+
+        }
+}
+
+Node* multiply(Node* node1, Node* node2){
+        if (node1.type != node2.type) 
+                yyerror("incompatibile");
+        else{
+                switch(node1.type){
+                        case INTEGER : return node1.value.i * node2.value.i; 
+                                       break;
+                        case FLOAT   : return node1.value.f * node2.value.f;
+                                       break;
+                        case BOOLEAN : yyerror("operator not supported.");
+                                       break;
+                        case STRING  : yyerror("operator not supported.");
+                                       break;
+                }
+
+        }
+}
+
+Node* divide(Node* node1, Node* node2){
+        if (node1.type != node2.type) 
+                yyerror("incompatibile");
+        if (node2.value == 0){
+                yyerror("division by 0 is not possible.");
+        }
+        else{
+                switch(node1.type){
+                        case INTEGER : return node1.value.i - node2.value.i; 
+                                       break;
+                        case FLOAT   : return node1.value.f - node2.value.f;
+                                       break;
+                        case BOOLEAN : yyerror("operator not supported.");
+                                       break;
+                        case STRING  : yyerror("operator not supported.");
+                                       break;
+                }
+
+        }
+}
+*/
 
 
 void yyerror(char * s) {  
     fprintf (stderr, "%s\n", s);
+    exit(1);
 }
   
 int main(void) {
     printf("enter whatever word to start: ");
     
-    yylex();
     return yyparse();
 }
 
