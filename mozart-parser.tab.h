@@ -44,11 +44,11 @@
      IF = 260,
      ELSE = 261,
      LOOP = 262,
-     START = 263,
-     END = 264,
+     STARTOFSCOPE = 263,
+     ENDOFSCOPE = 264,
      ASSIGNMENT = 265,
-     LPARENTHESIS = 266,
-     RPARENTHESIS = 267,
+     LPAREN = 266,
+     RPAREN = 267,
      ENDOFSTMT = 268,
      PLUS = 269,
      MINUS = 270,
@@ -88,16 +88,15 @@ typedef union YYSTYPE
 {
 
 /* Line 1676 of yacc.c  */
-#line 65 "mozart-parser.y"
+#line 68 "mozart-parser.y"
 
     char* LEXEME;
-    Node* NODE;
-    // struct Node* LINKTOSYM;
+    struct Node* NODE;
 
 
 
 /* Line 1676 of yacc.c  */
-#line 101 "mozart-parser.tab.h"
+#line 100 "mozart-parser.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

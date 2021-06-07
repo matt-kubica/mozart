@@ -1,6 +1,7 @@
 #ifndef SYMTAB
 #define SYMTAB
-
+#include structure.h;
+/*
     #include <stdio.h>
     #include <stdlib.h>
     #include <stdbool.h>
@@ -25,7 +26,7 @@
         Value value;
         Type type;
         struct Node* next;    
-    } Node; 
+    } Node; */
 
 
     Node * head = NULL;

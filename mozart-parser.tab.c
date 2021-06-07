@@ -76,6 +76,8 @@
 #include <ctype.h>
 #include <stdbool.h>
 
+extern int yylex();
+
 char * stringConcat(char * str1, char * str2);
 Node* trueVal();
 Node* falseVal();
@@ -88,7 +90,7 @@ void yyerror(char * s);
 
 
 /* Line 189 of yacc.c  */
-#line 92 "mozart-parser.tab.c"
+#line 94 "mozart-parser.tab.c"
 
 /* Enabling traces.  */
 #ifndef YYDEBUG
@@ -120,11 +122,11 @@ void yyerror(char * s);
      IF = 260,
      ELSE = 261,
      LOOP = 262,
-     START = 263,
-     END = 264,
+     STARTOFSCOPE = 263,
+     ENDOFSCOPE = 264,
      ASSIGNMENT = 265,
-     LPARENTHESIS = 266,
-     RPARENTHESIS = 267,
+     LPAREN = 266,
+     RPAREN = 267,
      ENDOFSTMT = 268,
      PLUS = 269,
      MINUS = 270,
@@ -164,16 +166,15 @@ typedef union YYSTYPE
 {
 
 /* Line 214 of yacc.c  */
-#line 65 "mozart-parser.y"
+#line 68 "mozart-parser.y"
 
     char* LEXEME;
-    Node* NODE;
-    // struct Node* LINKTOSYM;
+    struct Node* NODE;
 
 
 
 /* Line 214 of yacc.c  */
-#line 177 "mozart-parser.tab.c"
+#line 178 "mozart-parser.tab.c"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
@@ -185,7 +186,7 @@ typedef union YYSTYPE
 
 
 /* Line 264 of yacc.c  */
-#line 189 "mozart-parser.tab.c"
+#line 190 "mozart-parser.tab.c"
 
 #ifdef short
 # undef short
@@ -487,10 +488,10 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    80,    80,    81,    82,    83,    84,    85,    86,    88,
-      89,    90,    91,    93,    94,    96,    97,    99,   100,   103,
-     104,   105,   109,   110,   111,   112,   113,   114,   115,   116,
-     118,   119,   120,   121
+       0,    82,    82,    83,    84,    85,    86,    87,    88,    90,
+      91,    92,    93,    95,    96,    98,    99,   101,   102,   105,
+     106,   107,   111,   112,   113,   114,   115,   116,   117,   118,
+     120,   121,   122,   123
 };
 #endif
 
@@ -500,7 +501,7 @@ static const yytype_uint8 yyrline[] =
 static const char *const yytname[] =
 {
   "$end", "error", "$undefined", "VAR", "COLON", "IF", "ELSE", "LOOP",
-  "START", "END", "ASSIGNMENT", "LPARENTHESIS", "RPARENTHESIS",
+  "STARTOFSCOPE", "ENDOFSCOPE", "ASSIGNMENT", "LPAREN", "RPAREN",
   "ENDOFSTMT", "PLUS", "MINUS", "PER", "DIV", "MOD", "GREATEREQUAL",
   "LOWEREQUAL", "GREATER", "LOWER", "NOTEQUAL", "NOT", "EQUAL", "OR",
   "AND", "TRUEVAL", "FALSEVAL", "INTKEYWORD", "FLOATKEYWORD",
@@ -1467,147 +1468,147 @@ yyreduce:
         case 3:
 
 /* Line 1455 of yacc.c  */
-#line 81 "mozart-parser.y"
+#line 83 "mozart-parser.y"
     { ; ;}
     break;
 
   case 9:
 
 /* Line 1455 of yacc.c  */
-#line 88 "mozart-parser.y"
+#line 90 "mozart-parser.y"
     { insert(construct((yyvsp[(2) - (6)].LEXEME), (yyvsp[(6) - (6)].NODE))); /*TODO type checking in construction*/;}
     break;
 
   case 10:
 
 /* Line 1455 of yacc.c  */
-#line 89 "mozart-parser.y"
+#line 91 "mozart-parser.y"
     { insert(construct((yyvsp[(2) - (6)].LEXEME), (yyvsp[(6) - (6)].NODE))); ;}
     break;
 
   case 11:
 
 /* Line 1455 of yacc.c  */
-#line 90 "mozart-parser.y"
+#line 92 "mozart-parser.y"
     { insert(construct((yyvsp[(2) - (6)].LEXEME), (yyvsp[(6) - (6)].NODE))); ;}
     break;
 
   case 12:
 
 /* Line 1455 of yacc.c  */
-#line 91 "mozart-parser.y"
+#line 93 "mozart-parser.y"
     { insert(construct((yyvsp[(2) - (6)].LEXEME), (yyvsp[(6) - (6)].NODE))); ;}
     break;
 
   case 13:
 
 /* Line 1455 of yacc.c  */
-#line 93 "mozart-parser.y"
+#line 95 "mozart-parser.y"
     { /*insert number of times loop get executed into symbolTable*/;;}
     break;
 
   case 15:
 
 /* Line 1455 of yacc.c  */
-#line 96 "mozart-parser.y"
+#line 98 "mozart-parser.y"
     {;}
     break;
 
   case 17:
 
 /* Line 1455 of yacc.c  */
-#line 99 "mozart-parser.y"
+#line 101 "mozart-parser.y"
     {/*should all be stored in symbolTable and be made accessible to the rest of the program to execute*/;;}
     break;
 
   case 19:
 
 /* Line 1455 of yacc.c  */
-#line 103 "mozart-parser.y"
-    { (yyval.NODE) = trueVal();}
+#line 105 "mozart-parser.y"
+    { (yyval.NODE) = trueVal(); ;}
     break;
 
   case 20:
 
 /* Line 1455 of yacc.c  */
-#line 104 "mozart-parser.y"
-    { (yyval.NODE) = falseVal();}
+#line 106 "mozart-parser.y"
+    { (yyval.NODE) = falseVal(); ;}
     break;
 
   case 21:
 
 /* Line 1455 of yacc.c  */
-#line 105 "mozart-parser.y"
-    { (yyval.NODE) = greater((yyvsp[(1) - (3)].NODE), (yyvsp[(3) - (3)].NODE));}
+#line 107 "mozart-parser.y"
+    { (yyval.NODE) = greater((yyvsp[(1) - (3)].NODE), (yyvsp[(3) - (3)].NODE)); ;}
     break;
 
   case 22:
 
 /* Line 1455 of yacc.c  */
-#line 109 "mozart-parser.y"
+#line 111 "mozart-parser.y"
     { (yyval.NODE) = add((yyvsp[(1) - (3)].NODE), (yyvsp[(3) - (3)].NODE)); ;}
     break;
 
   case 23:
 
 /* Line 1455 of yacc.c  */
-#line 110 "mozart-parser.y"
+#line 112 "mozart-parser.y"
     {  ;}
     break;
 
   case 24:
 
 /* Line 1455 of yacc.c  */
-#line 111 "mozart-parser.y"
+#line 113 "mozart-parser.y"
     {  ;}
     break;
 
   case 25:
 
 /* Line 1455 of yacc.c  */
-#line 112 "mozart-parser.y"
+#line 114 "mozart-parser.y"
     {  ;}
     break;
 
   case 26:
 
 /* Line 1455 of yacc.c  */
-#line 113 "mozart-parser.y"
+#line 115 "mozart-parser.y"
     { ;}
     break;
 
   case 27:
 
 /* Line 1455 of yacc.c  */
-#line 114 "mozart-parser.y"
+#line 116 "mozart-parser.y"
     {;}
     break;
 
   case 28:
 
 /* Line 1455 of yacc.c  */
-#line 115 "mozart-parser.y"
+#line 117 "mozart-parser.y"
     {  ;}
     break;
 
   case 29:
 
 /* Line 1455 of yacc.c  */
-#line 116 "mozart-parser.y"
+#line 118 "mozart-parser.y"
     {;}
     break;
 
   case 30:
 
 /* Line 1455 of yacc.c  */
-#line 118 "mozart-parser.y"
+#line 120 "mozart-parser.y"
     {;}
     break;
 
 
 
 /* Line 1455 of yacc.c  */
-#line 1611 "mozart-parser.tab.c"
+#line 1612 "mozart-parser.tab.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -1819,7 +1820,128 @@ yyreturn:
 
 
 /* Line 1675 of yacc.c  */
-#line 129 "mozart-parser.y"
+#line 131 "mozart-parser.y"
+
+
+    typedef enum Type {
+        INTEGER,
+        FLOAT,
+        BOOLEAN,
+        STRING
+    } Type;
+
+    typedef union Value {
+        int i;
+        float f;
+        bool b;
+        char *s;
+    } Value;
+
+    typedef struct Node {
+        const char* id;  
+        Value value;
+        Type type;
+        struct Node* next;    
+    } Node; 
+
+
+    Node * head = NULL;
+    
+    void printTable() {
+        Node * node = head;
+        while(node != NULL) {
+            switch (node -> type) {
+                case INTEGER:
+                    printf("\nID: %s\nATTRIBUTE: %d\n", node -> id, node -> value.i);
+                    break;
+                case FLOAT:
+                    printf("\nID: %s\nATTRIBUTE: %f\n", node -> id, node -> value.f);
+                    break;
+                case BOOLEAN:
+                    printf("\nID: %s\nATTRIBUTE: %d\n", node -> id, (int)node -> value.b);
+                    break;
+                case STRING:
+                    printf("\nID: %s\nATTRIBUTE: %s\n", node -> id, node -> value.s);
+                    break;
+            }
+            node = node -> next;
+        }
+    }
+
+    Node* construct(char* id, Node* node){
+        node->id = id;
+        node->next = NULL;
+        return node;
+    }
+
+    Node *constructInteger(const char *id, int value) {
+        Node * node = (Node *) malloc(sizeof(Node));
+        node -> id = id;
+        node -> value.i = value;
+        node -> type = INTEGER;
+        node -> next = NULL;
+        return node;
+    }
+
+    Node *constructFloat(const char *id, float value) {
+        Node * node = (Node *) malloc(sizeof(Node));
+        node -> id = id;
+        node -> value.f = value;
+        node -> type = FLOAT;
+        node -> next = NULL;
+        return node;
+    }
+
+    Node *constructBoolean(const char *id, bool value) {
+        Node * node = (Node *) malloc(sizeof(Node));
+        node -> id = id;
+        node -> value.b = value;
+        node -> type = BOOLEAN;
+        node -> next = NULL;
+        return node;
+    }
+
+    Node *constructString(const char *id, char *value) {
+        Node * node = (Node *) malloc(sizeof(Node));
+        node -> id = id;
+        node -> value.s = strdup(value);
+        node -> type = STRING;
+        node -> next = NULL;
+        return node;
+    }
+
+    void insert(Node * newNode){
+        if (head == NULL) {
+            head = newNode;
+        }
+        else {
+            Node * node = head;
+            while (node -> next != NULL) {
+                if (strcmp(newNode -> id, node -> id) == 0) {
+                    // TODO: better error handling
+                    printf("Variable name already in use!\n");
+                    exit(EXIT_FAILURE);
+                }
+                node = node -> next;
+            }
+            if (strcmp(newNode -> id, node -> id) == 0) {
+                printf("Variable name already in use!\n");
+                exit(EXIT_FAILURE);
+            }
+            node -> next = newNode;
+        }
+    }
+
+    Node* getNode(const char *id) {
+        Node *node = head;
+        while (node != NULL) {
+            if (strcmp(node -> id, id) == 0) {
+                return node;
+            }
+            node = node -> next;
+        }
+        return 0;
+    }
 
 
 char * stringConcat(char * str1, char * str2){

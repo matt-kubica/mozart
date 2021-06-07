@@ -5,6 +5,8 @@
 #include <ctype.h>
 #include <stdbool.h>
 
+extern int yylex();
+
 char * stringConcat(char * str1, char * str2);
 Node* trueVal();
 Node* falseVal();
@@ -23,11 +25,11 @@ void yyerror(char * s);
 %token ELSE
 %token LOOP
 
-%token START
-%token END
+%token STARTOFSCOPE
+%token ENDOFSCOPE
 %token ASSIGNMENT
-%token LPARENTHESIS
-%token RPARENTHESIS
+%token LPAREN
+%token RPAREN
 %token ENDOFSTMT
 
 %token PLUS
@@ -62,10 +64,10 @@ void yyerror(char * s);
 %token FUNCTIONDECL
 %token RETURNSTMT
 
+
 %union{
     char* LEXEME;
-    Node* NODE;
-    // struct Node* LINKTOSYM;
+    struct Node* NODE;
 }
 
 %token <LEXEME> ID 
@@ -90,19 +92,19 @@ VARDECL : VAR ID COLON INTKEYWORD ASSIGNMENT EXPR      { insert(construct($2, $6
         | VAR ID COLON BOOLEANKEYWORD ASSIGNMENT EXPR  { insert(construct($2, $6)); }
         | VAR ID COLON STRINGKEYWORD ASSIGNMENT EXPR   { insert(construct($2, $6)); }
 
-LOOPSTMT :  INTEGERTYPE PER LOOP START LINE END         { /*insert number of times loop get executed into symbolTable*/;} 
-           |ID PER LOOP START LINE END 
+LOOPSTMT :  INTEGERTYPE PER LOOP STARTOFSCOPE LINE ENDOFSCOPE         { /*insert number of times loop get executed into symbolTable*/;} 
+           |ID PER LOOP STARTOFSCOPE LINE ENDOFSCOPE 
 
-IFSTMT : IF LPARENTHESIS LOGICEXPR RPARENTHESIS START LINE ELSE LINE END    {}
-        |IF LPARENTHESIS LOGICEXPR RPARENTHESIS START LINE END         
+IFSTMT : IF LPAREN LOGICEXPR RPAREN STARTOFSCOPE LINE ELSE LINE ENDOFSCOPE    {}
+        |IF LPAREN LOGICEXPR RPAREN STARTOFSCOPE LINE ENDOFSCOPE         
 
-FUNCTION : FUNCTIONDECL LPARENTHESIS VARDECL RPARENTHESIS START LINE END    {/*should all be stored in symbolTable and be made accessible to the rest of the program to execute*/;} 
-           |FUNCTIONDECL LPARENTHESIS RPARENTHESIS START LINE END
+FUNCTION : FUNCTIONDECL LPAREN VARDECL RPAREN STARTOFSCOPE LINE ENDOFSCOPE    {/*should all be stored in symbolTable and be made accessible to the rest of the program to execute*/;} 
+           |FUNCTIONDECL LPAREN RPAREN STARTOFSCOPE LINE ENDOFSCOPE
 
 LOGICEXPR : 
-            TRUEVAL                                 { $$ = trueVal()}
-           |FALSEVAL                                { $$ = falseVal()}
-           |EXPR GREATER EXPR                       { $$ = greater($1, $3)}
+            TRUEVAL                                 { $$ = trueVal(); }
+           |FALSEVAL                                { $$ = falseVal(); }
+           |EXPR GREATER EXPR                       { $$ = greater($1, $3); }
  
            
 
@@ -111,7 +113,7 @@ EXPR    : EXPR PLUS EXPR                            { $$ = add($1, $3); }
         | EXPR PER EXPR                             {  }
         | EXPR DIV EXPR                             {  }
         | EXPR MOD EXPR                             { }
-        | LPARENTHESIS EXPR RPARENTHESIS            {}
+        | LPAREN EXPR RPAREN                        {}
         | TYPEVAL                                   {  }
         | ID                                        {}
 
@@ -127,6 +129,127 @@ TYPEVAL : INTEGERTYPE                                   {}
 
               
 %%
+
+    typedef enum Type {
+        INTEGER,
+        FLOAT,
+        BOOLEAN,
+        STRING
+    } Type;
+
+    typedef union Value {
+        int i;
+        float f;
+        bool b;
+        char *s;
+    } Value;
+
+    typedef struct Node {
+        const char* id;  
+        Value value;
+        Type type;
+        struct Node* next;    
+    } Node; 
+
+
+    Node * head = NULL;
+    
+    void printTable() {
+        Node * node = head;
+        while(node != NULL) {
+            switch (node -> type) {
+                case INTEGER:
+                    printf("\nID: %s\nATTRIBUTE: %d\n", node -> id, node -> value.i);
+                    break;
+                case FLOAT:
+                    printf("\nID: %s\nATTRIBUTE: %f\n", node -> id, node -> value.f);
+                    break;
+                case BOOLEAN:
+                    printf("\nID: %s\nATTRIBUTE: %d\n", node -> id, (int)node -> value.b);
+                    break;
+                case STRING:
+                    printf("\nID: %s\nATTRIBUTE: %s\n", node -> id, node -> value.s);
+                    break;
+            }
+            node = node -> next;
+        }
+    }
+
+    Node* construct(char* id, Node* node){
+        node->id = id;
+        node->next = NULL;
+        return node;
+    }
+
+    Node *constructInteger(const char *id, int value) {
+        Node * node = (Node *) malloc(sizeof(Node));
+        node -> id = id;
+        node -> value.i = value;
+        node -> type = INTEGER;
+        node -> next = NULL;
+        return node;
+    }
+
+    Node *constructFloat(const char *id, float value) {
+        Node * node = (Node *) malloc(sizeof(Node));
+        node -> id = id;
+        node -> value.f = value;
+        node -> type = FLOAT;
+        node -> next = NULL;
+        return node;
+    }
+
+    Node *constructBoolean(const char *id, bool value) {
+        Node * node = (Node *) malloc(sizeof(Node));
+        node -> id = id;
+        node -> value.b = value;
+        node -> type = BOOLEAN;
+        node -> next = NULL;
+        return node;
+    }
+
+    Node *constructString(const char *id, char *value) {
+        Node * node = (Node *) malloc(sizeof(Node));
+        node -> id = id;
+        node -> value.s = strdup(value);
+        node -> type = STRING;
+        node -> next = NULL;
+        return node;
+    }
+
+    void insert(Node * newNode){
+        if (head == NULL) {
+            head = newNode;
+        }
+        else {
+            Node * node = head;
+            while (node -> next != NULL) {
+                if (strcmp(newNode -> id, node -> id) == 0) {
+                    // TODO: better error handling
+                    printf("Variable name already in use!\n");
+                    exit(EXIT_FAILURE);
+                }
+                node = node -> next;
+            }
+            if (strcmp(newNode -> id, node -> id) == 0) {
+                printf("Variable name already in use!\n");
+                exit(EXIT_FAILURE);
+            }
+            node -> next = newNode;
+        }
+    }
+
+    Node* getNode(const char *id) {
+        Node *node = head;
+        while (node != NULL) {
+            if (strcmp(node -> id, id) == 0) {
+                return node;
+            }
+            node = node -> next;
+        }
+        return 0;
+    }
+
 
 char * stringConcat(char * str1, char * str2){
         char newString[strlen(str1) + strlen(str2) + 1];
