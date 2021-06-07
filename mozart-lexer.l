@@ -3,9 +3,10 @@
 #include <stdlib.h> 
 #include <string.h>
 #include "y.tab.h"
+#include "symtab.h"
 
 /* helper function */
-bool convertToBoolean(const char *str) {
+int convertToBoolean(const char *str) {
 	if (strcmp(str, "tune") == 0)
 		return 1;
 	if (strcmp(str, "outOfTune") == 0)
@@ -79,10 +80,10 @@ chord 		{ return FUNCTIONDECL; }
 
  /* literals */
 
-{INTEGER} 	{ yylval.NODE.value.i = atoi(yytext); yylval.NODE.type = INTEGER;  return INTEGERTYPE; }  
-{FLOAT} 	{ yylval.NODE.value.f = atof(yytext); yylval.NODE.type = FLOAT; return FLOATTYPE; }
-{BOOLEAN}	{ yylval.NODE.value.b = convertToBoolean(yytext); yylval.NODE.type = BOOLEAN; return BOOLEANTYPE; }
-{STRING} 	{yylval.NODE.value.s = strdup(yytext); yylval.NODE.type = STRING; return STRINGTYPE; }
+{INTEGER} 	{ yylval.NODE -> value.i = atoi(yytext); yylval.NODE -> type = INTEGER;  return INTEGERTYPE; }  
+{FLOAT} 	{ yylval.NODE -> value.f = atof(yytext); yylval.NODE -> type = FLOAT; return FLOATTYPE; }
+{BOOLEAN}	{ yylval.NODE -> value.b = convertToBoolean(yytext); yylval.NODE -> type = BOOLEAN; return BOOLEANTYPE; }
+{STRING} 	{ yylval.NODE -> value.s = strdup(yytext); yylval.NODE -> type = STRING; return STRINGTYPE; }
 {ID} 		{ yylval.LEXEME = strdup(yytext); return ID; }
 %%
 

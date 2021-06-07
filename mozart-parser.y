@@ -5,6 +5,7 @@
 #include <ctype.h>
 #include <stdbool.h>
 
+extern int yylex();
 char * stringConcat(char * str1, char * str2);
 Node* trueVal();
 Node* falseVal();
@@ -23,11 +24,11 @@ void yyerror(char * s);
 %token ELSE
 %token LOOP
 
-%token START
-%token END
+%token STARTOFSCOPE
+%token ENDOFSCOPE
 %token ASSIGNMENT
-%token LPARENTHESIS
-%token RPARENTHESIS
+%token LPAREN
+%token RPAREN
 %token ENDOFSTMT
 
 %token PLUS
@@ -62,6 +63,7 @@ void yyerror(char * s);
 %token FUNCTIONDECL
 %token RETURNSTMT
 
+
 %union{
     char* LEXEME;
     Node* NODE;
@@ -90,19 +92,19 @@ VARDECL : VAR ID COLON INTKEYWORD ASSIGNMENT EXPR      { insert(construct($2, $6
         | VAR ID COLON BOOLEANKEYWORD ASSIGNMENT EXPR  { insert(construct($2, $6)); }
         | VAR ID COLON STRINGKEYWORD ASSIGNMENT EXPR   { insert(construct($2, $6)); }
 
-LOOPSTMT :  INTEGERTYPE PER LOOP START LINE END         { /*insert number of times loop get executed into symbolTable*/;} 
-           |ID PER LOOP START LINE END 
+LOOPSTMT :  INTEGERTYPE PER LOOP STARTOFSCOPE LINE ENDOFSCOPE         { /*insert number of times loop get executed into symbolTable*/;} 
+           |ID PER LOOP STARTOFSCOPE LINE ENDOFSCOPE 
 
-IFSTMT : IF LPARENTHESIS LOGICEXPR RPARENTHESIS START LINE ELSE LINE END    {}
-        |IF LPARENTHESIS LOGICEXPR RPARENTHESIS START LINE END         
+IFSTMT : IF LPAREN LOGICEXPR RPAREN STARTOFSCOPE LINE ELSE LINE ENDOFSCOPE    {}
+        |IF LPAREN LOGICEXPR RPAREN STARTOFSCOPE LINE ENDOFSCOPE         
 
-FUNCTION : FUNCTIONDECL LPARENTHESIS VARDECL RPARENTHESIS START LINE END    {/*should all be stored in symbolTable and be made accessible to the rest of the program to execute*/;} 
-           |FUNCTIONDECL LPARENTHESIS RPARENTHESIS START LINE END
+FUNCTION : FUNCTIONDECL LPAREN VARDECL RPAREN STARTOFSCOPE LINE ENDOFSCOPE    {/*should all be stored in symbolTable and be made accessible to the rest of the program to execute*/;} 
+           |FUNCTIONDECL LPAREN RPAREN STARTOFSCOPE LINE ENDOFSCOPE
 
 LOGICEXPR : 
-            TRUEVAL                                 { $$ = trueVal()}
-           |FALSEVAL                                { $$ = falseVal()}
-           |EXPR GREATER EXPR                       { $$ = greater($1, $3)}
+            TRUEVAL                                 { $$ = trueVal(); }
+           |FALSEVAL                                { $$ = falseVal(); }
+           |EXPR GREATER EXPR                       { $$ = greater($1, $3); }
  
            
 
@@ -111,7 +113,7 @@ EXPR    : EXPR PLUS EXPR                            { $$ = add($1, $3); }
         | EXPR PER EXPR                             {  }
         | EXPR DIV EXPR                             {  }
         | EXPR MOD EXPR                             { }
-        | LPARENTHESIS EXPR RPARENTHESIS            {}
+        | LPAREN EXPR RPAREN            {}
         | TYPEVAL                                   {  }
         | ID                                        {}
 

@@ -1,8 +1,12 @@
 
 
-symtab-test:
-	gcc symtab-test.c -o symtab-test
-	clear
-	./symtab-test
-	rm symtab-test
+build:
+	yacc -d mozart-parser.y
+	flex mozart-lexer.l
+	gcc y.tab.c lex.yy.c -o mozart
+
+clean:
+	rm y.tab.c
+	rm y.tab.h
+	rm lex.yy.c
 
