@@ -1,10 +1,10 @@
 %{
-#include "symtab.h"
 #include <stdio.h>
 #include <stdlib.h> 
 #include <ctype.h>
 #include <stdbool.h>
-
+#include "symtab.h"
+#include "symtabFunctions.h"
 extern int yylex();
 char * stringConcat(char * str1, char * str2);
 Node* trueVal();
@@ -15,6 +15,7 @@ Node* subtract(Node* node1, Node* node2);
 Node* multiply(Node* node1, Node* node2);
 Node* divide(Node* node1, Node* node2);
 void yyerror(char * s);
+
 %}
 
 %token VAR
@@ -66,7 +67,8 @@ void yyerror(char * s);
 
 %union{
     char* LEXEME;
-    Node* NODE;
+    struct Node* NODE;
+    union Value* value;
     // struct Node* LINKTOSYM;
 }
 
@@ -113,7 +115,7 @@ EXPR    : EXPR PLUS EXPR                            { $$ = add($1, $3); }
         | EXPR PER EXPR                             {  }
         | EXPR DIV EXPR                             {  }
         | EXPR MOD EXPR                             { }
-        | LPAREN EXPR RPAREN            {}
+        | LPAREN EXPR RPAREN                        {}
         | TYPEVAL                                   {  }
         | ID                                        {}
 

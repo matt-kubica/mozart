@@ -1,9 +1,11 @@
 %{
+#include "symtab.h"
+#include "mozart-parser.tab.h"
+
 #include <stdio.h>
 #include <stdlib.h> 
 #include <string.h>
-#include "y.tab.h"
-#include "symtab.h"
+
 
 /* helper function */
 int convertToBoolean(const char *str) {
