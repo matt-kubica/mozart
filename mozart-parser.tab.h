@@ -92,7 +92,7 @@ typedef union YYSTYPE
 
     char* LEXEME;
     struct Node* NODE;
-    union Value* value;
+    
     // struct Node* LINKTOSYM;
 
 

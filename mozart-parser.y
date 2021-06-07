@@ -68,7 +68,7 @@ void yyerror(char * s);
 %union{
     char* LEXEME;
     struct Node* NODE;
-    union Value* value;
+    
     // struct Node* LINKTOSYM;
 }
 
@@ -77,17 +77,18 @@ void yyerror(char * s);
 
 %type <NODE> EXPR
 %type <NODE> LOGICEXPR 
+%type <NODE> TYPEVAL 
 %start LINE;
 
 
 %%
 LINE    : 
-        | LINE VARDECL ENDOFSTMT                    { ; }
-        | LINE EXPR ENDOFSTMT
-        | LINE LOOPSTMT ENDOFSTMT
-        | LINE LOGICEXPR ENDOFSTMT
-        | LINE IFSTMT ENDOFSTMT
-        | LINE FUNCTION ENDOFSTMT
+        | LINE VARDECL ENDOFSTMT                    {  ;}
+        | LINE EXPR ENDOFSTMT                       {;}
+        | LINE LOOPSTMT ENDOFSTMT                       {;}
+        | LINE LOGICEXPR ENDOFSTMT{;}
+        | LINE IFSTMT ENDOFSTMT{;}
+        | LINE FUNCTION ENDOFSTMT{;}
 
 VARDECL : VAR ID COLON INTKEYWORD ASSIGNMENT EXPR      { insert(construct($2, $6)); /*TODO type checking in construction*/}
         | VAR ID COLON FLOATKEYWORD ASSIGNMENT EXPR    { insert(construct($2, $6)); }
@@ -95,13 +96,13 @@ VARDECL : VAR ID COLON INTKEYWORD ASSIGNMENT EXPR      { insert(construct($2, $6
         | VAR ID COLON STRINGKEYWORD ASSIGNMENT EXPR   { insert(construct($2, $6)); }
 
 LOOPSTMT :  INTEGERTYPE PER LOOP STARTOFSCOPE LINE ENDOFSCOPE         { /*insert number of times loop get executed into symbolTable*/;} 
-           |ID PER LOOP STARTOFSCOPE LINE ENDOFSCOPE 
+           |ID PER LOOP STARTOFSCOPE LINE ENDOFSCOPE {;}
 
-IFSTMT : IF LPAREN LOGICEXPR RPAREN STARTOFSCOPE LINE ELSE LINE ENDOFSCOPE    {}
-        |IF LPAREN LOGICEXPR RPAREN STARTOFSCOPE LINE ENDOFSCOPE         
+IFSTMT : IF LPAREN LOGICEXPR RPAREN STARTOFSCOPE LINE ELSE LINE ENDOFSCOPE    {;}
+        |IF LPAREN LOGICEXPR RPAREN STARTOFSCOPE LINE ENDOFSCOPE     {;}    
 
 FUNCTION : FUNCTIONDECL LPAREN VARDECL RPAREN STARTOFSCOPE LINE ENDOFSCOPE    {/*should all be stored in symbolTable and be made accessible to the rest of the program to execute*/;} 
-           |FUNCTIONDECL LPAREN RPAREN STARTOFSCOPE LINE ENDOFSCOPE
+           |FUNCTIONDECL LPAREN RPAREN STARTOFSCOPE LINE ENDOFSCOPE{;}
 
 LOGICEXPR : 
             TRUEVAL                                 { $$ = trueVal(); }
@@ -111,18 +112,18 @@ LOGICEXPR :
            
 
 EXPR    : EXPR PLUS EXPR                            { $$ = add($1, $3); }
-        | EXPR MINUS EXPR                           {  }
-        | EXPR PER EXPR                             {  }
-        | EXPR DIV EXPR                             {  }
-        | EXPR MOD EXPR                             { }
-        | LPAREN EXPR RPAREN                        {}
-        | TYPEVAL                                   {  }
-        | ID                                        {}
+        | EXPR MINUS EXPR                           { ; }
+        | EXPR PER EXPR                             { ; }
+        | EXPR DIV EXPR                             { ; }
+        | EXPR MOD EXPR                             { ; }
+        | LPAREN EXPR RPAREN                        { ; }
+        | TYPEVAL                                   { $$ = $1 }
+        | ID                                        { ; }
 
-TYPEVAL : INTEGERTYPE                                   {}
-          |FLOATTYPE
-          |BOOLEANTYPE
-          |STRINGTYPE
+TYPEVAL : INTEGERTYPE                                   {printf("hei"); $$ = $1}
+          |FLOATTYPE{;}
+          |BOOLEANTYPE{;}
+          |STRINGTYPE{;}
 
 
 
@@ -172,7 +173,7 @@ Node* greater(Node* node1, Node* node2){
 }
 
 Node* add(Node* node1, Node* node2){
-
+        printf("Adding.");
         if (node1->type != node2->type) 
                 yyerror("incompatibile");
         else{
@@ -260,8 +261,6 @@ void yyerror(char * s) {
 }
   
 int main(void) {
-    printf("enter whatever word to start: ");
-    
     return yyparse();
 }
 

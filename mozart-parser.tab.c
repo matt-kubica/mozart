@@ -170,7 +170,7 @@ typedef union YYSTYPE
 
     char* LEXEME;
     struct Node* NODE;
-    union Value* value;
+    
     // struct Node* LINKTOSYM;
 
 
@@ -490,10 +490,10 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    84,    84,    85,    86,    87,    88,    89,    90,    92,
-      93,    94,    95,    97,    98,   100,   101,   103,   104,   107,
-     108,   109,   113,   114,   115,   116,   117,   118,   119,   120,
-     122,   123,   124,   125
+       0,    85,    85,    86,    87,    88,    89,    90,    91,    93,
+      94,    95,    96,    98,    99,   101,   102,   104,   105,   108,
+     109,   110,   114,   115,   116,   117,   118,   119,   120,   121,
+     123,   124,   125,   126
 };
 #endif
 
@@ -1470,147 +1470,224 @@ yyreduce:
         case 3:
 
 /* Line 1455 of yacc.c  */
-#line 85 "mozart-parser.y"
-    { ; ;}
+#line 86 "mozart-parser.y"
+    {  ;;}
+    break;
+
+  case 4:
+
+/* Line 1455 of yacc.c  */
+#line 87 "mozart-parser.y"
+    {;;}
+    break;
+
+  case 5:
+
+/* Line 1455 of yacc.c  */
+#line 88 "mozart-parser.y"
+    {;;}
+    break;
+
+  case 6:
+
+/* Line 1455 of yacc.c  */
+#line 89 "mozart-parser.y"
+    {;;}
+    break;
+
+  case 7:
+
+/* Line 1455 of yacc.c  */
+#line 90 "mozart-parser.y"
+    {;;}
+    break;
+
+  case 8:
+
+/* Line 1455 of yacc.c  */
+#line 91 "mozart-parser.y"
+    {;;}
     break;
 
   case 9:
 
 /* Line 1455 of yacc.c  */
-#line 92 "mozart-parser.y"
+#line 93 "mozart-parser.y"
     { insert(construct((yyvsp[(2) - (6)].LEXEME), (yyvsp[(6) - (6)].NODE))); /*TODO type checking in construction*/;}
     break;
 
   case 10:
 
 /* Line 1455 of yacc.c  */
-#line 93 "mozart-parser.y"
+#line 94 "mozart-parser.y"
     { insert(construct((yyvsp[(2) - (6)].LEXEME), (yyvsp[(6) - (6)].NODE))); ;}
     break;
 
   case 11:
 
 /* Line 1455 of yacc.c  */
-#line 94 "mozart-parser.y"
+#line 95 "mozart-parser.y"
     { insert(construct((yyvsp[(2) - (6)].LEXEME), (yyvsp[(6) - (6)].NODE))); ;}
     break;
 
   case 12:
 
 /* Line 1455 of yacc.c  */
-#line 95 "mozart-parser.y"
+#line 96 "mozart-parser.y"
     { insert(construct((yyvsp[(2) - (6)].LEXEME), (yyvsp[(6) - (6)].NODE))); ;}
     break;
 
   case 13:
 
 /* Line 1455 of yacc.c  */
-#line 97 "mozart-parser.y"
+#line 98 "mozart-parser.y"
     { /*insert number of times loop get executed into symbolTable*/;;}
+    break;
+
+  case 14:
+
+/* Line 1455 of yacc.c  */
+#line 99 "mozart-parser.y"
+    {;;}
     break;
 
   case 15:
 
 /* Line 1455 of yacc.c  */
-#line 100 "mozart-parser.y"
-    {;}
+#line 101 "mozart-parser.y"
+    {;;}
+    break;
+
+  case 16:
+
+/* Line 1455 of yacc.c  */
+#line 102 "mozart-parser.y"
+    {;;}
     break;
 
   case 17:
 
 /* Line 1455 of yacc.c  */
-#line 103 "mozart-parser.y"
+#line 104 "mozart-parser.y"
     {/*should all be stored in symbolTable and be made accessible to the rest of the program to execute*/;;}
+    break;
+
+  case 18:
+
+/* Line 1455 of yacc.c  */
+#line 105 "mozart-parser.y"
+    {;;}
     break;
 
   case 19:
 
 /* Line 1455 of yacc.c  */
-#line 107 "mozart-parser.y"
+#line 108 "mozart-parser.y"
     { (yyval.NODE) = trueVal(); ;}
     break;
 
   case 20:
 
 /* Line 1455 of yacc.c  */
-#line 108 "mozart-parser.y"
+#line 109 "mozart-parser.y"
     { (yyval.NODE) = falseVal(); ;}
     break;
 
   case 21:
 
 /* Line 1455 of yacc.c  */
-#line 109 "mozart-parser.y"
+#line 110 "mozart-parser.y"
     { (yyval.NODE) = greater((yyvsp[(1) - (3)].NODE), (yyvsp[(3) - (3)].NODE)); ;}
     break;
 
   case 22:
 
 /* Line 1455 of yacc.c  */
-#line 113 "mozart-parser.y"
+#line 114 "mozart-parser.y"
     { (yyval.NODE) = add((yyvsp[(1) - (3)].NODE), (yyvsp[(3) - (3)].NODE)); ;}
     break;
 
   case 23:
 
 /* Line 1455 of yacc.c  */
-#line 114 "mozart-parser.y"
-    {  ;}
+#line 115 "mozart-parser.y"
+    { ; ;}
     break;
 
   case 24:
 
 /* Line 1455 of yacc.c  */
-#line 115 "mozart-parser.y"
-    {  ;}
+#line 116 "mozart-parser.y"
+    { ; ;}
     break;
 
   case 25:
 
 /* Line 1455 of yacc.c  */
-#line 116 "mozart-parser.y"
-    {  ;}
+#line 117 "mozart-parser.y"
+    { ; ;}
     break;
 
   case 26:
 
 /* Line 1455 of yacc.c  */
-#line 117 "mozart-parser.y"
-    { ;}
+#line 118 "mozart-parser.y"
+    { ; ;}
     break;
 
   case 27:
 
 /* Line 1455 of yacc.c  */
-#line 118 "mozart-parser.y"
-    {;}
+#line 119 "mozart-parser.y"
+    { ; ;}
     break;
 
   case 28:
 
 /* Line 1455 of yacc.c  */
-#line 119 "mozart-parser.y"
-    {  ;}
+#line 120 "mozart-parser.y"
+    { (yyval.NODE) = (yyvsp[(1) - (1)].NODE) ;}
     break;
 
   case 29:
 
 /* Line 1455 of yacc.c  */
-#line 120 "mozart-parser.y"
-    {;}
+#line 121 "mozart-parser.y"
+    { ; ;}
     break;
 
   case 30:
 
 /* Line 1455 of yacc.c  */
-#line 122 "mozart-parser.y"
-    {;}
+#line 123 "mozart-parser.y"
+    {printf("hei"); (yyval.NODE) = (yyvsp[(1) - (1)].NODE);}
+    break;
+
+  case 31:
+
+/* Line 1455 of yacc.c  */
+#line 124 "mozart-parser.y"
+    {;;}
+    break;
+
+  case 32:
+
+/* Line 1455 of yacc.c  */
+#line 125 "mozart-parser.y"
+    {;;}
+    break;
+
+  case 33:
+
+/* Line 1455 of yacc.c  */
+#line 126 "mozart-parser.y"
+    {;;}
     break;
 
 
 
 /* Line 1455 of yacc.c  */
-#line 1614 "mozart-parser.tab.c"
+#line 1691 "mozart-parser.tab.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -1822,7 +1899,7 @@ yyreturn:
 
 
 /* Line 1675 of yacc.c  */
-#line 133 "mozart-parser.y"
+#line 134 "mozart-parser.y"
 
 
 char * stringConcat(char * str1, char * str2){
@@ -1865,7 +1942,7 @@ Node* greater(Node* node1, Node* node2){
 }
 
 Node* add(Node* node1, Node* node2){
-
+        printf("Adding.");
         if (node1->type != node2->type) 
                 yyerror("incompatibile");
         else{
@@ -1953,8 +2030,6 @@ void yyerror(char * s) {
 }
   
 int main(void) {
-    printf("enter whatever word to start: ");
-    
     return yyparse();
 }
 
