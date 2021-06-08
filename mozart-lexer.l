@@ -1,6 +1,6 @@
 %{
-#include "symtab.h"
-#include "mozart-parser.tab.h"
+#include "y.tab.h"
+#include "symtab/types.h"
 
 #include <stdio.h>
 #include <stdlib.h> 
@@ -21,11 +21,12 @@ int convertToBoolean(const char *str) {
 %}
 
 
+BOOLEAN 	(tune|outOfTune)
 DIGIT 		[0-9]
 INTEGER 	{DIGIT}*
 FLOAT 		{INTEGER}\.?{DIGIT}+
 STRING 		\"(\\.|[^"\\])*\"
-BOOLEAN 	(tune|outOfTune)
+
 LOOP 		\*{INTEGER}|{ID}\:\|  
 ID 			[A-Za-z][A-Za-z{DIGIT}]*
 
@@ -81,11 +82,26 @@ chord 		{ return FUNCTIONDECL; }
 \# 			{ return RETURNSTMT; }
 
  /* literals */
+{INTEGER} 	{   
+				yylval.VALUE -> i = atoi(yytext);
+				return INTEGERTYPE; 
+			}  
 
-{INTEGER} 	{ yylval.NODE -> value.i = atoi(yytext); yylval.NODE -> type = INTEGER;  return INTEGERTYPE; }  
-{FLOAT} 	{ yylval.NODE -> value.f = atof(yytext); yylval.NODE -> type = FLOAT; return FLOATTYPE; }
-{BOOLEAN}	{ yylval.NODE -> value.b = convertToBoolean(yytext); yylval.NODE -> type = BOOLEAN; return BOOLEANTYPE; }
-{STRING} 	{ yylval.NODE -> value.s = strdup(yytext); yylval.NODE -> type = STRING; return STRINGTYPE; }
+{FLOAT} 	{ 	
+			  	yylval.VALUE -> f = atof(yytext);
+			  	return FLOATTYPE; 
+			}
+
+{BOOLEAN}	{ 
+				yylval.VALUE -> b = convertToBoolean(yytext);
+				return BOOLEANTYPE; 
+			}
+
+{STRING} 	{ 
+				yylval.VALUE -> s = strdup(yytext); 
+				return STRINGTYPE; 
+			}
+
 {ID} 		{ yylval.LEXEME = strdup(yytext); return ID; }
 %%
 

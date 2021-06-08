@@ -1,39 +1,62 @@
-#include "symtab.h"
+#ifndef SYMTABFUNCTIONS
+#define SYMTABFUNCTIONS
 
-
+    #include "types.h"
 
     Node * head = NULL;
 
     char * enumToString(Type type){
-            switch (type) {
-                case INTEGER:
-                    return "integer";
-                case FLOAT:
-                    return "float";
-                case BOOLEAN:
-                    return "boolean";
-                case STRING:
-                    return "string";
+        
+        switch (type) {
+            case INTEGER:
+                return "integer";
+            case FLOAT:
+                return "float";
+            case BOOLEAN:
+                return "boolean";
+            case STRING:
+                return "string";
+        }
+    }
+
+    void printNode(Node *node) {
+
+        switch (node -> type) {
+            case INTEGER:
+                printf("\nID: %s\nVALUE: %d\nTYPE: %s\n", 
+                    node -> id, 
+                    node -> value.i, 
+                    enumToString(node -> type)
+                );
+                break;
+            case FLOAT:
+                printf("\nID: %s\nVALUE: %f\nTYPE: %s\n", 
+                    node -> id, 
+                    node -> value.f, 
+                    enumToString(node -> type)
+                );
+                break;
+            case BOOLEAN:
+                printf("\nID: %s\nVALUE: %d\nTYPE: %s\n", 
+                    node -> id, 
+                    node -> value.b, 
+                    enumToString(node -> type)
+                );
+                break;
+            case STRING:
+                printf("\nID: %s\nVALUE: %s\nTYPE: %s\n", 
+                    node -> id, 
+                    node -> value.s, 
+                    enumToString(node -> type)
+                );
+                break;
             }
     }
     
     void printTable() {
         Node * node = head;
         while(node != NULL) {
-            switch (node -> type) {
-                case INTEGER:
-                    printf("\nID: %s\nATTRIBUTE: %d\nTYPE: %s\n", node -> id, node -> value.i, enumToString(node -> type));
-                    break;
-                case FLOAT:
-                    printf("\nID: %s\nATTRIBUTE: %f\nTYPE: %s\n", node -> id, node -> value.f), enumToString(node -> type);
-                    break;
-                case BOOLEAN:
-                    printf("\nID: %s\nATTRIBUTE: %d\nTYPE: %s\n", node -> id, (int)node -> value.b), enumToString(node -> type);
-                    break;
-                case STRING:
-                    printf("\nID: %s\nATTRIBUTE: %s\nTYPE: %s\n", node -> id, node -> value.s, enumToString(node -> type));
-                    break;
-            }
+            printNode(node);
             node = node -> next;
         }
     }
@@ -49,7 +72,6 @@
         node -> id = id;
         node -> value.i = value;
         node -> type = INTEGER;
-        //printf("Type: %s\n", node->type);
         node -> next = NULL;
         return node;
     }
@@ -113,4 +135,6 @@
         }
         return 0;
     }
+
+#endif
 

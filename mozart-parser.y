@@ -3,8 +3,10 @@
 #include <stdlib.h> 
 #include <ctype.h>
 #include <stdbool.h>
-#include "symtab.h"
-#include "symtabFunctions.h"
+#include "symtab/functions.h"
+#include "symtab/types.h"
+
+
 extern int yylex();
 char * stringConcat(char * str1, char * str2);
 Node* trueVal();
@@ -74,13 +76,11 @@ Type getType(Node* n);
 %union{
     char* LEXEME;
     struct Node* NODE;
-    // struct Node* LINKTOSYM;
+    Value VALUE;
 }
 
-%token ID 
-%type <LEXEME> ID 
-%token INTEGERTYPE FLOATTYPE BOOLEANTYPE STRINGTYPE
-%type <NODE> INTEGERTYPE FLOATTYPE BOOLEANTYPE STRINGTYPE
+%token <LEXEME> ID 
+%token <VALUE> INTEGERTYPE FLOATTYPE BOOLEANTYPE STRINGTYPE
 %type <NODE> EXPR
 %type <NODE> LOGICEXPR 
 %type <NODE> TYPEVAL 
@@ -89,11 +89,11 @@ Type getType(Node* n);
 
 %%
 LINE    : 
-        | LINE VARDECL ENDOFSTMT                    { printTable() ;}
-        | LINE EXPR ENDOFSTMT                       { printf("%s", getStringValue($2)) ;}
-        | LINE LOGICEXPR ENDOFSTMT{;}
-        | LINE IFSTMT ENDOFSTMT{;}
-        | LINE FUNCTION ENDOFSTMT{;}
+        | LINE VARDECL ENDOFSTMT                    { ; }
+        | LINE EXPR ENDOFSTMT                       { ; }
+        | LINE LOGICEXPR ENDOFSTMT                  { ; }
+        | LINE IFSTMT ENDOFSTMT                     { ; }
+        | LINE FUNCTION ENDOFSTMT                   { ; }
 
 VARDECL : VAR ID COLON INTKEYWORD ASSIGNMENT EXPR      { typeCheck($6, "integer");insert(construct($2, $6)); /*TODO type checking in construction*/}
         | VAR ID COLON FLOATKEYWORD ASSIGNMENT EXPR    { typeCheck($6, "float");insert(construct($2, $6)) ;}
@@ -122,13 +122,13 @@ EXPR    : EXPR PLUS EXPR                            { $$ = add($1, $3); }
         | EXPR DIV EXPR                             { ; }
         | EXPR MOD EXPR                             { ; }
         | LPAREN EXPR RPAREN                        { ; }
-        | TYPEVAL                                   {$$ = $1;}
-        | ID                                        {;}
+        | TYPEVAL                                   { $$ = $1; }
+        | ID                                        { ; }
 
-TYPEVAL : INTEGERTYPE                                   {$$ = constructInteger(NULL, getIntValue($1)); printf("\nhei, I'm an integer\n"); }
-          |FLOATTYPE                                    {$$ = constructFloat(NULL, getFloatValue($1));  printf("hei, I'm a float"); ;}
-          |BOOLEANTYPE                                  {$$ = constructBoolean(NULL, getBoolValue($1));  printf("hei, I'm a BOOLEAN"); ;}
-          |STRINGTYPE                                   {$$ = constructString(NULL, getStringValue($1));  printf("hei, I'm a String"); ;}
+TYPEVAL : INTEGERTYPE                                   { $$ = constructInteger(NULL, $1 -> i); }
+          |FLOATTYPE                                    { $$ = constructFloat(NULL, $1 -> f); }
+          |BOOLEANTYPE                                  { $$ = constructBoolean(NULL, $1 -> b); }
+          |STRINGTYPE                                   { $$ = constructString(NULL, $1 -> s); }
 
 
 
@@ -220,10 +220,10 @@ Node* greater(Node* node1, Node* node2){
                                         return result;
                 }
         }
+        return NULL;
 }
 
 Node* add(Node* node1, Node* node2){
-        printf("Adding.");
         if (node1->type != node2->type) 
                 yyerror("incompatibile");
         else{
@@ -243,6 +243,7 @@ Node* add(Node* node1, Node* node2){
                 }
 
         }
+        return NULL;
 }
 /*
 Node* subtract(Node* node1, Node* node2){
