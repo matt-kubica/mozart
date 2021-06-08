@@ -1,5 +1,5 @@
-#ifndef SYMTABTYPES
-#define SYMTABTYPES
+#ifndef TYPES
+#define TYPES
  
     #include <stdio.h>
     #include <stdlib.h>
@@ -26,7 +26,5 @@
         enum Type type ;
         struct Node* next;    
     } Node; 
-
-
 
 #endif

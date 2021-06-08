@@ -1,53 +1,50 @@
-#ifndef SYMTABFUNCTIONS
-#define SYMTABFUNCTIONS
+#ifndef SYMTAB
+#define SYMTAB
 
     #include "types.h"
+    #include "helpers.h"
 
-    Node * head = NULL;
+    void printNode(Node*);
+    void printTable();
+    Node* construct(const char*, Node*);
+    Node *constructInteger(const char*, int);
+    Node *constructFloat(const char*, float);
+    Node *constructBoolean(const char*, bool);
+    Node *constructString(const char*, char*);
+    void insert(Node*);
+    Node* getNode(const char* id);
 
-    char * enumToString(Type type){
-        
-        switch (type) {
-            case INTEGER:
-                return "integer";
-            case FLOAT:
-                return "float";
-            case BOOLEAN:
-                return "boolean";
-            case STRING:
-                return "string";
-        }
-    }
+    Node* head = NULL;
 
-    void printNode(Node *node) {
+    void printNode(Node* node) {
 
         switch (node -> type) {
             case INTEGER:
                 printf("\nID: %s\nVALUE: %d\nTYPE: %s\n", 
                     node -> id, 
                     node -> value.i, 
-                    enumToString(node -> type)
+                    typeToString(node -> type)
                 );
                 break;
             case FLOAT:
                 printf("\nID: %s\nVALUE: %f\nTYPE: %s\n", 
                     node -> id, 
                     node -> value.f, 
-                    enumToString(node -> type)
+                    typeToString(node -> type)
                 );
                 break;
             case BOOLEAN:
                 printf("\nID: %s\nVALUE: %d\nTYPE: %s\n", 
                     node -> id, 
                     node -> value.b, 
-                    enumToString(node -> type)
+                    typeToString(node -> type)
                 );
                 break;
             case STRING:
                 printf("\nID: %s\nVALUE: %s\nTYPE: %s\n", 
                     node -> id, 
                     node -> value.s, 
-                    enumToString(node -> type)
+                    typeToString(node -> type)
                 );
                 break;
             }
@@ -61,13 +58,13 @@
         }
     }
 
-    Node* construct(char *id, Node* node){
-        node->id = id;
-        node->next = NULL;
+    Node* construct(const char* id, Node* node) {
+        node -> id = id;
+        node -> next = NULL;
         return node;
     }
 
-    Node *constructInteger(char *id, int value) {
+    Node *constructInteger(const char* id, int value) {
         Node * node = (Node *) malloc(sizeof(Node));
         node -> id = id;
         node -> value.i = value;
@@ -76,7 +73,7 @@
         return node;
     }
 
-    Node *constructFloat(char *id, float value) {
+    Node *constructFloat(const char* id, float value) {
         Node * node = (Node *) malloc(sizeof(Node));
         node -> id = id;
         node -> value.f = value;
@@ -85,7 +82,7 @@
         return node;
     }
 
-    Node *constructBoolean(char *id, bool value) {
+    Node *constructBoolean(const char* id, bool value) {
         Node * node = (Node *) malloc(sizeof(Node));
         node -> id = id;
         node -> value.b = value;
@@ -94,7 +91,7 @@
         return node;
     }
 
-    Node *constructString(char *id, char * value) {
+    Node *constructString(const char* id, char* value) {
         Node * node = (Node *) malloc(sizeof(Node));
         node -> id = id;
         node -> value.s = strdup(value);
@@ -103,37 +100,31 @@
         return node;
     }
 
-    void insert(Node * newNode){
+    void insert(Node* newNode) {
         if (head == NULL) {
             head = newNode;
         }
         else {
             Node * node = head;
             while (node -> next != NULL) {
-                if (strcmp(newNode -> id, node -> id) == 0) {
-                    // TODO: better error handling
-                    printf("Variable name already in use!\n");
-                    exit(EXIT_FAILURE);
-                }
+                if (strcmp(newNode -> id, node -> id) == 0) 
+                    yyerror("Variable name already in use!");
                 node = node -> next;
             }
-            if (strcmp(newNode -> id, node -> id) == 0) {
-                printf("Variable name already in use!\n");
-                exit(EXIT_FAILURE);
-            }
+            if (strcmp(newNode -> id, node -> id) == 0) 
+                yyerror("Variable name already in use!");
             node -> next = newNode;
         }
     }
 
-    Node* getNode(const char *id) {
+    Node* getNode(const char* id) {
         Node *node = head;
         while (node != NULL) {
-            if (strcmp(node -> id, id) == 0) {
+            if (strcmp(node -> id, id) == 0)
                 return node;
-            }
             node = node -> next;
         }
-        return 0;
+        return NULL;
     }
 
 #endif
