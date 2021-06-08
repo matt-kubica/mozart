@@ -3,44 +3,58 @@
 
 
     Node * head = NULL;
+
+    char * enumToString(Type type){
+            switch (type) {
+                case INTEGER:
+                    return "integer";
+                case FLOAT:
+                    return "float";
+                case BOOLEAN:
+                    return "boolean";
+                case STRING:
+                    return "string";
+            }
+    }
     
     void printTable() {
         Node * node = head;
         while(node != NULL) {
             switch (node -> type) {
                 case INTEGER:
-                    printf("\nID: %s\nATTRIBUTE: %d\n", node -> id, node -> value.i);
+                    printf("\nID: %s\nATTRIBUTE: %d\nTYPE: %s\n", node -> id, node -> value.i, enumToString(node -> type));
                     break;
                 case FLOAT:
-                    printf("\nID: %s\nATTRIBUTE: %f\n", node -> id, node -> value.f);
+                    printf("\nID: %s\nATTRIBUTE: %f\nTYPE: %s\n", node -> id, node -> value.f), enumToString(node -> type);
                     break;
                 case BOOLEAN:
-                    printf("\nID: %s\nATTRIBUTE: %d\n", node -> id, (int)node -> value.b);
+                    printf("\nID: %s\nATTRIBUTE: %d\nTYPE: %s\n", node -> id, (int)node -> value.b), enumToString(node -> type);
                     break;
                 case STRING:
-                    printf("\nID: %s\nATTRIBUTE: %s\n", node -> id, node -> value.s);
+                    printf("\nID: %s\nATTRIBUTE: %s\nTYPE: %s\n", node -> id, node -> value.s, enumToString(node -> type));
                     break;
             }
             node = node -> next;
         }
     }
 
-    Node* construct(char* id, Node* node){
+    Node* construct(char *id, Node* node){
         node->id = id;
         node->next = NULL;
         return node;
     }
 
-    Node *constructInteger(const char *id, int value) {
+    Node *constructInteger(char *id, int value) {
         Node * node = (Node *) malloc(sizeof(Node));
         node -> id = id;
         node -> value.i = value;
         node -> type = INTEGER;
+        //printf("Type: %s\n", node->type);
         node -> next = NULL;
         return node;
     }
 
-    Node *constructFloat(const char *id, float value) {
+    Node *constructFloat(char *id, float value) {
         Node * node = (Node *) malloc(sizeof(Node));
         node -> id = id;
         node -> value.f = value;
@@ -49,7 +63,7 @@
         return node;
     }
 
-    Node *constructBoolean(const char *id, bool value) {
+    Node *constructBoolean(char *id, bool value) {
         Node * node = (Node *) malloc(sizeof(Node));
         node -> id = id;
         node -> value.b = value;
@@ -58,7 +72,7 @@
         return node;
     }
 
-    Node *constructString(const char *id, char *value) {
+    Node *constructString(char *id, char * value) {
         Node * node = (Node *) malloc(sizeof(Node));
         node -> id = id;
         node -> value.s = strdup(value);

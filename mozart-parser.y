@@ -15,6 +15,12 @@ Node* subtract(Node* node1, Node* node2);
 Node* multiply(Node* node1, Node* node2);
 Node* divide(Node* node1, Node* node2);
 void yyerror(char * s);
+int getIntValue(Node* n);
+float getFloatValue(Node* n);
+bool getBoolValue(Node* n);
+char* getStringValue(Node* n);
+void typeCheck(Node* n1, char * typeKeyword);
+Type getType(Node* n);
 
 %}
 
@@ -68,13 +74,13 @@ void yyerror(char * s);
 %union{
     char* LEXEME;
     struct Node* NODE;
-    
     // struct Node* LINKTOSYM;
 }
 
-%token <LEXEME> ID 
-%token <NODE> INTEGERTYPE FLOATTYPE BOOLEANTYPE STRINGTYPE
-
+%token ID 
+%type <LEXEME> ID 
+%token INTEGERTYPE FLOATTYPE BOOLEANTYPE STRINGTYPE
+%type <NODE> INTEGERTYPE FLOATTYPE BOOLEANTYPE STRINGTYPE
 %type <NODE> EXPR
 %type <NODE> LOGICEXPR 
 %type <NODE> TYPEVAL 
@@ -83,20 +89,18 @@ void yyerror(char * s);
 
 %%
 LINE    : 
-        | LINE VARDECL ENDOFSTMT                    {  ;}
-        | LINE EXPR ENDOFSTMT                       {;}
-        | LINE LOOPSTMT ENDOFSTMT                       {;}
+        | LINE VARDECL ENDOFSTMT                    { printTable() ;}
+        | LINE EXPR ENDOFSTMT                       { printf("%s", getStringValue($2)) ;}
         | LINE LOGICEXPR ENDOFSTMT{;}
         | LINE IFSTMT ENDOFSTMT{;}
         | LINE FUNCTION ENDOFSTMT{;}
 
-VARDECL : VAR ID COLON INTKEYWORD ASSIGNMENT EXPR      { insert(construct($2, $6)); /*TODO type checking in construction*/}
-        | VAR ID COLON FLOATKEYWORD ASSIGNMENT EXPR    { insert(construct($2, $6)); }
-        | VAR ID COLON BOOLEANKEYWORD ASSIGNMENT EXPR  { insert(construct($2, $6)); }
-        | VAR ID COLON STRINGKEYWORD ASSIGNMENT EXPR   { insert(construct($2, $6)); }
+VARDECL : VAR ID COLON INTKEYWORD ASSIGNMENT EXPR      { typeCheck($6, "integer");insert(construct($2, $6)); /*TODO type checking in construction*/}
+        | VAR ID COLON FLOATKEYWORD ASSIGNMENT EXPR    { typeCheck($6, "float");insert(construct($2, $6)) ;}
+        | VAR ID COLON BOOLEANKEYWORD ASSIGNMENT EXPR  { typeCheck($6, "boolean");insert(construct($2, $6)); }
+        | VAR ID COLON STRINGKEYWORD ASSIGNMENT EXPR   { typeCheck($6, "string");insert(construct($2, $6)); }
 
-LOOPSTMT :  INTEGERTYPE PER LOOP STARTOFSCOPE LINE ENDOFSCOPE         { /*insert number of times loop get executed into symbolTable*/;} 
-           |ID PER LOOP STARTOFSCOPE LINE ENDOFSCOPE {;}
+
 
 IFSTMT : IF LPAREN LOGICEXPR RPAREN STARTOFSCOPE LINE ELSE LINE ENDOFSCOPE    {;}
         |IF LPAREN LOGICEXPR RPAREN STARTOFSCOPE LINE ENDOFSCOPE     {;}    
@@ -108,6 +112,7 @@ LOGICEXPR :
             TRUEVAL                                 { $$ = trueVal(); }
            |FALSEVAL                                { $$ = falseVal(); }
            |EXPR GREATER EXPR                       { $$ = greater($1, $3); }
+
  
            
 
@@ -117,13 +122,13 @@ EXPR    : EXPR PLUS EXPR                            { $$ = add($1, $3); }
         | EXPR DIV EXPR                             { ; }
         | EXPR MOD EXPR                             { ; }
         | LPAREN EXPR RPAREN                        { ; }
-        | TYPEVAL                                   { $$ = $1 }
-        | ID                                        { ; }
+        | TYPEVAL                                   {$$ = $1;}
+        | ID                                        {;}
 
-TYPEVAL : INTEGERTYPE                                   {printf("hei"); $$ = $1}
-          |FLOATTYPE{;}
-          |BOOLEANTYPE{;}
-          |STRINGTYPE{;}
+TYPEVAL : INTEGERTYPE                                   {$$ = constructInteger(NULL, getIntValue($1)); printf("\nhei, I'm an integer\n"); }
+          |FLOATTYPE                                    {$$ = constructFloat(NULL, getFloatValue($1));  printf("hei, I'm a float"); ;}
+          |BOOLEANTYPE                                  {$$ = constructBoolean(NULL, getBoolValue($1));  printf("hei, I'm a BOOLEAN"); ;}
+          |STRINGTYPE                                   {$$ = constructString(NULL, getStringValue($1));  printf("hei, I'm a String"); ;}
 
 
 
@@ -132,6 +137,51 @@ TYPEVAL : INTEGERTYPE                                   {printf("hei"); $$ = $1}
 
               
 %%
+/*
+           |EXPR GREATEREQUAL EXPR                  { $$ = $1 >= $3}  
+           |EXPR LOWER EXPR                         { $$ = $1 < $3}  
+           |EXPR LOWEREQUAL EXPR                    { $$ = $1 <= $3}  
+           |EXPR EQUAL EXPR                         { $$ = $1 == $3}  
+           |EXPR  NOTEQUAL EXPR                     { $$ = $1 != $3}  
+           |NOT LOGICEXPR                           { $$ = !$2} 
+           |LOGICEXPR OR LOGICEXPR                  { $$ = $1 || $3} 
+           |LOGICEXPR AND LOGICEXPR                 { $$ = $1 && $3} 
+           
+           | LINE LOOPSTMT ENDOFSTMT                       {;}
+           
+           LOOPSTMT :  INTEGERTYPE PER LOOP STARTOFSCOPE LINE ENDOFSCOPE         { insert number of times loop get executed into symbolTable;} 
+           |ID PER LOOP STARTOFSCOPE LINE ENDOFSCOPE {;}
+           */
+
+           
+void typeCheck(Node* n1, char * typeKeyword){
+        printf("\ntypeChecking\nType: %s\nTypeKeyword: %s\n", enumToString(n1->type), typeKeyword);
+        if(strcmp(enumToString(n1->type),typeKeyword)){
+                yyerror("type declaration does not match !");
+                exit(1);
+        }
+}
+
+
+int getIntValue(Node* n){
+        return n->value.i;
+}
+
+Type getType(Node* n){
+        return n->type;
+}
+
+float getFloatValue(Node* n){
+        return n->value.f;
+}
+
+bool getBoolValue(Node* n){
+        return n->value.b;
+}
+
+char* getStringValue(Node* n){
+        return n->value.s;
+}
 
 char * stringConcat(char * str1, char * str2){
         char newString[strlen(str1) + strlen(str2) + 1];

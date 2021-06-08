@@ -88,17 +88,16 @@ typedef union YYSTYPE
 {
 
 /* Line 1676 of yacc.c  */
-#line 68 "mozart-parser.y"
+#line 74 "mozart-parser.y"
 
     char* LEXEME;
     struct Node* NODE;
-    
     // struct Node* LINKTOSYM;
 
 
 
 /* Line 1676 of yacc.c  */
-#line 102 "mozart-parser.tab.h"
+#line 101 "mozart-parser.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

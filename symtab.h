@@ -23,7 +23,7 @@
     typedef struct Node {
         const char* id;  
         Value value;
-        Type type;
+        enum Type type ;
         struct Node* next;    
     } Node; 
 
