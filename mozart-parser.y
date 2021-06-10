@@ -148,7 +148,7 @@ EXPR        : EXPR PLUS EXPR                                { $$ = add($1, $3); 
             ;
 
 
-TYPEVAL     : INTEGERTYPE                                   { $$ = constructInteger(NULL, $1.i); }
+TYPEVAL     : INTEGERTYPE                                   { $$ = constructInteger(NULL, $1.i); /* TODO: memory dealocation */ }
             | FLOATTYPE                                     { $$ = constructFloat(NULL, $1.f); }
             | BOOLEANTYPE                                   { $$ = constructBoolean(NULL, $1.b); }
             | STRINGTYPE                                    { $$ = constructString(NULL, $1.s); }

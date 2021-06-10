@@ -5,8 +5,7 @@ build:
 	flex mozart-lexer.l
 	gcc y.tab.c lex.yy.c -o mozart
 
-run: 
-	clear
+run:
 	./mozart
 
 clean:
