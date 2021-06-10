@@ -73,11 +73,12 @@
      SCALEKEYWORD = 289,
      FUNCTIONDECL = 290,
      RETURNSTMT = 291,
-     ID = 292,
-     INTEGERTYPE = 293,
-     FLOATTYPE = 294,
-     BOOLEANTYPE = 295,
-     STRINGTYPE = 296
+     EXITSTMT = 292,
+     ID = 293,
+     INTEGERTYPE = 294,
+     FLOATTYPE = 295,
+     BOOLEANTYPE = 296,
+     STRINGTYPE = 297
    };
 #endif
 
@@ -88,15 +89,16 @@ typedef union YYSTYPE
 {
 
 /* Line 1676 of yacc.c  */
-#line 68 "mozart-parser.y"
+#line 59 "mozart-parser.y"
 
     char* LEXEME;
     struct Node* NODE;
+    Value VALUE;
 
 
 
 /* Line 1676 of yacc.c  */
-#line 100 "mozart-parser.tab.h"
+#line 102 "mozart-parser.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

@@ -1,23 +1,9 @@
 %{
 #include "utils/types.h"
-#include "y.tab.h"
 
 #include <stdio.h>
 #include <stdlib.h> 
 #include <string.h>
-
-
-/* helper function */
-int convertToBoolean(const char *str) {
-	if (strcmp(str, "tune") == 0)
-		return 1;
-	if (strcmp(str, "outOfTune") == 0)
-		return 0;
-
-	// TODO: better error handling
-	printf("Syntax error");
-	exit(EXIT_FAILURE);
-}
 %}
 
 
@@ -74,8 +60,8 @@ minor       { return LOWER; }
 \&          { return AND; }
 
  /* boolean values */
-tune        { return TRUEVAL; }
-outOfTune   { return FALSEVAL; }
+    /*tune        { return TRUEVAL; }
+outOfTune   { return FALSEVAL; }*/
 
  /* functions */
 chord       { return FUNCTIONDECL; }
@@ -83,14 +69,6 @@ chord       { return FUNCTIONDECL; }
 exit        { return EXITSTMT; }
 
  /* literals */
-<<<<<<< HEAD
-
-{INTEGER} 	{ yylval.NODE -> value.i = atoi(yytext); yylval.NODE -> type = INTKEYWORD;  return INTEGERTYPE; } 
-{FLOAT} 	{ yylval.NODE ->value.f = atof(yytext); yylval.NODE -> type = FLOATKEYWORD; return FLOATTYPE; }
-{BOOLEAN}	{ yylval.NODE ->value.b = convertToBoolean(yytext); yylval.NODE ->type = BOOLEANKEYWORD; return BOOLEANTYPE; }
-{STRING} 	{ yylval.NODE -> value.s = strdup(yytext); yylval.NODE -> type = STRINGKEYWORD; return STRINGTYPE; }
-{ID} 		{ yylval.LEXEME = strdup(yytext); return ID; }
-=======
 {INTEGER}   {   
                 yylval.VALUE.i = atoi(yytext);
                 return INTEGERTYPE; 
@@ -112,7 +90,6 @@ exit        { return EXITSTMT; }
             }
 
 {ID}        { yylval.LEXEME = strdup(yytext); return ID; }
->>>>>>> 1c9829e63113e59b36e6631f463326f6729f0469
 %%
 
 int convertToBoolean(const char* str) {
