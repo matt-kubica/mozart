@@ -21,7 +21,7 @@ bool getBoolValue(Node* n);
 char* getStringValue(Node* n);
 void typeCheck(Node* n1, char * typeKeyword);
 Type getType(Node* n);
-
+void printExpr(Node* n);
 %}
 
 %token VAR
@@ -89,16 +89,17 @@ Type getType(Node* n);
 
 %%
 LINE    : 
+        | LINE EXPR ENDOFSTMT                       { printExpr($2);}
+        | LINE LOGICEXPR ENDOFSTMT{;}               { printExpr($2);}
         | LINE VARDECL ENDOFSTMT                    { printTable() ;}
-        | LINE EXPR ENDOFSTMT                       { printf("%s", getStringValue($2)) ;}
-        | LINE LOGICEXPR ENDOFSTMT{;}
         | LINE IFSTMT ENDOFSTMT{;}
         | LINE FUNCTION ENDOFSTMT{;}
+        | LINE ENDOFSTMT
 
-VARDECL : VAR ID COLON INTKEYWORD ASSIGNMENT EXPR      { typeCheck($6, "integer");insert(construct($2, $6)); /*TODO type checking in construction*/}
-        | VAR ID COLON FLOATKEYWORD ASSIGNMENT EXPR    { typeCheck($6, "float");insert(construct($2, $6)) ;}
-        | VAR ID COLON BOOLEANKEYWORD ASSIGNMENT EXPR  { typeCheck($6, "boolean");insert(construct($2, $6)); }
-        | VAR ID COLON STRINGKEYWORD ASSIGNMENT EXPR   { typeCheck($6, "string");insert(construct($2, $6)); }
+VARDECL : VAR ID COLON INTKEYWORD ASSIGNMENT EXPR      { typeCheck($6, "integer"); insert(construct($2, $6));}
+        | VAR ID COLON FLOATKEYWORD ASSIGNMENT EXPR    { typeCheck($6, "float"); insert(construct($2, $6)) ;}
+        | VAR ID COLON BOOLEANKEYWORD ASSIGNMENT EXPR  { typeCheck($6, "boolean"); insert(construct($2, $6)); }
+        | VAR ID COLON STRINGKEYWORD ASSIGNMENT EXPR   { typeCheck($6, "string"); insert(construct($2, $6)); }
 
 
 
@@ -116,7 +117,7 @@ LOGICEXPR :
  
            
 
-EXPR    : EXPR PLUS EXPR                            { $$ = add($1, $3); }
+EXPR    : EXPR PLUS EXPR                            { $$ = construct(NULL, add($1, $3)); }
         | EXPR MINUS EXPR                           { ; }
         | EXPR PER EXPR                             { ; }
         | EXPR DIV EXPR                             { ; }
@@ -125,10 +126,10 @@ EXPR    : EXPR PLUS EXPR                            { $$ = add($1, $3); }
         | TYPEVAL                                   {$$ = $1;}
         | ID                                        {;}
 
-TYPEVAL : INTEGERTYPE                                   {$$ = constructInteger(NULL, getIntValue($1)); printf("\nhei, I'm an integer\n"); }
-          |FLOATTYPE                                    {$$ = constructFloat(NULL, getFloatValue($1));  printf("hei, I'm a float"); ;}
-          |BOOLEANTYPE                                  {$$ = constructBoolean(NULL, getBoolValue($1));  printf("hei, I'm a BOOLEAN"); ;}
-          |STRINGTYPE                                   {$$ = constructString(NULL, getStringValue($1));  printf("hei, I'm a String"); ;}
+TYPEVAL : INTEGERTYPE                                   {$$ = construct(NULL, $1);}
+          |FLOATTYPE                                    {$$ = construct(NULL, $1);}
+          |BOOLEANTYPE                                  {$$ = construct(NULL, $1);}
+          |STRINGTYPE                                   {$$ = construct(NULL, $1);}
 
 
 
@@ -155,13 +156,11 @@ TYPEVAL : INTEGERTYPE                                   {$$ = constructInteger(N
 
            
 void typeCheck(Node* n1, char * typeKeyword){
-        printf("\ntypeChecking\nType: %s\nTypeKeyword: %s\n", enumToString(n1->type), typeKeyword);
         if(strcmp(enumToString(n1->type),typeKeyword)){
                 yyerror("type declaration does not match !");
                 exit(1);
         }
 }
-
 
 int getIntValue(Node* n){
         return n->value.i;
@@ -223,37 +222,40 @@ Node* greater(Node* node1, Node* node2){
 }
 
 Node* add(Node* node1, Node* node2){
-        printf("Adding.");
+        printf("\nAdding.\n");
         if (node1->type != node2->type) 
                 yyerror("incompatibile");
         else{
-                Node* result =(Node *) malloc(sizeof(Node));
+                int resultI;
+                float resultF;
+                char* resultS;
+                //Node* result =(Node *) malloc(sizeof(Node));
                 switch(node1->type){
-                        case INTEGER : result->value.i = node1->value.i + node2->value.i; 
-                                       result->type = INTEGER;
-                                       return result;
-                        case FLOAT   : result->value.f = node1->value.f + node2->value.f;
-                                       result->type = FLOAT;
-                                       return result;
+                        case INTEGER : resultI = node1->value.i + node2->value.i; 
+                                       node1->value.i = resultI;
+                                       return node1;
+                        case FLOAT   : resultF = node1->value.f + node2->value.f;
+                                       node1->value.f = resultF;
+                                       return node1;
                         case BOOLEAN : yyerror("operator not supported.");
                                        break;
-                        case STRING  : result->value.s = stringConcat(node1->value.s, node2->value.s);
-                                       result->type = STRING;
-                                       return result;
+                        case STRING  : resultS = stringConcat(node1->value.s, node2->value.s);
+                                       node1->value.s = resultS;
+                                       return node1;
                 }
 
         }
 }
 /*
 Node* subtract(Node* node1, Node* node2){
-        if (node1.type != node2.type) 
+        if (node1->type != node2->type) 
                 yyerror("incompatibile");
         else{
                 Node* result =(Node *) malloc(sizeof(Node));
-                switch(node1.type){
-                        case INTEGER : return node1.value.i - node2.value.i; 
+                switch(node1->type){
+                        case INTEGER : return node1->value.i - node2->value.i; 
                                        break;
-                        case FLOAT   : return node1.value.f - node2.value.f;
+                        case FLOAT   : return node1->value.f - node2->value.f;
                                        break;
                         case BOOLEAN : yyerror("operator not supported.");
                                        break;
@@ -265,7 +267,7 @@ Node* subtract(Node* node1, Node* node2){
 }
 
 Node* multiply(Node* node1, Node* node2){
-        if (node1.type != node2.type) 
+        if (node1->type != node2->type) 
                 yyerror("incompatibile");
         else{
                 switch(node1.type){
@@ -301,8 +303,18 @@ Node* divide(Node* node1, Node* node2){
                 }
 
         }
+}*/
+
+
+void printExpr(Node* n){
+                printf("Result: ");
+                switch(n->type){
+                        case INTEGER : printf("%i\n", n->value.i);break;
+                        case FLOAT   : printf("%f\n", n->value.f);break;
+                        case BOOLEAN : printf("%i\n", n->value.b);break;
+                        case STRING  : printf("%s\n", n->value.s);break;
+                }
 }
-*/
 
 
 void yyerror(char * s) {  

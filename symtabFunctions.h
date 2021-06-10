@@ -38,12 +38,6 @@
         }
     }
 
-    Node* construct(char *id, Node* node){
-        node->id = id;
-        node->next = NULL;
-        return node;
-    }
-
     Node *constructInteger(char *id, int value) {
         Node * node = (Node *) malloc(sizeof(Node));
         node -> id = id;
@@ -79,6 +73,19 @@
         node -> type = STRING;
         node -> next = NULL;
         return node;
+    }
+
+    Node* construct(char *id, Node* node){
+        switch(node->type){
+            case INTEGER: 
+                    return constructInteger(id, node->value.i);
+            case FLOAT:
+                    return constructFloat(id, node->value.f);
+            case BOOLEAN:
+                    return constructBoolean(id, node->value.b);
+            case STRING:
+                    return constructString(id, node->value.s);
+        }
     }
 
     void insert(Node * newNode){
