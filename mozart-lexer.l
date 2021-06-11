@@ -1,9 +1,11 @@
 %{
 #include "utils/types.h"
+#include "mozart-parser.tab.h"
 
 #include <stdio.h>
 #include <stdlib.h> 
 #include <string.h>
+int convertToBoolean(const char*);
 %}
 
 
@@ -11,10 +13,9 @@ BOOLEAN     (tune|outOfTune)
 DIGIT       [0-9]
 INTEGER     {DIGIT}*
 FLOAT       {INTEGER}\.?{DIGIT}+
-STRING      \"(\\.|[^"\\])*\"
-
-LOOP        \*{INTEGER}|{ID}\:\|  
+STRING      \"(\\.|[^"\\])*\" 
 ID          [A-Za-z][A-Za-z{DIGIT}]*
+LOOP        \*({INTEGER}|{ID})\:\| 
 
 
 /* Rules Section*/
@@ -43,9 +44,9 @@ scale       { return SCALEKEYWORD; }
 
  /* arithmetic operators */
 \+          { return PLUS; }
-'-'         { return MINUS; }
-'*'         { return PER; }
-'\/'        { return DIV; }
+\-         { return MINUS; }
+\*         { return PER; }
+\/        { return DIV; }
 \%          { return MOD; }
 
  /* logical operators */
@@ -57,11 +58,9 @@ minor       { return LOWER; }
 \!\=        { return NOTEQUAL; }
 \!          { return NOT; }
 \^          { return OR; }
-\&          { return AND; }
+\&         {return AND; }
 
  /* boolean values */
-    /*tune        { return TRUEVAL; }
-outOfTune   { return FALSEVAL; }*/
 
  /* functions */
 chord       { return FUNCTIONDECL; }

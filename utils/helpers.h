@@ -63,4 +63,23 @@
         return strdup(newString);
     }
 
+    /*
+    char* stringSubtract(char* a, char* b){
+        if(a >= b){
+            char res[strlen(a)];
+        }
+        else{
+            char res[strlen(b)];
+        }
+
+        int i = 0;
+        while(*a++ && *b++ && *a != '\0' && *b != '\0'){
+            if(strcmp(a, b) != 0){
+                res[i] = *a;
+                i++;
+            }
+        }
+        return res;
+    }*/  //Just an idea, return a string which is string a without substring b
+
 #endif
