@@ -63,7 +63,7 @@
         return strdup(newString);
     }
 
-    /*
+    
     char* stringSubtract(char* a, char* b){
         if(a >= b){
             char res[strlen(a)];
@@ -80,6 +80,6 @@
             }
         }
         return res;
-    }*/  //Just an idea, return a string which is string a without substring b
+    }  //Just an idea, return a string which is string a without substring b
 
 #endif

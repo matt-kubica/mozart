@@ -56,9 +56,9 @@
             case BOOLEAN: 
                 yyerror("Operator not supported!");
                 return NULL;
-            case STRING: /*
+            case STRING: 
                 result -> value.s = stringSubtract(node1 -> value.s, node2 -> value.s);
-                result -> type = STRING;*/
+                result -> type = STRING;
                 return result;
         }    
         return NULL;
