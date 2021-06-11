@@ -74,6 +74,7 @@
 #include <stdlib.h> 
 #include <ctype.h>
 #include <stdbool.h>
+<<<<<<< HEAD
 #include "symtab.h"
 #include "symtabFunctions.h"
 extern int yylex();
@@ -93,10 +94,17 @@ char* getStringValue(Node* n);
 void typeCheck(Node* n1, char * typeKeyword);
 Type getType(Node* n);
 void printExpr(Node* n);
+=======
+#include "utils/symtab.h"
+#include "utils/expr.h"
+#include "utils/logicexpr.h"
+
+extern int yylex();
+>>>>>>> master
 
 
 /* Line 189 of yacc.c  */
-#line 100 "mozart-parser.tab.c"
+#line 86 "mozart-parser.tab.c"
 
 /* Enabling traces.  */
 #ifndef YYDEBUG
@@ -157,11 +165,12 @@ void printExpr(Node* n);
      SCALEKEYWORD = 289,
      FUNCTIONDECL = 290,
      RETURNSTMT = 291,
-     ID = 292,
-     INTEGERTYPE = 293,
-     FLOATTYPE = 294,
-     BOOLEANTYPE = 295,
-     STRINGTYPE = 296
+     EXITSTMT = 292,
+     ID = 293,
+     INTEGERTYPE = 294,
+     FLOATTYPE = 295,
+     BOOLEANTYPE = 296,
+     STRINGTYPE = 297
    };
 #endif
 
@@ -172,16 +181,16 @@ typedef union YYSTYPE
 {
 
 /* Line 214 of yacc.c  */
-#line 74 "mozart-parser.y"
+#line 59 "mozart-parser.y"
 
     char* LEXEME;
     struct Node* NODE;
-    // struct Node* LINKTOSYM;
+    Value VALUE;
 
 
 
 /* Line 214 of yacc.c  */
-#line 185 "mozart-parser.tab.c"
+#line 172 "mozart-parser.tab.c"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
@@ -193,7 +202,7 @@ typedef union YYSTYPE
 
 
 /* Line 264 of yacc.c  */
-#line 197 "mozart-parser.tab.c"
+#line 184 "mozart-parser.tab.c"
 
 #ifdef short
 # undef short
@@ -406,22 +415,32 @@ union yyalloc
 #endif
 
 /* YYFINAL -- State number of the termination state.  */
-#define YYFINAL  2
+#define YYFINAL  33
 /* YYLAST -- Last index in YYTABLE.  */
+<<<<<<< HEAD
 #define YYLAST   182
+=======
+#define YYLAST   380
+>>>>>>> master
 
 /* YYNTOKENS -- Number of terminals.  */
-#define YYNTOKENS  42
+#define YYNTOKENS  43
 /* YYNNTS -- Number of nonterminals.  */
 #define YYNNTS  9
 /* YYNRULES -- Number of rules.  */
+<<<<<<< HEAD
 #define YYNRULES  32
 /* YYNRULES -- Number of states.  */
 #define YYNSTATES  75
+=======
+#define YYNRULES  48
+/* YYNRULES -- Number of states.  */
+#define YYNSTATES  119
+>>>>>>> master
 
 /* YYTRANSLATE(YYLEX) -- Bison symbol number corresponding to YYLEX.  */
 #define YYUNDEFTOK  2
-#define YYMAXUTOK   296
+#define YYMAXUTOK   297
 
 #define YYTRANSLATE(YYX)						\
   ((unsigned int) (YYX) <= YYMAXUTOK ? yytranslate[YYX] : YYUNDEFTOK)
@@ -458,7 +477,7 @@ static const yytype_uint8 yytranslate[] =
        5,     6,     7,     8,     9,    10,    11,    12,    13,    14,
       15,    16,    17,    18,    19,    20,    21,    22,    23,    24,
       25,    26,    27,    28,    29,    30,    31,    32,    33,    34,
-      35,    36,    37,    38,    39,    40,    41
+      35,    36,    37,    38,    39,    40,    41,    42
 };
 
 #if YYDEBUG
@@ -466,15 +485,24 @@ static const yytype_uint8 yytranslate[] =
    YYRHS.  */
 static const yytype_uint8 yyprhs[] =
 {
+<<<<<<< HEAD
        0,     0,     3,     4,     8,     9,    14,    18,    22,    26,
       29,    36,    43,    50,    57,    67,    75,    83,    90,    92,
       94,    98,   102,   106,   110,   114,   118,   122,   124,   126,
      128,   130,   132
+=======
+       0,     0,     3,     6,    10,    13,    17,    20,    24,    27,
+      31,    34,    38,    41,    45,    48,    52,    59,    66,    73,
+      80,    90,    98,   105,   112,   120,   127,   129,   131,   135,
+     139,   143,   147,   151,   155,   158,   162,   166,   170,   174,
+     178,   182,   186,   190,   192,   194,   196,   198,   200
+>>>>>>> master
 };
 
 /* YYRHS -- A `-1'-separated list of the rules' RHS.  */
 static const yytype_int8 yyrhs[] =
 {
+<<<<<<< HEAD
       43,     0,    -1,    -1,    43,    49,    13,    -1,    -1,    43,
       48,    13,    44,    -1,    43,    45,    13,    -1,    43,    46,
       13,    -1,    43,    47,    13,    -1,    43,    13,    -1,     3,
@@ -489,15 +517,46 @@ static const yytype_int8 yyrhs[] =
       49,    17,    49,    -1,    49,    18,    49,    -1,    11,    49,
       12,    -1,    50,    -1,    37,    -1,    38,    -1,    39,    -1,
       40,    -1,    41,    -1
+=======
+      44,     0,    -1,    37,    13,    -1,    44,    37,    13,    -1,
+      45,    13,    -1,    44,    45,    13,    -1,    50,    13,    -1,
+      44,    50,    13,    -1,    49,    13,    -1,    44,    49,    13,
+      -1,    46,    13,    -1,    44,    46,    13,    -1,    47,    13,
+      -1,    44,    47,    13,    -1,    48,    13,    -1,    44,    48,
+      13,    -1,     3,    38,     4,    30,    10,    50,    -1,     3,
+      38,     4,    31,    10,    50,    -1,     3,    38,     4,    32,
+      10,    50,    -1,     3,    38,     4,    33,    10,    50,    -1,
+       5,    11,    49,    12,     8,    44,     6,    44,     9,    -1,
+       5,    11,    49,    12,     8,    44,     9,    -1,    39,    16,
+       7,     8,    44,     9,    -1,    38,    16,     7,     8,    44,
+       9,    -1,    35,    11,    45,    12,     8,    44,     9,    -1,
+      35,    11,    12,     8,    44,     9,    -1,    28,    -1,    29,
+      -1,    50,    21,    50,    -1,    50,    19,    50,    -1,    50,
+      22,    50,    -1,    50,    20,    50,    -1,    50,    25,    50,
+      -1,    50,    23,    50,    -1,    24,    49,    -1,    49,    26,
+      49,    -1,    49,    27,    49,    -1,    50,    14,    50,    -1,
+      50,    15,    50,    -1,    50,    16,    50,    -1,    50,    17,
+      50,    -1,    50,    18,    50,    -1,    11,    50,    12,    -1,
+      51,    -1,    38,    -1,    39,    -1,    40,    -1,    41,    -1,
+      42,    -1
+>>>>>>> master
 };
 
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
+<<<<<<< HEAD
        0,    91,    91,    92,    93,    93,    94,    95,    96,    97,
       99,   100,   101,   102,   106,   107,   109,   110,   113,   114,
      115,   120,   121,   122,   123,   124,   125,   126,   127,   129,
      130,   131,   132
+=======
+       0,    75,    75,    76,    77,    78,    79,    80,    81,    82,
+      83,    84,    85,    86,    87,    88,    92,    96,   100,   104,
+     111,   112,   116,   117,   121,   122,   126,   127,   128,   129,
+     130,   131,   132,   133,   134,   135,   136,   140,   141,   142,
+     143,   144,   145,   146,   147,   151,   152,   153,   154
+>>>>>>> master
 };
 #endif
 
@@ -512,9 +571,15 @@ static const char *const yytname[] =
   "LOWEREQUAL", "GREATER", "LOWER", "NOTEQUAL", "NOT", "EQUAL", "OR",
   "AND", "TRUEVAL", "FALSEVAL", "INTKEYWORD", "FLOATKEYWORD",
   "BOOLEANKEYWORD", "STRINGKEYWORD", "SCALEKEYWORD", "FUNCTIONDECL",
+<<<<<<< HEAD
   "RETURNSTMT", "ID", "INTEGERTYPE", "FLOATTYPE", "BOOLEANTYPE",
   "STRINGTYPE", "$accept", "LINE", "$@1", "VARDECL", "IFSTMT", "FUNCTION",
   "LOGICEXPR", "EXPR", "TYPEVAL", 0
+=======
+  "RETURNSTMT", "EXITSTMT", "ID", "INTEGERTYPE", "FLOATTYPE",
+  "BOOLEANTYPE", "STRINGTYPE", "$accept", "LINE", "VARDECL", "IFSTMT",
+  "LOOPSTMT", "FUNCTION", "LOGICEXPR", "EXPR", "TYPEVAL", 0
+>>>>>>> master
 };
 #endif
 
@@ -527,26 +592,42 @@ static const yytype_uint16 yytoknum[] =
      265,   266,   267,   268,   269,   270,   271,   272,   273,   274,
      275,   276,   277,   278,   279,   280,   281,   282,   283,   284,
      285,   286,   287,   288,   289,   290,   291,   292,   293,   294,
-     295,   296
+     295,   296,   297
 };
 # endif
 
 /* YYR1[YYN] -- Symbol number of symbol that rule YYN derives.  */
 static const yytype_uint8 yyr1[] =
 {
+<<<<<<< HEAD
        0,    42,    43,    43,    44,    43,    43,    43,    43,    43,
       45,    45,    45,    45,    46,    46,    47,    47,    48,    48,
       48,    49,    49,    49,    49,    49,    49,    49,    49,    50,
       50,    50,    50
+=======
+       0,    43,    44,    44,    44,    44,    44,    44,    44,    44,
+      44,    44,    44,    44,    44,    44,    45,    45,    45,    45,
+      46,    46,    47,    47,    48,    48,    49,    49,    49,    49,
+      49,    49,    49,    49,    49,    49,    49,    50,    50,    50,
+      50,    50,    50,    50,    50,    51,    51,    51,    51
+>>>>>>> master
 };
 
 /* YYR2[YYN] -- Number of symbols composing right hand side of rule YYN.  */
 static const yytype_uint8 yyr2[] =
 {
+<<<<<<< HEAD
        0,     2,     0,     3,     0,     4,     3,     3,     3,     2,
        6,     6,     6,     6,     9,     7,     7,     6,     1,     1,
        3,     3,     3,     3,     3,     3,     3,     1,     1,     1,
        1,     1,     1
+=======
+       0,     2,     2,     3,     2,     3,     2,     3,     2,     3,
+       2,     3,     2,     3,     2,     3,     6,     6,     6,     6,
+       9,     7,     6,     6,     7,     6,     1,     1,     3,     3,
+       3,     3,     3,     3,     2,     3,     3,     3,     3,     3,
+       3,     3,     3,     1,     1,     1,     1,     1,     1
+>>>>>>> master
 };
 
 /* YYDEFACT[STATE-NAME] -- Default rule to reduce with in state
@@ -554,6 +635,7 @@ static const yytype_uint8 yyr2[] =
    means the default is an error.  */
 static const yytype_uint8 yydefact[] =
 {
+<<<<<<< HEAD
        2,     0,     1,     0,     0,     0,     9,    18,    19,     0,
       28,    29,    30,    31,    32,     0,     0,     0,     0,     0,
       27,     0,     0,     0,     0,     6,     7,     8,     4,     3,
@@ -562,16 +644,35 @@ static const yytype_uint8 yydefact[] =
        0,     0,     0,     0,     2,     0,     0,     0,     0,     0,
        2,     0,     2,    10,    11,    12,    13,     0,    17,     0,
        2,    15,    16,     0,    14
+=======
+       0,     0,     0,     0,     0,    26,    27,     0,     0,    44,
+      45,    46,    47,    48,     0,     0,     0,     0,     0,     0,
+       0,    43,     0,     0,    44,    45,     0,    34,     0,     0,
+       2,     0,     0,     1,     0,     0,     0,     0,     0,     0,
+       0,     4,    10,    12,    14,     8,     0,     0,     6,     0,
+       0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+       0,     0,    42,     0,     0,     0,     0,     3,     5,    11,
+      13,    15,     9,     7,    35,    36,    37,    38,    39,    40,
+      41,    29,    31,    28,    30,    33,    32,     0,     0,     0,
+       0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+       0,     0,     0,     0,     0,    16,    17,    18,    19,     0,
+      25,     0,    23,    22,     0,    21,    24,     0,    20
+>>>>>>> master
 };
 
 /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
+<<<<<<< HEAD
       -1,     1,    42,    15,    16,    17,    18,    19,    20
+=======
+      -1,    14,    15,    16,    17,    18,    19,    20,    21
+>>>>>>> master
 };
 
 /* YYPACT[STATE-NUM] -- Index in YYTABLE of the portion describing
    STATE-NUM.  */
+<<<<<<< HEAD
 #define YYPACT_NINF -51
 static const yytype_int16 yypact[] =
 {
@@ -583,12 +684,33 @@ static const yytype_int16 yypact[] =
       56,    57,    58,    62,   -51,    64,    45,    45,    45,    45,
      -51,    66,   -51,    82,    82,    82,    82,    52,   -51,   105,
      -51,   -51,   -51,   119,   -51
+=======
+#define YYPACT_NINF -88
+static const yytype_int16 yypact[] =
+{
+     312,   -34,    -5,    -8,    46,   -88,   -88,     1,    10,     3,
+       5,   -88,   -88,   -88,   142,    29,    32,    47,    48,    50,
+     342,   -88,    58,    46,   -88,   -88,   134,     2,   140,     6,
+     -88,     7,    57,   -88,    59,    60,    67,    68,    69,    52,
+     355,   -88,   -88,   -88,   -88,   -88,    46,    46,   -88,    -8,
+      -8,    -8,    -8,    -8,    -8,    -8,    -8,    -8,    -8,    -8,
+      36,    -2,   -88,    28,    71,    63,    82,   -88,   -88,   -88,
+     -88,   -88,   -88,   -88,     2,     2,    22,    22,   -88,   -88,
+     -88,   158,   158,   158,   158,   158,   158,    92,    93,    94,
+      97,   102,   312,   110,   312,   312,    -8,    -8,    -8,    -8,
+     312,   204,   312,   226,   248,   158,   158,   158,   158,   182,
+     -88,   270,   -88,   -88,   312,   -88,   -88,   292,   -88
+>>>>>>> master
 };
 
 /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
+<<<<<<< HEAD
      -51,   -50,   -51,    38,   -51,   -51,    80,    -5,   -51
+=======
+     -88,   -87,   -12,     8,    23,    27,    12,    -3,   -88
+>>>>>>> master
 };
 
 /* YYTABLE[YYPACT[STATE-NUM]].  What to do in state STATE-NUM.  If
@@ -598,6 +720,7 @@ static const yytype_int8 yypgoto[] =
 #define YYTABLE_NINF -1
 static const yytype_uint8 yytable[] =
 {
+<<<<<<< HEAD
       23,    21,     3,     2,    61,    22,     3,    24,     4,    53,
       67,    40,    69,    25,     5,    26,     6,    38,    27,     5,
       73,    49,    50,    51,    52,    43,    44,    45,    46,    47,
@@ -617,10 +740,52 @@ static const yytype_uint8 yytable[] =
       14,    29,    30,    31,    32,    33,    34,     0,     0,    35,
       30,    31,    32,    33,    34,     0,    39,    35,    30,    31,
       32,    33,    34
+=======
+      26,    28,    35,     3,    22,   101,    23,   103,   104,     1,
+      91,    40,    29,   109,    65,   111,    27,    64,    63,    31,
+      28,    32,    36,    30,    46,    47,    39,   117,    46,    47,
+      24,    25,    11,    12,    13,    61,    92,    37,    51,    52,
+      53,    38,    41,    28,    28,    42,    76,    77,    78,    79,
+      80,    81,    82,    83,    84,    85,    86,     3,    74,    75,
+      43,    44,    60,    45,    66,    72,    87,    88,    89,    90,
+       4,    94,    67,    68,     5,     6,    46,    47,    46,    47,
+      69,    70,    71,    93,    24,    25,    11,    12,    13,    35,
+      95,    35,    35,   105,   106,   107,   108,    35,    40,    35,
+      40,    40,    96,    97,    98,    35,    40,    99,    40,    36,
+     100,    36,    36,    39,    40,    39,    39,    36,   102,    36,
+       0,    39,     0,    39,    37,    36,    37,    37,    38,    39,
+      38,    38,    37,     0,    37,     0,    38,     0,    38,     0,
+      37,     0,    33,     0,    38,     1,    62,     2,    49,    50,
+      51,    52,    53,     3,    49,    50,    51,    52,    53,    54,
+      55,    56,    57,    58,     0,    59,     4,     0,     0,     0,
+       5,     6,    49,    50,    51,    52,    53,     7,     0,    34,
+       9,    10,    11,    12,    13,     1,     0,     2,   114,     0,
+       0,   115,     0,     3,     0,     0,     0,     0,     0,     0,
+       0,     0,     0,     0,     0,     0,     4,     1,     0,     2,
+       5,     6,     0,   110,     0,     3,     0,     7,     0,    34,
+       9,    10,    11,    12,    13,     0,     0,     0,     4,     1,
+       0,     2,     5,     6,     0,   112,     0,     3,     0,     7,
+       0,    34,     9,    10,    11,    12,    13,     0,     0,     0,
+       4,     1,     0,     2,     5,     6,     0,   113,     0,     3,
+       0,     7,     0,    34,     9,    10,    11,    12,    13,     0,
+       0,     0,     4,     1,     0,     2,     5,     6,     0,   116,
+       0,     3,     0,     7,     0,    34,     9,    10,    11,    12,
+      13,     0,     0,     0,     4,     1,     0,     2,     5,     6,
+       0,   118,     0,     3,     0,     7,     0,    34,     9,    10,
+      11,    12,    13,     0,     0,     1,     4,     2,     0,     0,
+       5,     6,     0,     3,     0,     0,     0,     7,     0,    34,
+       9,    10,    11,    12,    13,     0,     4,     0,     0,     0,
+       5,     6,     0,     0,     0,     0,     0,     7,     0,     8,
+       9,    10,    11,    12,    13,    48,    49,    50,    51,    52,
+      53,    54,    55,    56,    57,    58,     0,    59,    73,    49,
+      50,    51,    52,    53,    54,    55,    56,    57,    58,     0,
+      59
+>>>>>>> master
 };
 
 static const yytype_int8 yycheck[] =
 {
+<<<<<<< HEAD
        5,    37,     3,     0,    54,    11,     3,    11,     5,    12,
       60,    12,    62,    13,    11,    13,    13,    22,    13,    11,
       70,    30,    31,    32,    33,    30,    31,    32,    33,    34,
@@ -640,12 +805,54 @@ static const yytype_int8 yycheck[] =
       41,    13,    14,    15,    16,    17,    18,    -1,    -1,    21,
       14,    15,    16,    17,    18,    -1,    12,    21,    14,    15,
       16,    17,    18
+=======
+       3,     4,    14,    11,    38,    92,    11,    94,    95,     3,
+      12,    14,    11,   100,     7,   102,     4,    29,    12,    16,
+      23,    16,    14,    13,    26,    27,    14,   114,    26,    27,
+      38,    39,    40,    41,    42,    23,     8,    14,    16,    17,
+      18,    14,    13,    46,    47,    13,    49,    50,    51,    52,
+      53,    54,    55,    56,    57,    58,    59,    11,    46,    47,
+      13,    13,     4,    13,     7,    13,    30,    31,    32,    33,
+      24,     8,    13,    13,    28,    29,    26,    27,    26,    27,
+      13,    13,    13,    12,    38,    39,    40,    41,    42,   101,
+       8,   103,   104,    96,    97,    98,    99,   109,   101,   111,
+     103,   104,    10,    10,    10,   117,   109,    10,   111,   101,
+       8,   103,   104,   101,   117,   103,   104,   109,     8,   111,
+      -1,   109,    -1,   111,   101,   117,   103,   104,   101,   117,
+     103,   104,   109,    -1,   111,    -1,   109,    -1,   111,    -1,
+     117,    -1,     0,    -1,   117,     3,    12,     5,    14,    15,
+      16,    17,    18,    11,    14,    15,    16,    17,    18,    19,
+      20,    21,    22,    23,    -1,    25,    24,    -1,    -1,    -1,
+      28,    29,    14,    15,    16,    17,    18,    35,    -1,    37,
+      38,    39,    40,    41,    42,     3,    -1,     5,     6,    -1,
+      -1,     9,    -1,    11,    -1,    -1,    -1,    -1,    -1,    -1,
+      -1,    -1,    -1,    -1,    -1,    -1,    24,     3,    -1,     5,
+      28,    29,    -1,     9,    -1,    11,    -1,    35,    -1,    37,
+      38,    39,    40,    41,    42,    -1,    -1,    -1,    24,     3,
+      -1,     5,    28,    29,    -1,     9,    -1,    11,    -1,    35,
+      -1,    37,    38,    39,    40,    41,    42,    -1,    -1,    -1,
+      24,     3,    -1,     5,    28,    29,    -1,     9,    -1,    11,
+      -1,    35,    -1,    37,    38,    39,    40,    41,    42,    -1,
+      -1,    -1,    24,     3,    -1,     5,    28,    29,    -1,     9,
+      -1,    11,    -1,    35,    -1,    37,    38,    39,    40,    41,
+      42,    -1,    -1,    -1,    24,     3,    -1,     5,    28,    29,
+      -1,     9,    -1,    11,    -1,    35,    -1,    37,    38,    39,
+      40,    41,    42,    -1,    -1,     3,    24,     5,    -1,    -1,
+      28,    29,    -1,    11,    -1,    -1,    -1,    35,    -1,    37,
+      38,    39,    40,    41,    42,    -1,    24,    -1,    -1,    -1,
+      28,    29,    -1,    -1,    -1,    -1,    -1,    35,    -1,    37,
+      38,    39,    40,    41,    42,    13,    14,    15,    16,    17,
+      18,    19,    20,    21,    22,    23,    -1,    25,    13,    14,
+      15,    16,    17,    18,    19,    20,    21,    22,    23,    -1,
+      25
+>>>>>>> master
 };
 
 /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
    symbol of state STATE-NUM.  */
 static const yytype_uint8 yystos[] =
 {
+<<<<<<< HEAD
        0,    43,     0,     3,     5,    11,    13,    28,    29,    35,
       37,    38,    39,    40,    41,    45,    46,    47,    48,    49,
       50,    37,    11,    49,    11,    13,    13,    13,    13,    13,
@@ -654,6 +861,20 @@ static const yytype_uint8 yystos[] =
       31,    32,    33,    12,     8,    12,    10,    10,    10,    10,
        8,    43,     8,    49,    49,    49,    49,    43,     9,    43,
        6,     9,     9,    43,     9
+=======
+       0,     3,     5,    11,    24,    28,    29,    35,    37,    38,
+      39,    40,    41,    42,    44,    45,    46,    47,    48,    49,
+      50,    51,    38,    11,    38,    39,    50,    49,    50,    11,
+      13,    16,    16,     0,    37,    45,    46,    47,    48,    49,
+      50,    13,    13,    13,    13,    13,    26,    27,    13,    14,
+      15,    16,    17,    18,    19,    20,    21,    22,    23,    25,
+       4,    49,    12,    12,    45,     7,     7,    13,    13,    13,
+      13,    13,    13,    13,    49,    49,    50,    50,    50,    50,
+      50,    50,    50,    50,    50,    50,    50,    30,    31,    32,
+      33,    12,     8,    12,     8,     8,    10,    10,    10,    10,
+       8,    44,     8,    44,    44,    50,    50,    50,    50,    44,
+       9,    44,     9,     9,     6,     9,     9,    44,     9
+>>>>>>> master
 };
 
 #define yyerrok		(yyerrstatus = 0)
@@ -1464,213 +1685,493 @@ yyreduce:
   YY_REDUCE_PRINT (yyn);
   switch (yyn)
     {
-        case 3:
+        case 2:
 
 /* Line 1455 of yacc.c  */
+<<<<<<< HEAD
 #line 92 "mozart-parser.y"
     { printExpr((yyvsp[(2) - (3)].NODE));;}
+=======
+#line 75 "mozart-parser.y"
+    { exit(EXIT_SUCCESS); ;}
+    break;
+
+  case 3:
+
+/* Line 1455 of yacc.c  */
+#line 76 "mozart-parser.y"
+    { exit(EXIT_SUCCESS); ;}
+>>>>>>> master
     break;
 
   case 4:
 
 /* Line 1455 of yacc.c  */
+<<<<<<< HEAD
 #line 93 "mozart-parser.y"
     {;;}
+=======
+#line 77 "mozart-parser.y"
+    { ; ;}
+>>>>>>> master
     break;
 
   case 5:
 
 /* Line 1455 of yacc.c  */
+<<<<<<< HEAD
 #line 93 "mozart-parser.y"
     { printExpr((yyvsp[(2) - (4)].NODE));;}
+=======
+#line 78 "mozart-parser.y"
+    { ; ;}
+>>>>>>> master
     break;
 
   case 6:
 
 /* Line 1455 of yacc.c  */
+<<<<<<< HEAD
 #line 94 "mozart-parser.y"
     { printTable() ;;}
+=======
+#line 79 "mozart-parser.y"
+    { printNode((yyvsp[(1) - (2)].NODE)); ;}
+>>>>>>> master
     break;
 
   case 7:
 
 /* Line 1455 of yacc.c  */
+<<<<<<< HEAD
 #line 95 "mozart-parser.y"
     {;;}
+=======
+#line 80 "mozart-parser.y"
+    { printNode((yyvsp[(2) - (3)].NODE)); ;}
+>>>>>>> master
     break;
 
   case 8:
 
 /* Line 1455 of yacc.c  */
+<<<<<<< HEAD
 #line 96 "mozart-parser.y"
     {;;}
+=======
+#line 81 "mozart-parser.y"
+    { printNode((yyvsp[(1) - (2)].NODE)); ;}
+    break;
+
+  case 9:
+
+/* Line 1455 of yacc.c  */
+#line 82 "mozart-parser.y"
+    { printNode((yyvsp[(2) - (3)].NODE)); ;}
+>>>>>>> master
     break;
 
   case 10:
 
 /* Line 1455 of yacc.c  */
+<<<<<<< HEAD
 #line 99 "mozart-parser.y"
     { typeCheck((yyvsp[(6) - (6)].NODE), "integer"); insert(construct((yyvsp[(2) - (6)].LEXEME), (yyvsp[(6) - (6)].NODE)));;}
+=======
+#line 83 "mozart-parser.y"
+    { ; ;}
+>>>>>>> master
     break;
 
   case 11:
 
 /* Line 1455 of yacc.c  */
+<<<<<<< HEAD
 #line 100 "mozart-parser.y"
     { typeCheck((yyvsp[(6) - (6)].NODE), "float"); insert(construct((yyvsp[(2) - (6)].LEXEME), (yyvsp[(6) - (6)].NODE))) ;;}
+=======
+#line 84 "mozart-parser.y"
+    { ; ;}
+>>>>>>> master
     break;
 
   case 12:
 
 /* Line 1455 of yacc.c  */
+<<<<<<< HEAD
 #line 101 "mozart-parser.y"
     { typeCheck((yyvsp[(6) - (6)].NODE), "boolean"); insert(construct((yyvsp[(2) - (6)].LEXEME), (yyvsp[(6) - (6)].NODE))); ;}
+=======
+#line 85 "mozart-parser.y"
+    { ; ;}
+>>>>>>> master
     break;
 
   case 13:
 
 /* Line 1455 of yacc.c  */
+<<<<<<< HEAD
 #line 102 "mozart-parser.y"
     { typeCheck((yyvsp[(6) - (6)].NODE), "string"); insert(construct((yyvsp[(2) - (6)].LEXEME), (yyvsp[(6) - (6)].NODE))); ;}
+=======
+#line 86 "mozart-parser.y"
+    { ; ;}
+>>>>>>> master
     break;
 
   case 14:
 
 /* Line 1455 of yacc.c  */
+<<<<<<< HEAD
 #line 106 "mozart-parser.y"
     {;;}
+=======
+#line 87 "mozart-parser.y"
+    { ; ;}
+>>>>>>> master
     break;
 
   case 15:
 
 /* Line 1455 of yacc.c  */
+<<<<<<< HEAD
 #line 107 "mozart-parser.y"
     {;;}
+=======
+#line 88 "mozart-parser.y"
+    { ; ;}
+>>>>>>> master
     break;
 
   case 16:
 
 /* Line 1455 of yacc.c  */
+<<<<<<< HEAD
 #line 109 "mozart-parser.y"
     {/*should all be stored in symbolTable and be made accessible to the rest of the program to execute*/;;}
+=======
+#line 92 "mozart-parser.y"
+    {   
+                                                                typeCheck((yyvsp[(6) - (6)].NODE), INTEGER);
+                                                                insert(construct((yyvsp[(2) - (6)].LEXEME), (yyvsp[(6) - (6)].NODE)));
+                                                            ;}
+>>>>>>> master
     break;
 
   case 17:
 
 /* Line 1455 of yacc.c  */
+<<<<<<< HEAD
 #line 110 "mozart-parser.y"
     {;;}
+=======
+#line 96 "mozart-parser.y"
+    { 
+                                                                typeCheck((yyvsp[(6) - (6)].NODE), FLOAT);
+                                                                insert(construct((yyvsp[(2) - (6)].LEXEME), (yyvsp[(6) - (6)].NODE)));
+                                                            ;}
+>>>>>>> master
     break;
 
   case 18:
 
 /* Line 1455 of yacc.c  */
+<<<<<<< HEAD
 #line 113 "mozart-parser.y"
     { (yyval.NODE) = trueVal(); ;}
+=======
+#line 100 "mozart-parser.y"
+    { 
+                                                                typeCheck((yyvsp[(6) - (6)].NODE), BOOLEAN);
+                                                                insert(construct((yyvsp[(2) - (6)].LEXEME), (yyvsp[(6) - (6)].NODE))); 
+                                                            ;}
+>>>>>>> master
     break;
 
   case 19:
 
 /* Line 1455 of yacc.c  */
+<<<<<<< HEAD
 #line 114 "mozart-parser.y"
     { (yyval.NODE) = falseVal(); ;}
+=======
+#line 104 "mozart-parser.y"
+    { 
+                                                                typeCheck((yyvsp[(6) - (6)].NODE), STRING);
+                                                                insert(construct((yyvsp[(2) - (6)].LEXEME), (yyvsp[(6) - (6)].NODE))); 
+                                                            ;}
+>>>>>>> master
     break;
 
   case 20:
 
 /* Line 1455 of yacc.c  */
+<<<<<<< HEAD
 #line 115 "mozart-parser.y"
     { (yyval.NODE) = greater((yyvsp[(1) - (3)].NODE), (yyvsp[(3) - (3)].NODE)); ;}
+=======
+#line 111 "mozart-parser.y"
+    { ; ;}
+>>>>>>> master
     break;
 
   case 21:
 
 /* Line 1455 of yacc.c  */
+<<<<<<< HEAD
 #line 120 "mozart-parser.y"
     { (yyval.NODE) = construct(NULL, add((yyvsp[(1) - (3)].NODE), (yyvsp[(3) - (3)].NODE))); ;}
+=======
+#line 112 "mozart-parser.y"
+    { ; ;}
+>>>>>>> master
     break;
 
   case 22:
 
 /* Line 1455 of yacc.c  */
+<<<<<<< HEAD
 #line 121 "mozart-parser.y"
     { ; ;}
+=======
+#line 116 "mozart-parser.y"
+    { /*insert number of times loop get executed into symbolTable */ ;}
+>>>>>>> master
     break;
 
   case 23:
 
 /* Line 1455 of yacc.c  */
+<<<<<<< HEAD
 #line 122 "mozart-parser.y"
+=======
+#line 117 "mozart-parser.y"
+>>>>>>> master
     { ; ;}
     break;
 
   case 24:
 
 /* Line 1455 of yacc.c  */
+<<<<<<< HEAD
 #line 123 "mozart-parser.y"
+=======
+#line 121 "mozart-parser.y"
+>>>>>>> master
     { ; ;}
     break;
 
   case 25:
 
 /* Line 1455 of yacc.c  */
+<<<<<<< HEAD
 #line 124 "mozart-parser.y"
+=======
+#line 122 "mozart-parser.y"
+>>>>>>> master
     { ; ;}
     break;
 
   case 26:
 
 /* Line 1455 of yacc.c  */
+<<<<<<< HEAD
 #line 125 "mozart-parser.y"
     { ; ;}
+=======
+#line 126 "mozart-parser.y"
+    { (yyval.NODE) = trueVal(); ;}
+>>>>>>> master
     break;
 
   case 27:
 
 /* Line 1455 of yacc.c  */
+<<<<<<< HEAD
 #line 126 "mozart-parser.y"
     {(yyval.NODE) = (yyvsp[(1) - (1)].NODE);;}
+=======
+#line 127 "mozart-parser.y"
+    { (yyval.NODE) = falseVal(); ;}
+>>>>>>> master
     break;
 
   case 28:
 
 /* Line 1455 of yacc.c  */
+<<<<<<< HEAD
 #line 127 "mozart-parser.y"
     {;;}
+=======
+#line 128 "mozart-parser.y"
+    { (yyval.NODE) = greater((yyvsp[(1) - (3)].NODE), (yyvsp[(3) - (3)].NODE)); ;}
+>>>>>>> master
     break;
 
   case 29:
 
 /* Line 1455 of yacc.c  */
 #line 129 "mozart-parser.y"
+<<<<<<< HEAD
     {(yyval.NODE) = construct(NULL, (yyvsp[(1) - (1)].NODE));;}
+=======
+    { ; ;}
+>>>>>>> master
     break;
 
   case 30:
 
 /* Line 1455 of yacc.c  */
 #line 130 "mozart-parser.y"
+<<<<<<< HEAD
     {(yyval.NODE) = construct(NULL, (yyvsp[(1) - (1)].NODE));;}
+=======
+    { ; ;}
+>>>>>>> master
     break;
 
   case 31:
 
 /* Line 1455 of yacc.c  */
 #line 131 "mozart-parser.y"
+<<<<<<< HEAD
     {(yyval.NODE) = construct(NULL, (yyvsp[(1) - (1)].NODE));;}
+=======
+    { ; ;}
+>>>>>>> master
     break;
 
   case 32:
 
 /* Line 1455 of yacc.c  */
 #line 132 "mozart-parser.y"
+<<<<<<< HEAD
     {(yyval.NODE) = construct(NULL, (yyvsp[(1) - (1)].NODE));;}
+=======
+    { ; ;}
+>>>>>>> master
+    break;
+
+  case 33:
+
+/* Line 1455 of yacc.c  */
+#line 133 "mozart-parser.y"
+    { ; ;}
+    break;
+
+  case 34:
+
+/* Line 1455 of yacc.c  */
+<<<<<<< HEAD
+#line 1674 "mozart-parser.tab.c"
+=======
+#line 134 "mozart-parser.y"
+    { ; ;}
+    break;
+
+  case 35:
+
+/* Line 1455 of yacc.c  */
+#line 135 "mozart-parser.y"
+    { ; ;}
+    break;
+
+  case 36:
+
+/* Line 1455 of yacc.c  */
+#line 136 "mozart-parser.y"
+    { ; ;}
+    break;
+
+  case 37:
+
+/* Line 1455 of yacc.c  */
+#line 140 "mozart-parser.y"
+    { (yyval.NODE) = add((yyvsp[(1) - (3)].NODE), (yyvsp[(3) - (3)].NODE)); ;}
+    break;
+
+  case 38:
+
+/* Line 1455 of yacc.c  */
+#line 141 "mozart-parser.y"
+    { ; ;}
+    break;
+
+  case 39:
+
+/* Line 1455 of yacc.c  */
+#line 142 "mozart-parser.y"
+    { ; ;}
+    break;
+
+  case 40:
+
+/* Line 1455 of yacc.c  */
+#line 143 "mozart-parser.y"
+    { ; ;}
+    break;
+
+  case 41:
+
+/* Line 1455 of yacc.c  */
+#line 144 "mozart-parser.y"
+    { ; ;}
+    break;
+
+  case 42:
+
+/* Line 1455 of yacc.c  */
+#line 145 "mozart-parser.y"
+    { ; ;}
+    break;
+
+  case 43:
+
+/* Line 1455 of yacc.c  */
+#line 146 "mozart-parser.y"
+    { (yyval.NODE) = (yyvsp[(1) - (1)].NODE); ;}
+    break;
+
+  case 44:
+
+/* Line 1455 of yacc.c  */
+#line 147 "mozart-parser.y"
+    { (yyval.NODE) = getNode((yyvsp[(1) - (1)].LEXEME)); ;}
+    break;
+
+  case 45:
+
+/* Line 1455 of yacc.c  */
+#line 151 "mozart-parser.y"
+    { (yyval.NODE) = constructInteger(NULL, (yyvsp[(1) - (1)].VALUE).i); /* TODO: memory dealocation */ ;}
+    break;
+
+  case 46:
+
+/* Line 1455 of yacc.c  */
+#line 152 "mozart-parser.y"
+    { (yyval.NODE) = constructFloat(NULL, (yyvsp[(1) - (1)].VALUE).f); ;}
+    break;
+
+  case 47:
+
+/* Line 1455 of yacc.c  */
+#line 153 "mozart-parser.y"
+    { (yyval.NODE) = constructBoolean(NULL, (yyvsp[(1) - (1)].VALUE).b); ;}
+    break;
+
+  case 48:
+
+/* Line 1455 of yacc.c  */
+#line 154 "mozart-parser.y"
+    { (yyval.NODE) = constructString(NULL, (yyvsp[(1) - (1)].VALUE).s); ;}
     break;
 
 
 
 /* Line 1455 of yacc.c  */
-#line 1674 "mozart-parser.tab.c"
+#line 1862 "mozart-parser.tab.c"
+>>>>>>> master
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -1882,6 +2383,7 @@ yyreturn:
 
 
 /* Line 1675 of yacc.c  */
+<<<<<<< HEAD
 #line 140 "mozart-parser.y"
 
 /*
@@ -2068,6 +2570,11 @@ void yyerror(char * s) {
     exit(1);
 }
   
+=======
+#line 157 "mozart-parser.y"
+
+ 
+>>>>>>> master
 int main(void) {
     return yyparse();
 }

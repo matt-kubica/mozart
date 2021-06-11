@@ -1,22 +1,24 @@
 Terminals unused in grammar
 
-   LOOP
-   GREATEREQUAL
-   LOWEREQUAL
-   LOWER
-   NOTEQUAL
-   NOT
-   EQUAL
-   OR
-   AND
    SCALEKEYWORD
    RETURNSTMT
 
 
+<<<<<<< HEAD
+=======
+Stato 9 1 conflitti shift/riduzione
+Stato 10 1 conflitti shift/riduzione
+Stato 27 2 conflitti shift/riduzione
+Stato 74 2 conflitti shift/riduzione
+Stato 75 2 conflitti shift/riduzione
+
+
+>>>>>>> master
 Grammatica
 
     0 $accept: LINE $end
 
+<<<<<<< HEAD
     1 LINE: /* vuoto */
     2     | LINE EXPR ENDOFSTMT
 
@@ -56,12 +58,69 @@ Grammatica
    29        | FLOATTYPE
    30        | BOOLEANTYPE
    31        | STRINGTYPE
+=======
+    1 LINE: EXITSTMT ENDOFSTMT
+    2     | LINE EXITSTMT ENDOFSTMT
+    3     | VARDECL ENDOFSTMT
+    4     | LINE VARDECL ENDOFSTMT
+    5     | EXPR ENDOFSTMT
+    6     | LINE EXPR ENDOFSTMT
+    7     | LOGICEXPR ENDOFSTMT
+    8     | LINE LOGICEXPR ENDOFSTMT
+    9     | IFSTMT ENDOFSTMT
+   10     | LINE IFSTMT ENDOFSTMT
+   11     | LOOPSTMT ENDOFSTMT
+   12     | LINE LOOPSTMT ENDOFSTMT
+   13     | FUNCTION ENDOFSTMT
+   14     | LINE FUNCTION ENDOFSTMT
+
+   15 VARDECL: VAR ID COLON INTKEYWORD ASSIGNMENT EXPR
+   16        | VAR ID COLON FLOATKEYWORD ASSIGNMENT EXPR
+   17        | VAR ID COLON BOOLEANKEYWORD ASSIGNMENT EXPR
+   18        | VAR ID COLON STRINGKEYWORD ASSIGNMENT EXPR
+
+   19 IFSTMT: IF LPAREN LOGICEXPR RPAREN STARTOFSCOPE LINE ELSE LINE ENDOFSCOPE
+   20       | IF LPAREN LOGICEXPR RPAREN STARTOFSCOPE LINE ENDOFSCOPE
+
+   21 LOOPSTMT: INTEGERTYPE PER LOOP STARTOFSCOPE LINE ENDOFSCOPE
+   22         | ID PER LOOP STARTOFSCOPE LINE ENDOFSCOPE
+
+   23 FUNCTION: FUNCTIONDECL LPAREN VARDECL RPAREN STARTOFSCOPE LINE ENDOFSCOPE
+   24         | FUNCTIONDECL LPAREN RPAREN STARTOFSCOPE LINE ENDOFSCOPE
+
+   25 LOGICEXPR: TRUEVAL
+   26          | FALSEVAL
+   27          | EXPR GREATER EXPR
+   28          | EXPR GREATEREQUAL EXPR
+   29          | EXPR LOWER EXPR
+   30          | EXPR LOWEREQUAL EXPR
+   31          | EXPR EQUAL EXPR
+   32          | EXPR NOTEQUAL EXPR
+   33          | NOT LOGICEXPR
+   34          | LOGICEXPR OR LOGICEXPR
+   35          | LOGICEXPR AND LOGICEXPR
+
+   36 EXPR: EXPR PLUS EXPR
+   37     | EXPR MINUS EXPR
+   38     | EXPR PER EXPR
+   39     | EXPR DIV EXPR
+   40     | EXPR MOD EXPR
+   41     | LPAREN EXPR RPAREN
+   42     | TYPEVAL
+   43     | ID
+
+   44 TYPEVAL: INTEGERTYPE
+   45        | FLOATTYPE
+   46        | BOOLEANTYPE
+   47        | STRINGTYPE
+>>>>>>> master
 
 
 Simboli terminali e regole in cui appaiono
 
 $end (0) 0
 error (256)
+<<<<<<< HEAD
 VAR (258) 9 10 11 12
 COLON (259) 9 10 11 12
 IF (260) 13 14
@@ -101,12 +160,55 @@ INTEGERTYPE (293) 28
 FLOATTYPE (294) 29
 BOOLEANTYPE (295) 30
 STRINGTYPE (296) 31
+=======
+VAR (258) 15 16 17 18
+COLON (259) 15 16 17 18
+IF (260) 19 20
+ELSE (261) 19
+LOOP (262) 21 22
+STARTOFSCOPE (263) 19 20 21 22 23 24
+ENDOFSCOPE (264) 19 20 21 22 23 24
+ASSIGNMENT (265) 15 16 17 18
+LPAREN (266) 19 20 23 24 41
+RPAREN (267) 19 20 23 24 41
+ENDOFSTMT (268) 1 2 3 4 5 6 7 8 9 10 11 12 13 14
+PLUS (269) 36
+MINUS (270) 37
+PER (271) 21 22 38
+DIV (272) 39
+MOD (273) 40
+GREATEREQUAL (274) 28
+LOWEREQUAL (275) 30
+GREATER (276) 27
+LOWER (277) 29
+NOTEQUAL (278) 32
+NOT (279) 33
+EQUAL (280) 31
+OR (281) 34
+AND (282) 35
+TRUEVAL (283) 25
+FALSEVAL (284) 26
+INTKEYWORD (285) 15
+FLOATKEYWORD (286) 16
+BOOLEANKEYWORD (287) 17
+STRINGKEYWORD (288) 18
+SCALEKEYWORD (289)
+FUNCTIONDECL (290) 23 24
+RETURNSTMT (291)
+EXITSTMT (292) 1 2
+ID (293) 15 16 17 18 22 43
+INTEGERTYPE (294) 21 44
+FLOATTYPE (295) 45
+BOOLEANTYPE (296) 46
+STRINGTYPE (297) 47
+>>>>>>> master
 
 
 Simboli nonterminali e regole in cui appaiono
 
-$accept (42)
+$accept (43)
     nel primo membro: 0
+<<<<<<< HEAD
 LINE (43)
     nel primo membro: 1 2 4 5 6 7 8, nel secondo membro: 0 2 4 5 6
     7 8 13 14 15 16
@@ -125,12 +227,34 @@ EXPR (49)
     2 9 10 11 12 19 20 21 22 23 24 25
 TYPEVAL (50)
     nel primo membro: 28 29 30 31, nel secondo membro: 26
+=======
+LINE (44)
+    nel primo membro: 1 2 3 4 5 6 7 8 9 10 11 12 13 14, nel secondo membro:
+    0 2 4 6 8 10 12 14 19 20 21 22 23 24
+VARDECL (45)
+    nel primo membro: 15 16 17 18, nel secondo membro: 3 4 23
+IFSTMT (46)
+    nel primo membro: 19 20, nel secondo membro: 9 10
+LOOPSTMT (47)
+    nel primo membro: 21 22, nel secondo membro: 11 12
+FUNCTION (48)
+    nel primo membro: 23 24, nel secondo membro: 13 14
+LOGICEXPR (49)
+    nel primo membro: 25 26 27 28 29 30 31 32 33 34 35, nel secondo membro:
+    7 8 19 20 33 34 35
+EXPR (50)
+    nel primo membro: 36 37 38 39 40 41 42 43, nel secondo membro:
+    5 6 15 16 17 18 27 28 29 30 31 32 36 37 38 39 40 41
+TYPEVAL (51)
+    nel primo membro: 44 45 46 47, nel secondo membro: 42
+>>>>>>> master
 
 
 stato 0
 
     0 $accept: . LINE $end
 
+<<<<<<< HEAD
     $default  riduzione con la regola 1 (LINE)
 
     LINE  prosecuzione allo stato 1
@@ -166,35 +290,82 @@ stato 1
     LOGICEXPR  prosecuzione allo stato 18
     EXPR       prosecuzione allo stato 19
     TYPEVAL    prosecuzione allo stato 20
+=======
+    VAR           shift e prosecuzione allo stato 1
+    IF            shift e prosecuzione allo stato 2
+    LPAREN        shift e prosecuzione allo stato 3
+    NOT           shift e prosecuzione allo stato 4
+    TRUEVAL       shift e prosecuzione allo stato 5
+    FALSEVAL      shift e prosecuzione allo stato 6
+    FUNCTIONDECL  shift e prosecuzione allo stato 7
+    EXITSTMT      shift e prosecuzione allo stato 8
+    ID            shift e prosecuzione allo stato 9
+    INTEGERTYPE   shift e prosecuzione allo stato 10
+    FLOATTYPE     shift e prosecuzione allo stato 11
+    BOOLEANTYPE   shift e prosecuzione allo stato 12
+    STRINGTYPE    shift e prosecuzione allo stato 13
+
+    LINE       prosecuzione allo stato 14
+    VARDECL    prosecuzione allo stato 15
+    IFSTMT     prosecuzione allo stato 16
+    LOOPSTMT   prosecuzione allo stato 17
+    FUNCTION   prosecuzione allo stato 18
+    LOGICEXPR  prosecuzione allo stato 19
+    EXPR       prosecuzione allo stato 20
+    TYPEVAL    prosecuzione allo stato 21
+>>>>>>> master
+
+
+stato 1
+
+   15 VARDECL: VAR . ID COLON INTKEYWORD ASSIGNMENT EXPR
+   16        | VAR . ID COLON FLOATKEYWORD ASSIGNMENT EXPR
+   17        | VAR . ID COLON BOOLEANKEYWORD ASSIGNMENT EXPR
+   18        | VAR . ID COLON STRINGKEYWORD ASSIGNMENT EXPR
+
+    ID  shift e prosecuzione allo stato 22
 
 
 stato 2
 
-    0 $accept: LINE $end .
-
-    $default  accetta
-
-
-stato 3
-
+<<<<<<< HEAD
     9 VARDECL: VAR . ID COLON INTKEYWORD ASSIGNMENT EXPR
    10        | VAR . ID COLON FLOATKEYWORD ASSIGNMENT EXPR
    11        | VAR . ID COLON BOOLEANKEYWORD ASSIGNMENT EXPR
    12        | VAR . ID COLON STRINGKEYWORD ASSIGNMENT EXPR
 
     ID  shift e prosecuzione allo stato 21
+=======
+   19 IFSTMT: IF . LPAREN LOGICEXPR RPAREN STARTOFSCOPE LINE ELSE LINE ENDOFSCOPE
+   20       | IF . LPAREN LOGICEXPR RPAREN STARTOFSCOPE LINE ENDOFSCOPE
+
+    LPAREN  shift e prosecuzione allo stato 23
+>>>>>>> master
 
 
-stato 4
+stato 3
 
+<<<<<<< HEAD
    13 IFSTMT: IF . LPAREN LOGICEXPR RPAREN STARTOFSCOPE LINE ELSE LINE ENDOFSCOPE
    14       | IF . LPAREN LOGICEXPR RPAREN STARTOFSCOPE LINE ENDOFSCOPE
 
     LPAREN  shift e prosecuzione allo stato 22
+=======
+   41 EXPR: LPAREN . EXPR RPAREN
+
+    LPAREN       shift e prosecuzione allo stato 3
+    ID           shift e prosecuzione allo stato 24
+    INTEGERTYPE  shift e prosecuzione allo stato 25
+    FLOATTYPE    shift e prosecuzione allo stato 11
+    BOOLEANTYPE  shift e prosecuzione allo stato 12
+    STRINGTYPE   shift e prosecuzione allo stato 13
+>>>>>>> master
+
+    EXPR     prosecuzione allo stato 26
+    TYPEVAL  prosecuzione allo stato 21
 
 
-stato 5
-
+<<<<<<< HEAD
    25 EXPR: LPAREN . EXPR RPAREN
 
     LPAREN       shift e prosecuzione allo stato 5
@@ -206,102 +377,238 @@ stato 5
 
     EXPR     prosecuzione allo stato 23
     TYPEVAL  prosecuzione allo stato 20
+=======
+stato 4
+
+   33 LOGICEXPR: NOT . LOGICEXPR
+
+    LPAREN       shift e prosecuzione allo stato 3
+    NOT          shift e prosecuzione allo stato 4
+    TRUEVAL      shift e prosecuzione allo stato 5
+    FALSEVAL     shift e prosecuzione allo stato 6
+    ID           shift e prosecuzione allo stato 24
+    INTEGERTYPE  shift e prosecuzione allo stato 25
+    FLOATTYPE    shift e prosecuzione allo stato 11
+    BOOLEANTYPE  shift e prosecuzione allo stato 12
+    STRINGTYPE   shift e prosecuzione allo stato 13
+
+    LOGICEXPR  prosecuzione allo stato 27
+    EXPR       prosecuzione allo stato 28
+    TYPEVAL    prosecuzione allo stato 21
+
+
+stato 5
+
+   25 LOGICEXPR: TRUEVAL .
+
+    $default  riduzione con la regola 25 (LOGICEXPR)
+>>>>>>> master
 
 
 stato 6
 
+<<<<<<< HEAD
     8 LINE: LINE ENDOFSTMT .
 
     $default  riduzione con la regola 8 (LINE)
+=======
+   26 LOGICEXPR: FALSEVAL .
+
+    $default  riduzione con la regola 26 (LOGICEXPR)
+>>>>>>> master
 
 
 stato 7
 
+<<<<<<< HEAD
    17 LOGICEXPR: TRUEVAL .
 
     $default  riduzione con la regola 17 (LOGICEXPR)
+=======
+   23 FUNCTION: FUNCTIONDECL . LPAREN VARDECL RPAREN STARTOFSCOPE LINE ENDOFSCOPE
+   24         | FUNCTIONDECL . LPAREN RPAREN STARTOFSCOPE LINE ENDOFSCOPE
+
+    LPAREN  shift e prosecuzione allo stato 29
+>>>>>>> master
 
 
 stato 8
 
+<<<<<<< HEAD
    18 LOGICEXPR: FALSEVAL .
 
     $default  riduzione con la regola 18 (LOGICEXPR)
+=======
+    1 LINE: EXITSTMT . ENDOFSTMT
+
+    ENDOFSTMT  shift e prosecuzione allo stato 30
+>>>>>>> master
 
 
 stato 9
 
+<<<<<<< HEAD
    15 FUNCTION: FUNCTIONDECL . LPAREN VARDECL RPAREN STARTOFSCOPE LINE ENDOFSCOPE
    16         | FUNCTIONDECL . LPAREN RPAREN STARTOFSCOPE LINE ENDOFSCOPE
 
     LPAREN  shift e prosecuzione allo stato 24
+=======
+   22 LOOPSTMT: ID . PER LOOP STARTOFSCOPE LINE ENDOFSCOPE
+   43 EXPR: ID .
+
+    PER  shift e prosecuzione allo stato 31
+
+    PER       [riduzione con la regola 43 (EXPR)]
+    $default  riduzione con la regola 43 (EXPR)
+>>>>>>> master
 
 
 stato 10
 
+<<<<<<< HEAD
    27 EXPR: ID .
 
     $default  riduzione con la regola 27 (EXPR)
+=======
+   21 LOOPSTMT: INTEGERTYPE . PER LOOP STARTOFSCOPE LINE ENDOFSCOPE
+   44 TYPEVAL: INTEGERTYPE .
+
+    PER  shift e prosecuzione allo stato 32
+
+    PER       [riduzione con la regola 44 (TYPEVAL)]
+    $default  riduzione con la regola 44 (TYPEVAL)
+>>>>>>> master
 
 
 stato 11
 
+<<<<<<< HEAD
    28 TYPEVAL: INTEGERTYPE .
 
     $default  riduzione con la regola 28 (TYPEVAL)
+=======
+   45 TYPEVAL: FLOATTYPE .
+
+    $default  riduzione con la regola 45 (TYPEVAL)
+>>>>>>> master
 
 
 stato 12
 
+<<<<<<< HEAD
    29 TYPEVAL: FLOATTYPE .
 
     $default  riduzione con la regola 29 (TYPEVAL)
+=======
+   46 TYPEVAL: BOOLEANTYPE .
+
+    $default  riduzione con la regola 46 (TYPEVAL)
+>>>>>>> master
 
 
 stato 13
 
+<<<<<<< HEAD
    30 TYPEVAL: BOOLEANTYPE .
 
     $default  riduzione con la regola 30 (TYPEVAL)
+=======
+   47 TYPEVAL: STRINGTYPE .
+
+    $default  riduzione con la regola 47 (TYPEVAL)
+>>>>>>> master
 
 
 stato 14
 
+<<<<<<< HEAD
    31 TYPEVAL: STRINGTYPE .
 
     $default  riduzione con la regola 31 (TYPEVAL)
+=======
+    0 $accept: LINE . $end
+    2 LINE: LINE . EXITSTMT ENDOFSTMT
+    4     | LINE . VARDECL ENDOFSTMT
+    6     | LINE . EXPR ENDOFSTMT
+    8     | LINE . LOGICEXPR ENDOFSTMT
+   10     | LINE . IFSTMT ENDOFSTMT
+   12     | LINE . LOOPSTMT ENDOFSTMT
+   14     | LINE . FUNCTION ENDOFSTMT
+
+    $end          shift e prosecuzione allo stato 33
+    VAR           shift e prosecuzione allo stato 1
+    IF            shift e prosecuzione allo stato 2
+    LPAREN        shift e prosecuzione allo stato 3
+    NOT           shift e prosecuzione allo stato 4
+    TRUEVAL       shift e prosecuzione allo stato 5
+    FALSEVAL      shift e prosecuzione allo stato 6
+    FUNCTIONDECL  shift e prosecuzione allo stato 7
+    EXITSTMT      shift e prosecuzione allo stato 34
+    ID            shift e prosecuzione allo stato 9
+    INTEGERTYPE   shift e prosecuzione allo stato 10
+    FLOATTYPE     shift e prosecuzione allo stato 11
+    BOOLEANTYPE   shift e prosecuzione allo stato 12
+    STRINGTYPE    shift e prosecuzione allo stato 13
+
+    VARDECL    prosecuzione allo stato 35
+    IFSTMT     prosecuzione allo stato 36
+    LOOPSTMT   prosecuzione allo stato 37
+    FUNCTION   prosecuzione allo stato 38
+    LOGICEXPR  prosecuzione allo stato 39
+    EXPR       prosecuzione allo stato 40
+    TYPEVAL    prosecuzione allo stato 21
+>>>>>>> master
 
 
 stato 15
 
+<<<<<<< HEAD
     5 LINE: LINE VARDECL . ENDOFSTMT
+=======
+    3 LINE: VARDECL . ENDOFSTMT
+>>>>>>> master
 
-    ENDOFSTMT  shift e prosecuzione allo stato 25
+    ENDOFSTMT  shift e prosecuzione allo stato 41
 
 
 stato 16
 
+<<<<<<< HEAD
     6 LINE: LINE IFSTMT . ENDOFSTMT
+=======
+    9 LINE: IFSTMT . ENDOFSTMT
+>>>>>>> master
 
-    ENDOFSTMT  shift e prosecuzione allo stato 26
+    ENDOFSTMT  shift e prosecuzione allo stato 42
 
 
 stato 17
 
+<<<<<<< HEAD
     7 LINE: LINE FUNCTION . ENDOFSTMT
+=======
+   11 LINE: LOOPSTMT . ENDOFSTMT
+>>>>>>> master
 
-    ENDOFSTMT  shift e prosecuzione allo stato 27
+    ENDOFSTMT  shift e prosecuzione allo stato 43
 
 
 stato 18
 
+<<<<<<< HEAD
     4 LINE: LINE LOGICEXPR . ENDOFSTMT $@1
 
     ENDOFSTMT  shift e prosecuzione allo stato 28
+=======
+   13 LINE: FUNCTION . ENDOFSTMT
+
+    ENDOFSTMT  shift e prosecuzione allo stato 44
+>>>>>>> master
 
 
 stato 19
 
+<<<<<<< HEAD
     2 LINE: LINE EXPR . ENDOFSTMT
    19 LOGICEXPR: EXPR . GREATER EXPR
    20 EXPR: EXPR . PLUS EXPR
@@ -317,27 +624,71 @@ stato 19
     DIV        shift e prosecuzione allo stato 33
     MOD        shift e prosecuzione allo stato 34
     GREATER    shift e prosecuzione allo stato 35
+=======
+    7 LINE: LOGICEXPR . ENDOFSTMT
+   34 LOGICEXPR: LOGICEXPR . OR LOGICEXPR
+   35          | LOGICEXPR . AND LOGICEXPR
+
+    ENDOFSTMT  shift e prosecuzione allo stato 45
+    OR         shift e prosecuzione allo stato 46
+    AND        shift e prosecuzione allo stato 47
+>>>>>>> master
 
 
 stato 20
 
+<<<<<<< HEAD
    26 EXPR: TYPEVAL .
 
     $default  riduzione con la regola 26 (EXPR)
+=======
+    5 LINE: EXPR . ENDOFSTMT
+   27 LOGICEXPR: EXPR . GREATER EXPR
+   28          | EXPR . GREATEREQUAL EXPR
+   29          | EXPR . LOWER EXPR
+   30          | EXPR . LOWEREQUAL EXPR
+   31          | EXPR . EQUAL EXPR
+   32          | EXPR . NOTEQUAL EXPR
+   36 EXPR: EXPR . PLUS EXPR
+   37     | EXPR . MINUS EXPR
+   38     | EXPR . PER EXPR
+   39     | EXPR . DIV EXPR
+   40     | EXPR . MOD EXPR
+
+    ENDOFSTMT     shift e prosecuzione allo stato 48
+    PLUS          shift e prosecuzione allo stato 49
+    MINUS         shift e prosecuzione allo stato 50
+    PER           shift e prosecuzione allo stato 51
+    DIV           shift e prosecuzione allo stato 52
+    MOD           shift e prosecuzione allo stato 53
+    GREATEREQUAL  shift e prosecuzione allo stato 54
+    LOWEREQUAL    shift e prosecuzione allo stato 55
+    GREATER       shift e prosecuzione allo stato 56
+    LOWER         shift e prosecuzione allo stato 57
+    NOTEQUAL      shift e prosecuzione allo stato 58
+    EQUAL         shift e prosecuzione allo stato 59
+>>>>>>> master
 
 
 stato 21
 
+<<<<<<< HEAD
     9 VARDECL: VAR ID . COLON INTKEYWORD ASSIGNMENT EXPR
    10        | VAR ID . COLON FLOATKEYWORD ASSIGNMENT EXPR
    11        | VAR ID . COLON BOOLEANKEYWORD ASSIGNMENT EXPR
    12        | VAR ID . COLON STRINGKEYWORD ASSIGNMENT EXPR
 
     COLON  shift e prosecuzione allo stato 36
+=======
+   42 EXPR: TYPEVAL .
+
+    $default  riduzione con la regola 42 (EXPR)
+>>>>>>> master
 
 
 stato 22
 
+<<<<<<< HEAD
    13 IFSTMT: IF LPAREN . LOGICEXPR RPAREN STARTOFSCOPE LINE ELSE LINE ENDOFSCOPE
    14       | IF LPAREN . LOGICEXPR RPAREN STARTOFSCOPE LINE ENDOFSCOPE
 
@@ -353,10 +704,19 @@ stato 22
     LOGICEXPR  prosecuzione allo stato 37
     EXPR       prosecuzione allo stato 38
     TYPEVAL    prosecuzione allo stato 20
+=======
+   15 VARDECL: VAR ID . COLON INTKEYWORD ASSIGNMENT EXPR
+   16        | VAR ID . COLON FLOATKEYWORD ASSIGNMENT EXPR
+   17        | VAR ID . COLON BOOLEANKEYWORD ASSIGNMENT EXPR
+   18        | VAR ID . COLON STRINGKEYWORD ASSIGNMENT EXPR
+
+    COLON  shift e prosecuzione allo stato 60
+>>>>>>> master
 
 
 stato 23
 
+<<<<<<< HEAD
    20 EXPR: EXPR . PLUS EXPR
    21     | EXPR . MINUS EXPR
    22     | EXPR . PER EXPR
@@ -370,10 +730,29 @@ stato 23
     PER     shift e prosecuzione allo stato 32
     DIV     shift e prosecuzione allo stato 33
     MOD     shift e prosecuzione allo stato 34
+=======
+   19 IFSTMT: IF LPAREN . LOGICEXPR RPAREN STARTOFSCOPE LINE ELSE LINE ENDOFSCOPE
+   20       | IF LPAREN . LOGICEXPR RPAREN STARTOFSCOPE LINE ENDOFSCOPE
+
+    LPAREN       shift e prosecuzione allo stato 3
+    NOT          shift e prosecuzione allo stato 4
+    TRUEVAL      shift e prosecuzione allo stato 5
+    FALSEVAL     shift e prosecuzione allo stato 6
+    ID           shift e prosecuzione allo stato 24
+    INTEGERTYPE  shift e prosecuzione allo stato 25
+    FLOATTYPE    shift e prosecuzione allo stato 11
+    BOOLEANTYPE  shift e prosecuzione allo stato 12
+    STRINGTYPE   shift e prosecuzione allo stato 13
+
+    LOGICEXPR  prosecuzione allo stato 61
+    EXPR       prosecuzione allo stato 28
+    TYPEVAL    prosecuzione allo stato 21
+>>>>>>> master
 
 
 stato 24
 
+<<<<<<< HEAD
    15 FUNCTION: FUNCTIONDECL LPAREN . VARDECL RPAREN STARTOFSCOPE LINE ENDOFSCOPE
    16         | FUNCTIONDECL LPAREN . RPAREN STARTOFSCOPE LINE ENDOFSCOPE
 
@@ -381,47 +760,120 @@ stato 24
     RPAREN  shift e prosecuzione allo stato 40
 
     VARDECL  prosecuzione allo stato 41
+=======
+   43 EXPR: ID .
+
+    $default  riduzione con la regola 43 (EXPR)
+>>>>>>> master
 
 
 stato 25
 
+<<<<<<< HEAD
     5 LINE: LINE VARDECL ENDOFSTMT .
+=======
+   44 TYPEVAL: INTEGERTYPE .
+>>>>>>> master
 
-    $default  riduzione con la regola 5 (LINE)
+    $default  riduzione con la regola 44 (TYPEVAL)
 
 
 stato 26
 
+<<<<<<< HEAD
     6 LINE: LINE IFSTMT ENDOFSTMT .
+=======
+   36 EXPR: EXPR . PLUS EXPR
+   37     | EXPR . MINUS EXPR
+   38     | EXPR . PER EXPR
+   39     | EXPR . DIV EXPR
+   40     | EXPR . MOD EXPR
+   41     | LPAREN EXPR . RPAREN
+>>>>>>> master
 
-    $default  riduzione con la regola 6 (LINE)
+    RPAREN  shift e prosecuzione allo stato 62
+    PLUS    shift e prosecuzione allo stato 49
+    MINUS   shift e prosecuzione allo stato 50
+    PER     shift e prosecuzione allo stato 51
+    DIV     shift e prosecuzione allo stato 52
+    MOD     shift e prosecuzione allo stato 53
 
 
 stato 27
 
+<<<<<<< HEAD
     7 LINE: LINE FUNCTION ENDOFSTMT .
 
     $default  riduzione con la regola 7 (LINE)
+=======
+   33 LOGICEXPR: NOT LOGICEXPR .
+   34          | LOGICEXPR . OR LOGICEXPR
+   35          | LOGICEXPR . AND LOGICEXPR
+
+    OR   shift e prosecuzione allo stato 46
+    AND  shift e prosecuzione allo stato 47
+>>>>>>> master
+
+    OR        [riduzione con la regola 33 (LOGICEXPR)]
+    AND       [riduzione con la regola 33 (LOGICEXPR)]
+    $default  riduzione con la regola 33 (LOGICEXPR)
 
 
-stato 28
-
+<<<<<<< HEAD
     4 LINE: LINE LOGICEXPR ENDOFSTMT . $@1
 
     $default  riduzione con la regola 3 ($@1)
+=======
+stato 28
+
+   27 LOGICEXPR: EXPR . GREATER EXPR
+   28          | EXPR . GREATEREQUAL EXPR
+   29          | EXPR . LOWER EXPR
+   30          | EXPR . LOWEREQUAL EXPR
+   31          | EXPR . EQUAL EXPR
+   32          | EXPR . NOTEQUAL EXPR
+   36 EXPR: EXPR . PLUS EXPR
+   37     | EXPR . MINUS EXPR
+   38     | EXPR . PER EXPR
+   39     | EXPR . DIV EXPR
+   40     | EXPR . MOD EXPR
+
+    PLUS          shift e prosecuzione allo stato 49
+    MINUS         shift e prosecuzione allo stato 50
+    PER           shift e prosecuzione allo stato 51
+    DIV           shift e prosecuzione allo stato 52
+    MOD           shift e prosecuzione allo stato 53
+    GREATEREQUAL  shift e prosecuzione allo stato 54
+    LOWEREQUAL    shift e prosecuzione allo stato 55
+    GREATER       shift e prosecuzione allo stato 56
+    LOWER         shift e prosecuzione allo stato 57
+    NOTEQUAL      shift e prosecuzione allo stato 58
+    EQUAL         shift e prosecuzione allo stato 59
+>>>>>>> master
 
     $@1  prosecuzione allo stato 42
 
 
+<<<<<<< HEAD
 stato 29
 
     2 LINE: LINE EXPR ENDOFSTMT .
 
     $default  riduzione con la regola 2 (LINE)
+=======
+   23 FUNCTION: FUNCTIONDECL LPAREN . VARDECL RPAREN STARTOFSCOPE LINE ENDOFSCOPE
+   24         | FUNCTIONDECL LPAREN . RPAREN STARTOFSCOPE LINE ENDOFSCOPE
+
+    VAR     shift e prosecuzione allo stato 1
+    RPAREN  shift e prosecuzione allo stato 63
+
+    VARDECL  prosecuzione allo stato 64
+>>>>>>> master
 
 
 stato 30
 
+<<<<<<< HEAD
    20 EXPR: EXPR PLUS . EXPR
 
     LPAREN       shift e prosecuzione allo stato 5
@@ -433,10 +885,16 @@ stato 30
 
     EXPR     prosecuzione allo stato 43
     TYPEVAL  prosecuzione allo stato 20
+=======
+    1 LINE: EXITSTMT ENDOFSTMT .
+
+    $default  riduzione con la regola 1 (LINE)
+>>>>>>> master
 
 
 stato 31
 
+<<<<<<< HEAD
    21 EXPR: EXPR MINUS . EXPR
 
     LPAREN       shift e prosecuzione allo stato 5
@@ -448,10 +906,16 @@ stato 31
 
     EXPR     prosecuzione allo stato 44
     TYPEVAL  prosecuzione allo stato 20
+=======
+   22 LOOPSTMT: ID PER . LOOP STARTOFSCOPE LINE ENDOFSCOPE
+
+    LOOP  shift e prosecuzione allo stato 65
+>>>>>>> master
 
 
 stato 32
 
+<<<<<<< HEAD
    22 EXPR: EXPR PER . EXPR
 
     LPAREN       shift e prosecuzione allo stato 5
@@ -463,10 +927,16 @@ stato 32
 
     EXPR     prosecuzione allo stato 45
     TYPEVAL  prosecuzione allo stato 20
+=======
+   21 LOOPSTMT: INTEGERTYPE PER . LOOP STARTOFSCOPE LINE ENDOFSCOPE
+
+    LOOP  shift e prosecuzione allo stato 66
+>>>>>>> master
 
 
 stato 33
 
+<<<<<<< HEAD
    23 EXPR: EXPR DIV . EXPR
 
     LPAREN       shift e prosecuzione allo stato 5
@@ -478,10 +948,16 @@ stato 33
 
     EXPR     prosecuzione allo stato 46
     TYPEVAL  prosecuzione allo stato 20
+=======
+    0 $accept: LINE $end .
+
+    $default  accetta
+>>>>>>> master
 
 
 stato 34
 
+<<<<<<< HEAD
    24 EXPR: EXPR MOD . EXPR
 
     LPAREN       shift e prosecuzione allo stato 5
@@ -493,10 +969,16 @@ stato 34
 
     EXPR     prosecuzione allo stato 47
     TYPEVAL  prosecuzione allo stato 20
+=======
+    2 LINE: LINE EXITSTMT . ENDOFSTMT
+
+    ENDOFSTMT  shift e prosecuzione allo stato 67
+>>>>>>> master
 
 
 stato 35
 
+<<<<<<< HEAD
    19 LOGICEXPR: EXPR GREATER . EXPR
 
     LPAREN       shift e prosecuzione allo stato 5
@@ -508,10 +990,16 @@ stato 35
 
     EXPR     prosecuzione allo stato 48
     TYPEVAL  prosecuzione allo stato 20
+=======
+    4 LINE: LINE VARDECL . ENDOFSTMT
+
+    ENDOFSTMT  shift e prosecuzione allo stato 68
+>>>>>>> master
 
 
 stato 36
 
+<<<<<<< HEAD
     9 VARDECL: VAR ID COLON . INTKEYWORD ASSIGNMENT EXPR
    10        | VAR ID COLON . FLOATKEYWORD ASSIGNMENT EXPR
    11        | VAR ID COLON . BOOLEANKEYWORD ASSIGNMENT EXPR
@@ -521,18 +1009,30 @@ stato 36
     FLOATKEYWORD    shift e prosecuzione allo stato 50
     BOOLEANKEYWORD  shift e prosecuzione allo stato 51
     STRINGKEYWORD   shift e prosecuzione allo stato 52
+=======
+   10 LINE: LINE IFSTMT . ENDOFSTMT
+
+    ENDOFSTMT  shift e prosecuzione allo stato 69
+>>>>>>> master
 
 
 stato 37
 
+<<<<<<< HEAD
    13 IFSTMT: IF LPAREN LOGICEXPR . RPAREN STARTOFSCOPE LINE ELSE LINE ENDOFSCOPE
    14       | IF LPAREN LOGICEXPR . RPAREN STARTOFSCOPE LINE ENDOFSCOPE
 
     RPAREN  shift e prosecuzione allo stato 53
+=======
+   12 LINE: LINE LOOPSTMT . ENDOFSTMT
+
+    ENDOFSTMT  shift e prosecuzione allo stato 70
+>>>>>>> master
 
 
 stato 38
 
+<<<<<<< HEAD
    19 LOGICEXPR: EXPR . GREATER EXPR
    20 EXPR: EXPR . PLUS EXPR
    21     | EXPR . MINUS EXPR
@@ -546,38 +1046,94 @@ stato 38
     DIV      shift e prosecuzione allo stato 33
     MOD      shift e prosecuzione allo stato 34
     GREATER  shift e prosecuzione allo stato 35
+=======
+   14 LINE: LINE FUNCTION . ENDOFSTMT
+
+    ENDOFSTMT  shift e prosecuzione allo stato 71
+>>>>>>> master
 
 
 stato 39
 
+<<<<<<< HEAD
    25 EXPR: LPAREN EXPR RPAREN .
 
     $default  riduzione con la regola 25 (EXPR)
+=======
+    8 LINE: LINE LOGICEXPR . ENDOFSTMT
+   34 LOGICEXPR: LOGICEXPR . OR LOGICEXPR
+   35          | LOGICEXPR . AND LOGICEXPR
+
+    ENDOFSTMT  shift e prosecuzione allo stato 72
+    OR         shift e prosecuzione allo stato 46
+    AND        shift e prosecuzione allo stato 47
+>>>>>>> master
 
 
 stato 40
 
+<<<<<<< HEAD
    16 FUNCTION: FUNCTIONDECL LPAREN RPAREN . STARTOFSCOPE LINE ENDOFSCOPE
 
     STARTOFSCOPE  shift e prosecuzione allo stato 54
+=======
+    6 LINE: LINE EXPR . ENDOFSTMT
+   27 LOGICEXPR: EXPR . GREATER EXPR
+   28          | EXPR . GREATEREQUAL EXPR
+   29          | EXPR . LOWER EXPR
+   30          | EXPR . LOWEREQUAL EXPR
+   31          | EXPR . EQUAL EXPR
+   32          | EXPR . NOTEQUAL EXPR
+   36 EXPR: EXPR . PLUS EXPR
+   37     | EXPR . MINUS EXPR
+   38     | EXPR . PER EXPR
+   39     | EXPR . DIV EXPR
+   40     | EXPR . MOD EXPR
+
+    ENDOFSTMT     shift e prosecuzione allo stato 73
+    PLUS          shift e prosecuzione allo stato 49
+    MINUS         shift e prosecuzione allo stato 50
+    PER           shift e prosecuzione allo stato 51
+    DIV           shift e prosecuzione allo stato 52
+    MOD           shift e prosecuzione allo stato 53
+    GREATEREQUAL  shift e prosecuzione allo stato 54
+    LOWEREQUAL    shift e prosecuzione allo stato 55
+    GREATER       shift e prosecuzione allo stato 56
+    LOWER         shift e prosecuzione allo stato 57
+    NOTEQUAL      shift e prosecuzione allo stato 58
+    EQUAL         shift e prosecuzione allo stato 59
+>>>>>>> master
 
 
 stato 41
 
+<<<<<<< HEAD
    15 FUNCTION: FUNCTIONDECL LPAREN VARDECL . RPAREN STARTOFSCOPE LINE ENDOFSCOPE
 
     RPAREN  shift e prosecuzione allo stato 55
+=======
+    3 LINE: VARDECL ENDOFSTMT .
+
+    $default  riduzione con la regola 3 (LINE)
+>>>>>>> master
 
 
 stato 42
 
+<<<<<<< HEAD
     4 LINE: LINE LOGICEXPR ENDOFSTMT $@1 .
 
     $default  riduzione con la regola 4 (LINE)
+=======
+    9 LINE: IFSTMT ENDOFSTMT .
+
+    $default  riduzione con la regola 9 (LINE)
+>>>>>>> master
 
 
 stato 43
 
+<<<<<<< HEAD
    20 EXPR: EXPR . PLUS EXPR
    20     | EXPR PLUS EXPR .
    21     | EXPR . MINUS EXPR
@@ -588,12 +1144,16 @@ stato 43
     PER  shift e prosecuzione allo stato 32
     DIV  shift e prosecuzione allo stato 33
     MOD  shift e prosecuzione allo stato 34
+=======
+   11 LINE: LOOPSTMT ENDOFSTMT .
+>>>>>>> master
 
-    $default  riduzione con la regola 20 (EXPR)
+    $default  riduzione con la regola 11 (LINE)
 
 
 stato 44
 
+<<<<<<< HEAD
    20 EXPR: EXPR . PLUS EXPR
    21     | EXPR . MINUS EXPR
    21     | EXPR MINUS EXPR .
@@ -604,24 +1164,32 @@ stato 44
     PER  shift e prosecuzione allo stato 32
     DIV  shift e prosecuzione allo stato 33
     MOD  shift e prosecuzione allo stato 34
+=======
+   13 LINE: FUNCTION ENDOFSTMT .
+>>>>>>> master
 
-    $default  riduzione con la regola 21 (EXPR)
+    $default  riduzione con la regola 13 (LINE)
 
 
 stato 45
 
+<<<<<<< HEAD
    20 EXPR: EXPR . PLUS EXPR
    21     | EXPR . MINUS EXPR
    22     | EXPR . PER EXPR
    22     | EXPR PER EXPR .
    23     | EXPR . DIV EXPR
    24     | EXPR . MOD EXPR
+=======
+    7 LINE: LOGICEXPR ENDOFSTMT .
+>>>>>>> master
 
-    $default  riduzione con la regola 22 (EXPR)
+    $default  riduzione con la regola 7 (LINE)
 
 
 stato 46
 
+<<<<<<< HEAD
    20 EXPR: EXPR . PLUS EXPR
    21     | EXPR . MINUS EXPR
    22     | EXPR . PER EXPR
@@ -630,10 +1198,28 @@ stato 46
    24     | EXPR . MOD EXPR
 
     $default  riduzione con la regola 23 (EXPR)
+=======
+   34 LOGICEXPR: LOGICEXPR OR . LOGICEXPR
+
+    LPAREN       shift e prosecuzione allo stato 3
+    NOT          shift e prosecuzione allo stato 4
+    TRUEVAL      shift e prosecuzione allo stato 5
+    FALSEVAL     shift e prosecuzione allo stato 6
+    ID           shift e prosecuzione allo stato 24
+    INTEGERTYPE  shift e prosecuzione allo stato 25
+    FLOATTYPE    shift e prosecuzione allo stato 11
+    BOOLEANTYPE  shift e prosecuzione allo stato 12
+    STRINGTYPE   shift e prosecuzione allo stato 13
+
+    LOGICEXPR  prosecuzione allo stato 74
+    EXPR       prosecuzione allo stato 28
+    TYPEVAL    prosecuzione allo stato 21
+>>>>>>> master
 
 
 stato 47
 
+<<<<<<< HEAD
    20 EXPR: EXPR . PLUS EXPR
    21     | EXPR . MINUS EXPR
    22     | EXPR . PER EXPR
@@ -642,10 +1228,28 @@ stato 47
    24     | EXPR MOD EXPR .
 
     $default  riduzione con la regola 24 (EXPR)
+=======
+   35 LOGICEXPR: LOGICEXPR AND . LOGICEXPR
+
+    LPAREN       shift e prosecuzione allo stato 3
+    NOT          shift e prosecuzione allo stato 4
+    TRUEVAL      shift e prosecuzione allo stato 5
+    FALSEVAL     shift e prosecuzione allo stato 6
+    ID           shift e prosecuzione allo stato 24
+    INTEGERTYPE  shift e prosecuzione allo stato 25
+    FLOATTYPE    shift e prosecuzione allo stato 11
+    BOOLEANTYPE  shift e prosecuzione allo stato 12
+    STRINGTYPE   shift e prosecuzione allo stato 13
+
+    LOGICEXPR  prosecuzione allo stato 75
+    EXPR       prosecuzione allo stato 28
+    TYPEVAL    prosecuzione allo stato 21
+>>>>>>> master
 
 
 stato 48
 
+<<<<<<< HEAD
    19 LOGICEXPR: EXPR GREATER EXPR .
    20 EXPR: EXPR . PLUS EXPR
    21     | EXPR . MINUS EXPR
@@ -660,62 +1264,160 @@ stato 48
     MOD    shift e prosecuzione allo stato 34
 
     $default  riduzione con la regola 19 (LOGICEXPR)
+=======
+    5 LINE: EXPR ENDOFSTMT .
+
+    $default  riduzione con la regola 5 (LINE)
+>>>>>>> master
 
 
 stato 49
 
+<<<<<<< HEAD
     9 VARDECL: VAR ID COLON INTKEYWORD . ASSIGNMENT EXPR
+=======
+   36 EXPR: EXPR PLUS . EXPR
 
-    ASSIGNMENT  shift e prosecuzione allo stato 56
+    LPAREN       shift e prosecuzione allo stato 3
+    ID           shift e prosecuzione allo stato 24
+    INTEGERTYPE  shift e prosecuzione allo stato 25
+    FLOATTYPE    shift e prosecuzione allo stato 11
+    BOOLEANTYPE  shift e prosecuzione allo stato 12
+    STRINGTYPE   shift e prosecuzione allo stato 13
+>>>>>>> master
+
+    EXPR     prosecuzione allo stato 76
+    TYPEVAL  prosecuzione allo stato 21
 
 
 stato 50
 
+<<<<<<< HEAD
    10 VARDECL: VAR ID COLON FLOATKEYWORD . ASSIGNMENT EXPR
+=======
+   37 EXPR: EXPR MINUS . EXPR
 
-    ASSIGNMENT  shift e prosecuzione allo stato 57
+    LPAREN       shift e prosecuzione allo stato 3
+    ID           shift e prosecuzione allo stato 24
+    INTEGERTYPE  shift e prosecuzione allo stato 25
+    FLOATTYPE    shift e prosecuzione allo stato 11
+    BOOLEANTYPE  shift e prosecuzione allo stato 12
+    STRINGTYPE   shift e prosecuzione allo stato 13
+>>>>>>> master
+
+    EXPR     prosecuzione allo stato 77
+    TYPEVAL  prosecuzione allo stato 21
 
 
 stato 51
 
+<<<<<<< HEAD
    11 VARDECL: VAR ID COLON BOOLEANKEYWORD . ASSIGNMENT EXPR
 
     ASSIGNMENT  shift e prosecuzione allo stato 58
+=======
+   38 EXPR: EXPR PER . EXPR
+
+    LPAREN       shift e prosecuzione allo stato 3
+    ID           shift e prosecuzione allo stato 24
+    INTEGERTYPE  shift e prosecuzione allo stato 25
+    FLOATTYPE    shift e prosecuzione allo stato 11
+    BOOLEANTYPE  shift e prosecuzione allo stato 12
+    STRINGTYPE   shift e prosecuzione allo stato 13
+
+    EXPR     prosecuzione allo stato 78
+    TYPEVAL  prosecuzione allo stato 21
+>>>>>>> master
 
 
 stato 52
 
+<<<<<<< HEAD
    12 VARDECL: VAR ID COLON STRINGKEYWORD . ASSIGNMENT EXPR
 
     ASSIGNMENT  shift e prosecuzione allo stato 59
+=======
+   39 EXPR: EXPR DIV . EXPR
+
+    LPAREN       shift e prosecuzione allo stato 3
+    ID           shift e prosecuzione allo stato 24
+    INTEGERTYPE  shift e prosecuzione allo stato 25
+    FLOATTYPE    shift e prosecuzione allo stato 11
+    BOOLEANTYPE  shift e prosecuzione allo stato 12
+    STRINGTYPE   shift e prosecuzione allo stato 13
+
+    EXPR     prosecuzione allo stato 79
+    TYPEVAL  prosecuzione allo stato 21
+>>>>>>> master
 
 
 stato 53
 
+<<<<<<< HEAD
    13 IFSTMT: IF LPAREN LOGICEXPR RPAREN . STARTOFSCOPE LINE ELSE LINE ENDOFSCOPE
    14       | IF LPAREN LOGICEXPR RPAREN . STARTOFSCOPE LINE ENDOFSCOPE
+=======
+   40 EXPR: EXPR MOD . EXPR
 
-    STARTOFSCOPE  shift e prosecuzione allo stato 60
+    LPAREN       shift e prosecuzione allo stato 3
+    ID           shift e prosecuzione allo stato 24
+    INTEGERTYPE  shift e prosecuzione allo stato 25
+    FLOATTYPE    shift e prosecuzione allo stato 11
+    BOOLEANTYPE  shift e prosecuzione allo stato 12
+    STRINGTYPE   shift e prosecuzione allo stato 13
+>>>>>>> master
+
+    EXPR     prosecuzione allo stato 80
+    TYPEVAL  prosecuzione allo stato 21
 
 
 stato 54
 
+<<<<<<< HEAD
    16 FUNCTION: FUNCTIONDECL LPAREN RPAREN STARTOFSCOPE . LINE ENDOFSCOPE
 
     $default  riduzione con la regola 1 (LINE)
 
     LINE  prosecuzione allo stato 61
+=======
+   28 LOGICEXPR: EXPR GREATEREQUAL . EXPR
+
+    LPAREN       shift e prosecuzione allo stato 3
+    ID           shift e prosecuzione allo stato 24
+    INTEGERTYPE  shift e prosecuzione allo stato 25
+    FLOATTYPE    shift e prosecuzione allo stato 11
+    BOOLEANTYPE  shift e prosecuzione allo stato 12
+    STRINGTYPE   shift e prosecuzione allo stato 13
+
+    EXPR     prosecuzione allo stato 81
+    TYPEVAL  prosecuzione allo stato 21
+>>>>>>> master
 
 
 stato 55
 
+<<<<<<< HEAD
    15 FUNCTION: FUNCTIONDECL LPAREN VARDECL RPAREN . STARTOFSCOPE LINE ENDOFSCOPE
 
     STARTOFSCOPE  shift e prosecuzione allo stato 62
+=======
+   30 LOGICEXPR: EXPR LOWEREQUAL . EXPR
+
+    LPAREN       shift e prosecuzione allo stato 3
+    ID           shift e prosecuzione allo stato 24
+    INTEGERTYPE  shift e prosecuzione allo stato 25
+    FLOATTYPE    shift e prosecuzione allo stato 11
+    BOOLEANTYPE  shift e prosecuzione allo stato 12
+    STRINGTYPE   shift e prosecuzione allo stato 13
+
+    EXPR     prosecuzione allo stato 82
+    TYPEVAL  prosecuzione allo stato 21
+>>>>>>> master
 
 
 stato 56
 
+<<<<<<< HEAD
     9 VARDECL: VAR ID COLON INTKEYWORD ASSIGNMENT . EXPR
 
     LPAREN       shift e prosecuzione allo stato 5
@@ -727,10 +1429,24 @@ stato 56
 
     EXPR     prosecuzione allo stato 63
     TYPEVAL  prosecuzione allo stato 20
+=======
+   27 LOGICEXPR: EXPR GREATER . EXPR
+
+    LPAREN       shift e prosecuzione allo stato 3
+    ID           shift e prosecuzione allo stato 24
+    INTEGERTYPE  shift e prosecuzione allo stato 25
+    FLOATTYPE    shift e prosecuzione allo stato 11
+    BOOLEANTYPE  shift e prosecuzione allo stato 12
+    STRINGTYPE   shift e prosecuzione allo stato 13
+
+    EXPR     prosecuzione allo stato 83
+    TYPEVAL  prosecuzione allo stato 21
+>>>>>>> master
 
 
 stato 57
 
+<<<<<<< HEAD
    10 VARDECL: VAR ID COLON FLOATKEYWORD ASSIGNMENT . EXPR
 
     LPAREN       shift e prosecuzione allo stato 5
@@ -742,10 +1458,24 @@ stato 57
 
     EXPR     prosecuzione allo stato 64
     TYPEVAL  prosecuzione allo stato 20
+=======
+   29 LOGICEXPR: EXPR LOWER . EXPR
+
+    LPAREN       shift e prosecuzione allo stato 3
+    ID           shift e prosecuzione allo stato 24
+    INTEGERTYPE  shift e prosecuzione allo stato 25
+    FLOATTYPE    shift e prosecuzione allo stato 11
+    BOOLEANTYPE  shift e prosecuzione allo stato 12
+    STRINGTYPE   shift e prosecuzione allo stato 13
+
+    EXPR     prosecuzione allo stato 84
+    TYPEVAL  prosecuzione allo stato 21
+>>>>>>> master
 
 
 stato 58
 
+<<<<<<< HEAD
    11 VARDECL: VAR ID COLON BOOLEANKEYWORD ASSIGNMENT . EXPR
 
     LPAREN       shift e prosecuzione allo stato 5
@@ -757,10 +1487,24 @@ stato 58
 
     EXPR     prosecuzione allo stato 65
     TYPEVAL  prosecuzione allo stato 20
+=======
+   32 LOGICEXPR: EXPR NOTEQUAL . EXPR
+
+    LPAREN       shift e prosecuzione allo stato 3
+    ID           shift e prosecuzione allo stato 24
+    INTEGERTYPE  shift e prosecuzione allo stato 25
+    FLOATTYPE    shift e prosecuzione allo stato 11
+    BOOLEANTYPE  shift e prosecuzione allo stato 12
+    STRINGTYPE   shift e prosecuzione allo stato 13
+
+    EXPR     prosecuzione allo stato 85
+    TYPEVAL  prosecuzione allo stato 21
+>>>>>>> master
 
 
 stato 59
 
+<<<<<<< HEAD
    12 VARDECL: VAR ID COLON STRINGKEYWORD ASSIGNMENT . EXPR
 
     LPAREN       shift e prosecuzione allo stato 5
@@ -772,20 +1516,429 @@ stato 59
 
     EXPR     prosecuzione allo stato 66
     TYPEVAL  prosecuzione allo stato 20
+=======
+   31 LOGICEXPR: EXPR EQUAL . EXPR
+
+    LPAREN       shift e prosecuzione allo stato 3
+    ID           shift e prosecuzione allo stato 24
+    INTEGERTYPE  shift e prosecuzione allo stato 25
+    FLOATTYPE    shift e prosecuzione allo stato 11
+    BOOLEANTYPE  shift e prosecuzione allo stato 12
+    STRINGTYPE   shift e prosecuzione allo stato 13
+
+    EXPR     prosecuzione allo stato 86
+    TYPEVAL  prosecuzione allo stato 21
 
 
 stato 60
 
-   13 IFSTMT: IF LPAREN LOGICEXPR RPAREN STARTOFSCOPE . LINE ELSE LINE ENDOFSCOPE
-   14       | IF LPAREN LOGICEXPR RPAREN STARTOFSCOPE . LINE ENDOFSCOPE
+   15 VARDECL: VAR ID COLON . INTKEYWORD ASSIGNMENT EXPR
+   16        | VAR ID COLON . FLOATKEYWORD ASSIGNMENT EXPR
+   17        | VAR ID COLON . BOOLEANKEYWORD ASSIGNMENT EXPR
+   18        | VAR ID COLON . STRINGKEYWORD ASSIGNMENT EXPR
 
-    $default  riduzione con la regola 1 (LINE)
-
-    LINE  prosecuzione allo stato 67
+    INTKEYWORD      shift e prosecuzione allo stato 87
+    FLOATKEYWORD    shift e prosecuzione allo stato 88
+    BOOLEANKEYWORD  shift e prosecuzione allo stato 89
+    STRINGKEYWORD   shift e prosecuzione allo stato 90
 
 
 stato 61
 
+   19 IFSTMT: IF LPAREN LOGICEXPR . RPAREN STARTOFSCOPE LINE ELSE LINE ENDOFSCOPE
+   20       | IF LPAREN LOGICEXPR . RPAREN STARTOFSCOPE LINE ENDOFSCOPE
+   34 LOGICEXPR: LOGICEXPR . OR LOGICEXPR
+   35          | LOGICEXPR . AND LOGICEXPR
+
+    RPAREN  shift e prosecuzione allo stato 91
+    OR      shift e prosecuzione allo stato 46
+    AND     shift e prosecuzione allo stato 47
+
+
+stato 62
+
+   41 EXPR: LPAREN EXPR RPAREN .
+
+    $default  riduzione con la regola 41 (EXPR)
+
+
+stato 63
+
+   24 FUNCTION: FUNCTIONDECL LPAREN RPAREN . STARTOFSCOPE LINE ENDOFSCOPE
+
+    STARTOFSCOPE  shift e prosecuzione allo stato 92
+
+
+stato 64
+
+   23 FUNCTION: FUNCTIONDECL LPAREN VARDECL . RPAREN STARTOFSCOPE LINE ENDOFSCOPE
+
+    RPAREN  shift e prosecuzione allo stato 93
+
+
+stato 65
+
+   22 LOOPSTMT: ID PER LOOP . STARTOFSCOPE LINE ENDOFSCOPE
+
+    STARTOFSCOPE  shift e prosecuzione allo stato 94
+
+
+stato 66
+
+   21 LOOPSTMT: INTEGERTYPE PER LOOP . STARTOFSCOPE LINE ENDOFSCOPE
+
+    STARTOFSCOPE  shift e prosecuzione allo stato 95
+
+
+stato 67
+
+    2 LINE: LINE EXITSTMT ENDOFSTMT .
+
+    $default  riduzione con la regola 2 (LINE)
+
+
+stato 68
+
+    4 LINE: LINE VARDECL ENDOFSTMT .
+
+    $default  riduzione con la regola 4 (LINE)
+
+
+stato 69
+
+   10 LINE: LINE IFSTMT ENDOFSTMT .
+
+    $default  riduzione con la regola 10 (LINE)
+
+
+stato 70
+
+   12 LINE: LINE LOOPSTMT ENDOFSTMT .
+
+    $default  riduzione con la regola 12 (LINE)
+
+
+stato 71
+
+   14 LINE: LINE FUNCTION ENDOFSTMT .
+
+    $default  riduzione con la regola 14 (LINE)
+
+
+stato 72
+
+    8 LINE: LINE LOGICEXPR ENDOFSTMT .
+
+    $default  riduzione con la regola 8 (LINE)
+
+
+stato 73
+
+    6 LINE: LINE EXPR ENDOFSTMT .
+
+    $default  riduzione con la regola 6 (LINE)
+
+
+stato 74
+
+   34 LOGICEXPR: LOGICEXPR . OR LOGICEXPR
+   34          | LOGICEXPR OR LOGICEXPR .
+   35          | LOGICEXPR . AND LOGICEXPR
+
+    OR   shift e prosecuzione allo stato 46
+    AND  shift e prosecuzione allo stato 47
+
+    OR        [riduzione con la regola 34 (LOGICEXPR)]
+    AND       [riduzione con la regola 34 (LOGICEXPR)]
+    $default  riduzione con la regola 34 (LOGICEXPR)
+
+
+stato 75
+
+   34 LOGICEXPR: LOGICEXPR . OR LOGICEXPR
+   35          | LOGICEXPR . AND LOGICEXPR
+   35          | LOGICEXPR AND LOGICEXPR .
+
+    OR   shift e prosecuzione allo stato 46
+    AND  shift e prosecuzione allo stato 47
+
+    OR        [riduzione con la regola 35 (LOGICEXPR)]
+    AND       [riduzione con la regola 35 (LOGICEXPR)]
+    $default  riduzione con la regola 35 (LOGICEXPR)
+
+
+stato 76
+
+   36 EXPR: EXPR . PLUS EXPR
+   36     | EXPR PLUS EXPR .
+   37     | EXPR . MINUS EXPR
+   38     | EXPR . PER EXPR
+   39     | EXPR . DIV EXPR
+   40     | EXPR . MOD EXPR
+
+    PER  shift e prosecuzione allo stato 51
+    DIV  shift e prosecuzione allo stato 52
+    MOD  shift e prosecuzione allo stato 53
+
+    $default  riduzione con la regola 36 (EXPR)
+
+
+stato 77
+
+   36 EXPR: EXPR . PLUS EXPR
+   37     | EXPR . MINUS EXPR
+   37     | EXPR MINUS EXPR .
+   38     | EXPR . PER EXPR
+   39     | EXPR . DIV EXPR
+   40     | EXPR . MOD EXPR
+
+    PER  shift e prosecuzione allo stato 51
+    DIV  shift e prosecuzione allo stato 52
+    MOD  shift e prosecuzione allo stato 53
+
+    $default  riduzione con la regola 37 (EXPR)
+
+
+stato 78
+
+   36 EXPR: EXPR . PLUS EXPR
+   37     | EXPR . MINUS EXPR
+   38     | EXPR . PER EXPR
+   38     | EXPR PER EXPR .
+   39     | EXPR . DIV EXPR
+   40     | EXPR . MOD EXPR
+
+    $default  riduzione con la regola 38 (EXPR)
+
+
+stato 79
+
+   36 EXPR: EXPR . PLUS EXPR
+   37     | EXPR . MINUS EXPR
+   38     | EXPR . PER EXPR
+   39     | EXPR . DIV EXPR
+   39     | EXPR DIV EXPR .
+   40     | EXPR . MOD EXPR
+
+    $default  riduzione con la regola 39 (EXPR)
+
+
+stato 80
+
+   36 EXPR: EXPR . PLUS EXPR
+   37     | EXPR . MINUS EXPR
+   38     | EXPR . PER EXPR
+   39     | EXPR . DIV EXPR
+   40     | EXPR . MOD EXPR
+   40     | EXPR MOD EXPR .
+
+    $default  riduzione con la regola 40 (EXPR)
+
+
+stato 81
+
+   28 LOGICEXPR: EXPR GREATEREQUAL EXPR .
+   36 EXPR: EXPR . PLUS EXPR
+   37     | EXPR . MINUS EXPR
+   38     | EXPR . PER EXPR
+   39     | EXPR . DIV EXPR
+   40     | EXPR . MOD EXPR
+
+    PLUS   shift e prosecuzione allo stato 49
+    MINUS  shift e prosecuzione allo stato 50
+    PER    shift e prosecuzione allo stato 51
+    DIV    shift e prosecuzione allo stato 52
+    MOD    shift e prosecuzione allo stato 53
+
+    $default  riduzione con la regola 28 (LOGICEXPR)
+
+
+stato 82
+
+   30 LOGICEXPR: EXPR LOWEREQUAL EXPR .
+   36 EXPR: EXPR . PLUS EXPR
+   37     | EXPR . MINUS EXPR
+   38     | EXPR . PER EXPR
+   39     | EXPR . DIV EXPR
+   40     | EXPR . MOD EXPR
+
+    PLUS   shift e prosecuzione allo stato 49
+    MINUS  shift e prosecuzione allo stato 50
+    PER    shift e prosecuzione allo stato 51
+    DIV    shift e prosecuzione allo stato 52
+    MOD    shift e prosecuzione allo stato 53
+
+    $default  riduzione con la regola 30 (LOGICEXPR)
+
+
+stato 83
+
+   27 LOGICEXPR: EXPR GREATER EXPR .
+   36 EXPR: EXPR . PLUS EXPR
+   37     | EXPR . MINUS EXPR
+   38     | EXPR . PER EXPR
+   39     | EXPR . DIV EXPR
+   40     | EXPR . MOD EXPR
+
+    PLUS   shift e prosecuzione allo stato 49
+    MINUS  shift e prosecuzione allo stato 50
+    PER    shift e prosecuzione allo stato 51
+    DIV    shift e prosecuzione allo stato 52
+    MOD    shift e prosecuzione allo stato 53
+
+    $default  riduzione con la regola 27 (LOGICEXPR)
+
+
+stato 84
+
+   29 LOGICEXPR: EXPR LOWER EXPR .
+   36 EXPR: EXPR . PLUS EXPR
+   37     | EXPR . MINUS EXPR
+   38     | EXPR . PER EXPR
+   39     | EXPR . DIV EXPR
+   40     | EXPR . MOD EXPR
+
+    PLUS   shift e prosecuzione allo stato 49
+    MINUS  shift e prosecuzione allo stato 50
+    PER    shift e prosecuzione allo stato 51
+    DIV    shift e prosecuzione allo stato 52
+    MOD    shift e prosecuzione allo stato 53
+
+    $default  riduzione con la regola 29 (LOGICEXPR)
+
+
+stato 85
+
+   32 LOGICEXPR: EXPR NOTEQUAL EXPR .
+   36 EXPR: EXPR . PLUS EXPR
+   37     | EXPR . MINUS EXPR
+   38     | EXPR . PER EXPR
+   39     | EXPR . DIV EXPR
+   40     | EXPR . MOD EXPR
+
+    PLUS   shift e prosecuzione allo stato 49
+    MINUS  shift e prosecuzione allo stato 50
+    PER    shift e prosecuzione allo stato 51
+    DIV    shift e prosecuzione allo stato 52
+    MOD    shift e prosecuzione allo stato 53
+
+    $default  riduzione con la regola 32 (LOGICEXPR)
+
+
+stato 86
+
+   31 LOGICEXPR: EXPR EQUAL EXPR .
+   36 EXPR: EXPR . PLUS EXPR
+   37     | EXPR . MINUS EXPR
+   38     | EXPR . PER EXPR
+   39     | EXPR . DIV EXPR
+   40     | EXPR . MOD EXPR
+
+    PLUS   shift e prosecuzione allo stato 49
+    MINUS  shift e prosecuzione allo stato 50
+    PER    shift e prosecuzione allo stato 51
+    DIV    shift e prosecuzione allo stato 52
+    MOD    shift e prosecuzione allo stato 53
+
+    $default  riduzione con la regola 31 (LOGICEXPR)
+
+
+stato 87
+
+   15 VARDECL: VAR ID COLON INTKEYWORD . ASSIGNMENT EXPR
+
+    ASSIGNMENT  shift e prosecuzione allo stato 96
+
+
+stato 88
+
+   16 VARDECL: VAR ID COLON FLOATKEYWORD . ASSIGNMENT EXPR
+
+    ASSIGNMENT  shift e prosecuzione allo stato 97
+
+
+stato 89
+
+   17 VARDECL: VAR ID COLON BOOLEANKEYWORD . ASSIGNMENT EXPR
+
+    ASSIGNMENT  shift e prosecuzione allo stato 98
+
+
+stato 90
+
+   18 VARDECL: VAR ID COLON STRINGKEYWORD . ASSIGNMENT EXPR
+
+    ASSIGNMENT  shift e prosecuzione allo stato 99
+
+
+stato 91
+
+   19 IFSTMT: IF LPAREN LOGICEXPR RPAREN . STARTOFSCOPE LINE ELSE LINE ENDOFSCOPE
+   20       | IF LPAREN LOGICEXPR RPAREN . STARTOFSCOPE LINE ENDOFSCOPE
+
+    STARTOFSCOPE  shift e prosecuzione allo stato 100
+
+
+stato 92
+
+   24 FUNCTION: FUNCTIONDECL LPAREN RPAREN STARTOFSCOPE . LINE ENDOFSCOPE
+
+    VAR           shift e prosecuzione allo stato 1
+    IF            shift e prosecuzione allo stato 2
+    LPAREN        shift e prosecuzione allo stato 3
+    NOT           shift e prosecuzione allo stato 4
+    TRUEVAL       shift e prosecuzione allo stato 5
+    FALSEVAL      shift e prosecuzione allo stato 6
+    FUNCTIONDECL  shift e prosecuzione allo stato 7
+    EXITSTMT      shift e prosecuzione allo stato 8
+    ID            shift e prosecuzione allo stato 9
+    INTEGERTYPE   shift e prosecuzione allo stato 10
+    FLOATTYPE     shift e prosecuzione allo stato 11
+    BOOLEANTYPE   shift e prosecuzione allo stato 12
+    STRINGTYPE    shift e prosecuzione allo stato 13
+
+    LINE       prosecuzione allo stato 101
+    VARDECL    prosecuzione allo stato 15
+    IFSTMT     prosecuzione allo stato 16
+    LOOPSTMT   prosecuzione allo stato 17
+    FUNCTION   prosecuzione allo stato 18
+    LOGICEXPR  prosecuzione allo stato 19
+    EXPR       prosecuzione allo stato 20
+    TYPEVAL    prosecuzione allo stato 21
+>>>>>>> master
+
+
+stato 93
+
+<<<<<<< HEAD
+   13 IFSTMT: IF LPAREN LOGICEXPR RPAREN STARTOFSCOPE . LINE ELSE LINE ENDOFSCOPE
+   14       | IF LPAREN LOGICEXPR RPAREN STARTOFSCOPE . LINE ENDOFSCOPE
+=======
+   23 FUNCTION: FUNCTIONDECL LPAREN VARDECL RPAREN . STARTOFSCOPE LINE ENDOFSCOPE
+>>>>>>> master
+
+    STARTOFSCOPE  shift e prosecuzione allo stato 102
+
+
+stato 94
+
+   22 LOOPSTMT: ID PER LOOP STARTOFSCOPE . LINE ENDOFSCOPE
+
+    VAR           shift e prosecuzione allo stato 1
+    IF            shift e prosecuzione allo stato 2
+    LPAREN        shift e prosecuzione allo stato 3
+    NOT           shift e prosecuzione allo stato 4
+    TRUEVAL       shift e prosecuzione allo stato 5
+    FALSEVAL      shift e prosecuzione allo stato 6
+    FUNCTIONDECL  shift e prosecuzione allo stato 7
+    EXITSTMT      shift e prosecuzione allo stato 8
+    ID            shift e prosecuzione allo stato 9
+    INTEGERTYPE   shift e prosecuzione allo stato 10
+    FLOATTYPE     shift e prosecuzione allo stato 11
+    BOOLEANTYPE   shift e prosecuzione allo stato 12
+    STRINGTYPE    shift e prosecuzione allo stato 13
+
+<<<<<<< HEAD
     2 LINE: LINE . EXPR ENDOFSTMT
     4     | LINE . LOGICEXPR ENDOFSTMT $@1
     5     | LINE . VARDECL ENDOFSTMT
@@ -814,19 +1967,66 @@ stato 61
     LOGICEXPR  prosecuzione allo stato 18
     EXPR       prosecuzione allo stato 19
     TYPEVAL    prosecuzione allo stato 20
+=======
+    LINE       prosecuzione allo stato 103
+    VARDECL    prosecuzione allo stato 15
+    IFSTMT     prosecuzione allo stato 16
+    LOOPSTMT   prosecuzione allo stato 17
+    FUNCTION   prosecuzione allo stato 18
+    LOGICEXPR  prosecuzione allo stato 19
+    EXPR       prosecuzione allo stato 20
+    TYPEVAL    prosecuzione allo stato 21
 
 
-stato 62
+stato 95
+>>>>>>> master
 
+   21 LOOPSTMT: INTEGERTYPE PER LOOP STARTOFSCOPE . LINE ENDOFSCOPE
+
+    VAR           shift e prosecuzione allo stato 1
+    IF            shift e prosecuzione allo stato 2
+    LPAREN        shift e prosecuzione allo stato 3
+    NOT           shift e prosecuzione allo stato 4
+    TRUEVAL       shift e prosecuzione allo stato 5
+    FALSEVAL      shift e prosecuzione allo stato 6
+    FUNCTIONDECL  shift e prosecuzione allo stato 7
+    EXITSTMT      shift e prosecuzione allo stato 8
+    ID            shift e prosecuzione allo stato 9
+    INTEGERTYPE   shift e prosecuzione allo stato 10
+    FLOATTYPE     shift e prosecuzione allo stato 11
+    BOOLEANTYPE   shift e prosecuzione allo stato 12
+    STRINGTYPE    shift e prosecuzione allo stato 13
+
+<<<<<<< HEAD
    15 FUNCTION: FUNCTIONDECL LPAREN VARDECL RPAREN STARTOFSCOPE . LINE ENDOFSCOPE
 
     $default  riduzione con la regola 1 (LINE)
 
     LINE  prosecuzione allo stato 69
+=======
+    LINE       prosecuzione allo stato 104
+    VARDECL    prosecuzione allo stato 15
+    IFSTMT     prosecuzione allo stato 16
+    LOOPSTMT   prosecuzione allo stato 17
+    FUNCTION   prosecuzione allo stato 18
+    LOGICEXPR  prosecuzione allo stato 19
+    EXPR       prosecuzione allo stato 20
+    TYPEVAL    prosecuzione allo stato 21
 
 
-stato 63
+stato 96
+>>>>>>> master
 
+   15 VARDECL: VAR ID COLON INTKEYWORD ASSIGNMENT . EXPR
+
+    LPAREN       shift e prosecuzione allo stato 3
+    ID           shift e prosecuzione allo stato 24
+    INTEGERTYPE  shift e prosecuzione allo stato 25
+    FLOATTYPE    shift e prosecuzione allo stato 11
+    BOOLEANTYPE  shift e prosecuzione allo stato 12
+    STRINGTYPE   shift e prosecuzione allo stato 13
+
+<<<<<<< HEAD
     9 VARDECL: VAR ID COLON INTKEYWORD ASSIGNMENT EXPR .
    20 EXPR: EXPR . PLUS EXPR
    21     | EXPR . MINUS EXPR
@@ -839,12 +2039,24 @@ stato 63
     PER    shift e prosecuzione allo stato 32
     DIV    shift e prosecuzione allo stato 33
     MOD    shift e prosecuzione allo stato 34
+=======
+    EXPR     prosecuzione allo stato 105
+    TYPEVAL  prosecuzione allo stato 21
 
-    $default  riduzione con la regola 9 (VARDECL)
+>>>>>>> master
 
+stato 97
 
-stato 64
+   16 VARDECL: VAR ID COLON FLOATKEYWORD ASSIGNMENT . EXPR
 
+    LPAREN       shift e prosecuzione allo stato 3
+    ID           shift e prosecuzione allo stato 24
+    INTEGERTYPE  shift e prosecuzione allo stato 25
+    FLOATTYPE    shift e prosecuzione allo stato 11
+    BOOLEANTYPE  shift e prosecuzione allo stato 12
+    STRINGTYPE   shift e prosecuzione allo stato 13
+
+<<<<<<< HEAD
    10 VARDECL: VAR ID COLON FLOATKEYWORD ASSIGNMENT EXPR .
    20 EXPR: EXPR . PLUS EXPR
    21     | EXPR . MINUS EXPR
@@ -857,12 +2069,43 @@ stato 64
     PER    shift e prosecuzione allo stato 32
     DIV    shift e prosecuzione allo stato 33
     MOD    shift e prosecuzione allo stato 34
+=======
+    EXPR     prosecuzione allo stato 106
+    TYPEVAL  prosecuzione allo stato 21
 
-    $default  riduzione con la regola 10 (VARDECL)
+>>>>>>> master
+
+stato 98
+
+   17 VARDECL: VAR ID COLON BOOLEANKEYWORD ASSIGNMENT . EXPR
+
+    LPAREN       shift e prosecuzione allo stato 3
+    ID           shift e prosecuzione allo stato 24
+    INTEGERTYPE  shift e prosecuzione allo stato 25
+    FLOATTYPE    shift e prosecuzione allo stato 11
+    BOOLEANTYPE  shift e prosecuzione allo stato 12
+    STRINGTYPE   shift e prosecuzione allo stato 13
+
+    EXPR     prosecuzione allo stato 107
+    TYPEVAL  prosecuzione allo stato 21
 
 
-stato 65
+stato 99
 
+   18 VARDECL: VAR ID COLON STRINGKEYWORD ASSIGNMENT . EXPR
+
+    LPAREN       shift e prosecuzione allo stato 3
+    ID           shift e prosecuzione allo stato 24
+    INTEGERTYPE  shift e prosecuzione allo stato 25
+    FLOATTYPE    shift e prosecuzione allo stato 11
+    BOOLEANTYPE  shift e prosecuzione allo stato 12
+    STRINGTYPE   shift e prosecuzione allo stato 13
+
+    EXPR     prosecuzione allo stato 108
+    TYPEVAL  prosecuzione allo stato 21
+
+
+<<<<<<< HEAD
    11 VARDECL: VAR ID COLON BOOLEANKEYWORD ASSIGNMENT EXPR .
    20 EXPR: EXPR . PLUS EXPR
    21     | EXPR . MINUS EXPR
@@ -877,10 +2120,73 @@ stato 65
     MOD    shift e prosecuzione allo stato 34
 
     $default  riduzione con la regola 11 (VARDECL)
+=======
+stato 100
+
+   19 IFSTMT: IF LPAREN LOGICEXPR RPAREN STARTOFSCOPE . LINE ELSE LINE ENDOFSCOPE
+   20       | IF LPAREN LOGICEXPR RPAREN STARTOFSCOPE . LINE ENDOFSCOPE
+
+    VAR           shift e prosecuzione allo stato 1
+    IF            shift e prosecuzione allo stato 2
+    LPAREN        shift e prosecuzione allo stato 3
+    NOT           shift e prosecuzione allo stato 4
+    TRUEVAL       shift e prosecuzione allo stato 5
+    FALSEVAL      shift e prosecuzione allo stato 6
+    FUNCTIONDECL  shift e prosecuzione allo stato 7
+    EXITSTMT      shift e prosecuzione allo stato 8
+    ID            shift e prosecuzione allo stato 9
+    INTEGERTYPE   shift e prosecuzione allo stato 10
+    FLOATTYPE     shift e prosecuzione allo stato 11
+    BOOLEANTYPE   shift e prosecuzione allo stato 12
+    STRINGTYPE    shift e prosecuzione allo stato 13
+
+    LINE       prosecuzione allo stato 109
+    VARDECL    prosecuzione allo stato 15
+    IFSTMT     prosecuzione allo stato 16
+    LOOPSTMT   prosecuzione allo stato 17
+    FUNCTION   prosecuzione allo stato 18
+    LOGICEXPR  prosecuzione allo stato 19
+    EXPR       prosecuzione allo stato 20
+    TYPEVAL    prosecuzione allo stato 21
 
 
-stato 66
+stato 101
 
+    2 LINE: LINE . EXITSTMT ENDOFSTMT
+    4     | LINE . VARDECL ENDOFSTMT
+    6     | LINE . EXPR ENDOFSTMT
+    8     | LINE . LOGICEXPR ENDOFSTMT
+   10     | LINE . IFSTMT ENDOFSTMT
+   12     | LINE . LOOPSTMT ENDOFSTMT
+   14     | LINE . FUNCTION ENDOFSTMT
+   24 FUNCTION: FUNCTIONDECL LPAREN RPAREN STARTOFSCOPE LINE . ENDOFSCOPE
+
+    VAR           shift e prosecuzione allo stato 1
+    IF            shift e prosecuzione allo stato 2
+    ENDOFSCOPE    shift e prosecuzione allo stato 110
+    LPAREN        shift e prosecuzione allo stato 3
+    NOT           shift e prosecuzione allo stato 4
+    TRUEVAL       shift e prosecuzione allo stato 5
+    FALSEVAL      shift e prosecuzione allo stato 6
+    FUNCTIONDECL  shift e prosecuzione allo stato 7
+    EXITSTMT      shift e prosecuzione allo stato 34
+    ID            shift e prosecuzione allo stato 9
+    INTEGERTYPE   shift e prosecuzione allo stato 10
+    FLOATTYPE     shift e prosecuzione allo stato 11
+    BOOLEANTYPE   shift e prosecuzione allo stato 12
+    STRINGTYPE    shift e prosecuzione allo stato 13
+>>>>>>> master
+
+    VARDECL    prosecuzione allo stato 35
+    IFSTMT     prosecuzione allo stato 36
+    LOOPSTMT   prosecuzione allo stato 37
+    FUNCTION   prosecuzione allo stato 38
+    LOGICEXPR  prosecuzione allo stato 39
+    EXPR       prosecuzione allo stato 40
+    TYPEVAL    prosecuzione allo stato 21
+
+
+<<<<<<< HEAD
    12 VARDECL: VAR ID COLON STRINGKEYWORD ASSIGNMENT EXPR .
    20 EXPR: EXPR . PLUS EXPR
    21     | EXPR . MINUS EXPR
@@ -895,10 +2201,98 @@ stato 66
     MOD    shift e prosecuzione allo stato 34
 
     $default  riduzione con la regola 12 (VARDECL)
+=======
+stato 102
+
+   23 FUNCTION: FUNCTIONDECL LPAREN VARDECL RPAREN STARTOFSCOPE . LINE ENDOFSCOPE
+>>>>>>> master
+
+    VAR           shift e prosecuzione allo stato 1
+    IF            shift e prosecuzione allo stato 2
+    LPAREN        shift e prosecuzione allo stato 3
+    NOT           shift e prosecuzione allo stato 4
+    TRUEVAL       shift e prosecuzione allo stato 5
+    FALSEVAL      shift e prosecuzione allo stato 6
+    FUNCTIONDECL  shift e prosecuzione allo stato 7
+    EXITSTMT      shift e prosecuzione allo stato 8
+    ID            shift e prosecuzione allo stato 9
+    INTEGERTYPE   shift e prosecuzione allo stato 10
+    FLOATTYPE     shift e prosecuzione allo stato 11
+    BOOLEANTYPE   shift e prosecuzione allo stato 12
+    STRINGTYPE    shift e prosecuzione allo stato 13
+
+    LINE       prosecuzione allo stato 111
+    VARDECL    prosecuzione allo stato 15
+    IFSTMT     prosecuzione allo stato 16
+    LOOPSTMT   prosecuzione allo stato 17
+    FUNCTION   prosecuzione allo stato 18
+    LOGICEXPR  prosecuzione allo stato 19
+    EXPR       prosecuzione allo stato 20
+    TYPEVAL    prosecuzione allo stato 21
 
 
-stato 67
+stato 103
 
+    2 LINE: LINE . EXITSTMT ENDOFSTMT
+    4     | LINE . VARDECL ENDOFSTMT
+    6     | LINE . EXPR ENDOFSTMT
+    8     | LINE . LOGICEXPR ENDOFSTMT
+   10     | LINE . IFSTMT ENDOFSTMT
+   12     | LINE . LOOPSTMT ENDOFSTMT
+   14     | LINE . FUNCTION ENDOFSTMT
+   22 LOOPSTMT: ID PER LOOP STARTOFSCOPE LINE . ENDOFSCOPE
+
+    VAR           shift e prosecuzione allo stato 1
+    IF            shift e prosecuzione allo stato 2
+    ENDOFSCOPE    shift e prosecuzione allo stato 112
+    LPAREN        shift e prosecuzione allo stato 3
+    NOT           shift e prosecuzione allo stato 4
+    TRUEVAL       shift e prosecuzione allo stato 5
+    FALSEVAL      shift e prosecuzione allo stato 6
+    FUNCTIONDECL  shift e prosecuzione allo stato 7
+    EXITSTMT      shift e prosecuzione allo stato 34
+    ID            shift e prosecuzione allo stato 9
+    INTEGERTYPE   shift e prosecuzione allo stato 10
+    FLOATTYPE     shift e prosecuzione allo stato 11
+    BOOLEANTYPE   shift e prosecuzione allo stato 12
+    STRINGTYPE    shift e prosecuzione allo stato 13
+
+    VARDECL    prosecuzione allo stato 35
+    IFSTMT     prosecuzione allo stato 36
+    LOOPSTMT   prosecuzione allo stato 37
+    FUNCTION   prosecuzione allo stato 38
+    LOGICEXPR  prosecuzione allo stato 39
+    EXPR       prosecuzione allo stato 40
+    TYPEVAL    prosecuzione allo stato 21
+
+
+stato 104
+
+    2 LINE: LINE . EXITSTMT ENDOFSTMT
+    4     | LINE . VARDECL ENDOFSTMT
+    6     | LINE . EXPR ENDOFSTMT
+    8     | LINE . LOGICEXPR ENDOFSTMT
+   10     | LINE . IFSTMT ENDOFSTMT
+   12     | LINE . LOOPSTMT ENDOFSTMT
+   14     | LINE . FUNCTION ENDOFSTMT
+   21 LOOPSTMT: INTEGERTYPE PER LOOP STARTOFSCOPE LINE . ENDOFSCOPE
+
+    VAR           shift e prosecuzione allo stato 1
+    IF            shift e prosecuzione allo stato 2
+    ENDOFSCOPE    shift e prosecuzione allo stato 113
+    LPAREN        shift e prosecuzione allo stato 3
+    NOT           shift e prosecuzione allo stato 4
+    TRUEVAL       shift e prosecuzione allo stato 5
+    FALSEVAL      shift e prosecuzione allo stato 6
+    FUNCTIONDECL  shift e prosecuzione allo stato 7
+    EXITSTMT      shift e prosecuzione allo stato 34
+    ID            shift e prosecuzione allo stato 9
+    INTEGERTYPE   shift e prosecuzione allo stato 10
+    FLOATTYPE     shift e prosecuzione allo stato 11
+    BOOLEANTYPE   shift e prosecuzione allo stato 12
+    STRINGTYPE    shift e prosecuzione allo stato 13
+
+<<<<<<< HEAD
     2 LINE: LINE . EXPR ENDOFSTMT
     4     | LINE . LOGICEXPR ENDOFSTMT $@1
     5     | LINE . VARDECL ENDOFSTMT
@@ -929,17 +2323,166 @@ stato 67
     LOGICEXPR  prosecuzione allo stato 18
     EXPR       prosecuzione allo stato 19
     TYPEVAL    prosecuzione allo stato 20
+=======
+    VARDECL    prosecuzione allo stato 35
+    IFSTMT     prosecuzione allo stato 36
+    LOOPSTMT   prosecuzione allo stato 37
+    FUNCTION   prosecuzione allo stato 38
+    LOGICEXPR  prosecuzione allo stato 39
+    EXPR       prosecuzione allo stato 40
+    TYPEVAL    prosecuzione allo stato 21
 
 
-stato 68
+stato 105
 
+   15 VARDECL: VAR ID COLON INTKEYWORD ASSIGNMENT EXPR .
+   36 EXPR: EXPR . PLUS EXPR
+   37     | EXPR . MINUS EXPR
+   38     | EXPR . PER EXPR
+   39     | EXPR . DIV EXPR
+   40     | EXPR . MOD EXPR
+
+    PLUS   shift e prosecuzione allo stato 49
+    MINUS  shift e prosecuzione allo stato 50
+    PER    shift e prosecuzione allo stato 51
+    DIV    shift e prosecuzione allo stato 52
+    MOD    shift e prosecuzione allo stato 53
+
+    $default  riduzione con la regola 15 (VARDECL)
+
+
+stato 106
+
+   16 VARDECL: VAR ID COLON FLOATKEYWORD ASSIGNMENT EXPR .
+   36 EXPR: EXPR . PLUS EXPR
+   37     | EXPR . MINUS EXPR
+   38     | EXPR . PER EXPR
+   39     | EXPR . DIV EXPR
+   40     | EXPR . MOD EXPR
+
+    PLUS   shift e prosecuzione allo stato 49
+    MINUS  shift e prosecuzione allo stato 50
+    PER    shift e prosecuzione allo stato 51
+    DIV    shift e prosecuzione allo stato 52
+    MOD    shift e prosecuzione allo stato 53
+
+    $default  riduzione con la regola 16 (VARDECL)
+
+
+stato 107
+
+   17 VARDECL: VAR ID COLON BOOLEANKEYWORD ASSIGNMENT EXPR .
+   36 EXPR: EXPR . PLUS EXPR
+   37     | EXPR . MINUS EXPR
+   38     | EXPR . PER EXPR
+   39     | EXPR . DIV EXPR
+   40     | EXPR . MOD EXPR
+
+    PLUS   shift e prosecuzione allo stato 49
+    MINUS  shift e prosecuzione allo stato 50
+    PER    shift e prosecuzione allo stato 51
+    DIV    shift e prosecuzione allo stato 52
+    MOD    shift e prosecuzione allo stato 53
+
+    $default  riduzione con la regola 17 (VARDECL)
+
+
+stato 108
+
+   18 VARDECL: VAR ID COLON STRINGKEYWORD ASSIGNMENT EXPR .
+   36 EXPR: EXPR . PLUS EXPR
+   37     | EXPR . MINUS EXPR
+   38     | EXPR . PER EXPR
+   39     | EXPR . DIV EXPR
+   40     | EXPR . MOD EXPR
+
+    PLUS   shift e prosecuzione allo stato 49
+    MINUS  shift e prosecuzione allo stato 50
+    PER    shift e prosecuzione allo stato 51
+    DIV    shift e prosecuzione allo stato 52
+    MOD    shift e prosecuzione allo stato 53
+
+    $default  riduzione con la regola 18 (VARDECL)
+
+
+stato 109
+
+    2 LINE: LINE . EXITSTMT ENDOFSTMT
+    4     | LINE . VARDECL ENDOFSTMT
+    6     | LINE . EXPR ENDOFSTMT
+    8     | LINE . LOGICEXPR ENDOFSTMT
+   10     | LINE . IFSTMT ENDOFSTMT
+   12     | LINE . LOOPSTMT ENDOFSTMT
+   14     | LINE . FUNCTION ENDOFSTMT
+   19 IFSTMT: IF LPAREN LOGICEXPR RPAREN STARTOFSCOPE LINE . ELSE LINE ENDOFSCOPE
+   20       | IF LPAREN LOGICEXPR RPAREN STARTOFSCOPE LINE . ENDOFSCOPE
+
+    VAR           shift e prosecuzione allo stato 1
+    IF            shift e prosecuzione allo stato 2
+    ELSE          shift e prosecuzione allo stato 114
+    ENDOFSCOPE    shift e prosecuzione allo stato 115
+    LPAREN        shift e prosecuzione allo stato 3
+    NOT           shift e prosecuzione allo stato 4
+    TRUEVAL       shift e prosecuzione allo stato 5
+    FALSEVAL      shift e prosecuzione allo stato 6
+    FUNCTIONDECL  shift e prosecuzione allo stato 7
+    EXITSTMT      shift e prosecuzione allo stato 34
+    ID            shift e prosecuzione allo stato 9
+    INTEGERTYPE   shift e prosecuzione allo stato 10
+    FLOATTYPE     shift e prosecuzione allo stato 11
+    BOOLEANTYPE   shift e prosecuzione allo stato 12
+    STRINGTYPE    shift e prosecuzione allo stato 13
+
+    VARDECL    prosecuzione allo stato 35
+    IFSTMT     prosecuzione allo stato 36
+    LOOPSTMT   prosecuzione allo stato 37
+    FUNCTION   prosecuzione allo stato 38
+    LOGICEXPR  prosecuzione allo stato 39
+    EXPR       prosecuzione allo stato 40
+    TYPEVAL    prosecuzione allo stato 21
+>>>>>>> master
+
+
+stato 110
+
+<<<<<<< HEAD
    16 FUNCTION: FUNCTIONDECL LPAREN RPAREN STARTOFSCOPE LINE ENDOFSCOPE .
 
     $default  riduzione con la regola 16 (FUNCTION)
+=======
+   24 FUNCTION: FUNCTIONDECL LPAREN RPAREN STARTOFSCOPE LINE ENDOFSCOPE .
 
+    $default  riduzione con la regola 24 (FUNCTION)
 
-stato 69
+>>>>>>> master
 
+stato 111
+
+    2 LINE: LINE . EXITSTMT ENDOFSTMT
+    4     | LINE . VARDECL ENDOFSTMT
+    6     | LINE . EXPR ENDOFSTMT
+    8     | LINE . LOGICEXPR ENDOFSTMT
+   10     | LINE . IFSTMT ENDOFSTMT
+   12     | LINE . LOOPSTMT ENDOFSTMT
+   14     | LINE . FUNCTION ENDOFSTMT
+   23 FUNCTION: FUNCTIONDECL LPAREN VARDECL RPAREN STARTOFSCOPE LINE . ENDOFSCOPE
+
+    VAR           shift e prosecuzione allo stato 1
+    IF            shift e prosecuzione allo stato 2
+    ENDOFSCOPE    shift e prosecuzione allo stato 116
+    LPAREN        shift e prosecuzione allo stato 3
+    NOT           shift e prosecuzione allo stato 4
+    TRUEVAL       shift e prosecuzione allo stato 5
+    FALSEVAL      shift e prosecuzione allo stato 6
+    FUNCTIONDECL  shift e prosecuzione allo stato 7
+    EXITSTMT      shift e prosecuzione allo stato 34
+    ID            shift e prosecuzione allo stato 9
+    INTEGERTYPE   shift e prosecuzione allo stato 10
+    FLOATTYPE     shift e prosecuzione allo stato 11
+    BOOLEANTYPE   shift e prosecuzione allo stato 12
+    STRINGTYPE    shift e prosecuzione allo stato 13
+
+<<<<<<< HEAD
     2 LINE: LINE . EXPR ENDOFSTMT
     4     | LINE . LOGICEXPR ENDOFSTMT $@1
     5     | LINE . VARDECL ENDOFSTMT
@@ -968,19 +2511,37 @@ stato 69
     LOGICEXPR  prosecuzione allo stato 18
     EXPR       prosecuzione allo stato 19
     TYPEVAL    prosecuzione allo stato 20
+=======
+    VARDECL    prosecuzione allo stato 35
+    IFSTMT     prosecuzione allo stato 36
+    LOOPSTMT   prosecuzione allo stato 37
+    FUNCTION   prosecuzione allo stato 38
+    LOGICEXPR  prosecuzione allo stato 39
+    EXPR       prosecuzione allo stato 40
+    TYPEVAL    prosecuzione allo stato 21
 
+>>>>>>> master
 
-stato 70
+stato 112
 
+   22 LOOPSTMT: ID PER LOOP STARTOFSCOPE LINE ENDOFSCOPE .
+
+<<<<<<< HEAD
    13 IFSTMT: IF LPAREN LOGICEXPR RPAREN STARTOFSCOPE LINE ELSE . LINE ENDOFSCOPE
 
     $default  riduzione con la regola 1 (LINE)
 
     LINE  prosecuzione allo stato 73
+=======
+    $default  riduzione con la regola 22 (LOOPSTMT)
 
+>>>>>>> master
 
-stato 71
+stato 113
 
+   21 LOOPSTMT: INTEGERTYPE PER LOOP STARTOFSCOPE LINE ENDOFSCOPE .
+
+<<<<<<< HEAD
    14 IFSTMT: IF LPAREN LOGICEXPR RPAREN STARTOFSCOPE LINE ENDOFSCOPE .
 
     $default  riduzione con la regola 14 (IFSTMT)
@@ -1016,6 +2577,37 @@ stato 73
     FLOATTYPE     shift e prosecuzione allo stato 12
     BOOLEANTYPE   shift e prosecuzione allo stato 13
     STRINGTYPE    shift e prosecuzione allo stato 14
+=======
+    $default  riduzione con la regola 21 (LOOPSTMT)
+
+
+stato 114
+
+   19 IFSTMT: IF LPAREN LOGICEXPR RPAREN STARTOFSCOPE LINE ELSE . LINE ENDOFSCOPE
+
+    VAR           shift e prosecuzione allo stato 1
+    IF            shift e prosecuzione allo stato 2
+    LPAREN        shift e prosecuzione allo stato 3
+    NOT           shift e prosecuzione allo stato 4
+    TRUEVAL       shift e prosecuzione allo stato 5
+    FALSEVAL      shift e prosecuzione allo stato 6
+    FUNCTIONDECL  shift e prosecuzione allo stato 7
+    EXITSTMT      shift e prosecuzione allo stato 8
+    ID            shift e prosecuzione allo stato 9
+    INTEGERTYPE   shift e prosecuzione allo stato 10
+    FLOATTYPE     shift e prosecuzione allo stato 11
+    BOOLEANTYPE   shift e prosecuzione allo stato 12
+    STRINGTYPE    shift e prosecuzione allo stato 13
+
+    LINE       prosecuzione allo stato 117
+    VARDECL    prosecuzione allo stato 15
+    IFSTMT     prosecuzione allo stato 16
+    LOOPSTMT   prosecuzione allo stato 17
+    FUNCTION   prosecuzione allo stato 18
+    LOGICEXPR  prosecuzione allo stato 19
+    EXPR       prosecuzione allo stato 20
+    TYPEVAL    prosecuzione allo stato 21
+>>>>>>> master
 
     VARDECL    prosecuzione allo stato 15
     IFSTMT     prosecuzione allo stato 16
@@ -1024,9 +2616,66 @@ stato 73
     EXPR       prosecuzione allo stato 19
     TYPEVAL    prosecuzione allo stato 20
 
+<<<<<<< HEAD
 
 stato 74
 
    13 IFSTMT: IF LPAREN LOGICEXPR RPAREN STARTOFSCOPE LINE ELSE LINE ENDOFSCOPE .
 
     $default  riduzione con la regola 13 (IFSTMT)
+=======
+stato 115
+
+   20 IFSTMT: IF LPAREN LOGICEXPR RPAREN STARTOFSCOPE LINE ENDOFSCOPE .
+
+    $default  riduzione con la regola 20 (IFSTMT)
+
+
+stato 116
+
+   23 FUNCTION: FUNCTIONDECL LPAREN VARDECL RPAREN STARTOFSCOPE LINE ENDOFSCOPE .
+
+    $default  riduzione con la regola 23 (FUNCTION)
+
+
+stato 117
+
+    2 LINE: LINE . EXITSTMT ENDOFSTMT
+    4     | LINE . VARDECL ENDOFSTMT
+    6     | LINE . EXPR ENDOFSTMT
+    8     | LINE . LOGICEXPR ENDOFSTMT
+   10     | LINE . IFSTMT ENDOFSTMT
+   12     | LINE . LOOPSTMT ENDOFSTMT
+   14     | LINE . FUNCTION ENDOFSTMT
+   19 IFSTMT: IF LPAREN LOGICEXPR RPAREN STARTOFSCOPE LINE ELSE LINE . ENDOFSCOPE
+
+    VAR           shift e prosecuzione allo stato 1
+    IF            shift e prosecuzione allo stato 2
+    ENDOFSCOPE    shift e prosecuzione allo stato 118
+    LPAREN        shift e prosecuzione allo stato 3
+    NOT           shift e prosecuzione allo stato 4
+    TRUEVAL       shift e prosecuzione allo stato 5
+    FALSEVAL      shift e prosecuzione allo stato 6
+    FUNCTIONDECL  shift e prosecuzione allo stato 7
+    EXITSTMT      shift e prosecuzione allo stato 34
+    ID            shift e prosecuzione allo stato 9
+    INTEGERTYPE   shift e prosecuzione allo stato 10
+    FLOATTYPE     shift e prosecuzione allo stato 11
+    BOOLEANTYPE   shift e prosecuzione allo stato 12
+    STRINGTYPE    shift e prosecuzione allo stato 13
+
+    VARDECL    prosecuzione allo stato 35
+    IFSTMT     prosecuzione allo stato 36
+    LOOPSTMT   prosecuzione allo stato 37
+    FUNCTION   prosecuzione allo stato 38
+    LOGICEXPR  prosecuzione allo stato 39
+    EXPR       prosecuzione allo stato 40
+    TYPEVAL    prosecuzione allo stato 21
+
+
+stato 118
+
+   19 IFSTMT: IF LPAREN LOGICEXPR RPAREN STARTOFSCOPE LINE ELSE LINE ENDOFSCOPE .
+
+    $default  riduzione con la regola 19 (IFSTMT)
+>>>>>>> master
