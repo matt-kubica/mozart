@@ -94,7 +94,7 @@
     Node *constructString(const char* id, char* value) {
         Node * node = (Node *) malloc(sizeof(Node));
         node -> id = id;
-        node -> value.s = strdup(value);
+        node -> value.s = removeQuoteMarks(value);
         node -> type = STRING;
         node -> next = NULL;
         return node;

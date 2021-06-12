@@ -14,6 +14,9 @@
     float getFloatValue(Node*);
     bool getBoolValue(Node*);
     char* getStringValue(Node*);
+    char* removeQuoteMarks(char* s);
+    char* stringConcat(const char* s1, const char* s2);
+    char* stringSubtract(char* s1, char* s2);
 
 
     void yyerror(const char* msg) { 
@@ -56,6 +59,19 @@
         return node -> value.s;
     }
 
+    char* removeQuoteMarks(char* s1){
+        char *res = (char *) malloc(strlen(s1)*sizeof(char));
+        int i = 1;
+        int j = 0;
+        while(i < strlen(s1)-1){
+            res[j] = s1[i];
+            i++;
+            j++;
+        }
+        
+        return res;
+    }
+
     char* stringConcat(const char* str1, const char* str2) {
         char newString[strlen(str1) + strlen(str2) + 1];
         strcpy(newString, str1);
@@ -65,21 +81,39 @@
 
     
     char* stringSubtract(char* a, char* b){
-        if(a >= b){
-            char res[strlen(a)];
+        char* res;
+        if(strlen(a) >= strlen(b)){
+            res = (char *) malloc(strlen(a)*sizeof(char));
         }
-        else{
-            char res[strlen(b)];
+        else if(strlen(a) < strlen(b)){
+            printf("subtrahend smaller than minhuend, subtraction not possible.");
+            return NULL;
         }
 
         int i = 0;
-        while(*a++ && *b++ && *a != '\0' && *b != '\0'){
-            if(strcmp(a, b) != 0){
-                res[i] = *a;
+        int j = 0;
+
+        int resI = 0;
+        
+        while(i < strlen(a)){
+            while(j < strlen(b)){
+                if(a[i] == b[j]){
+                    i++;
+                    j = 0;
+                    break;
+                }
+                j++;
+            }
+            
+            if(j != 0){
+                res[resI] = a[i];
+                resI++;
                 i++;
+                j = 0;
             }
         }
+
         return res;
-    }  //Just an idea, return a string which is string a without substring b
+    }  //Just an idea, return a string which is string a without char occurences of b
 
 #endif

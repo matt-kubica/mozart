@@ -31,7 +31,7 @@
                 yyerror("Operator not supported!");
                 return NULL;
             case STRING: 
-                result -> value.s = stringConcat(node1 -> value.s, node2 -> value.s);
+                result -> value.s = strcat(node1 -> value.s, node2 -> value.s);
                 result -> type = STRING;
                 return result;
         }    
