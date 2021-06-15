@@ -13,6 +13,7 @@ extern Scope* currentScope;
 
 %token VAR
 %token COLON
+%token SEMICOLON
 
 %token IF
 %token ELSE
@@ -71,27 +72,27 @@ extern Scope* currentScope;
 %token <VALUE> INTEGERTYPE FLOATTYPE BOOLEANTYPE STRINGTYPE
 %type <NODE> EXPR
 %type <NODE> LOGICEXPR 
-%type <NODE> TYPEVAL IFSTMT FUNCTION VARDECL
+%type <NODE> TYPEVAL IFSTMT LINE FUNCTION VARDECL
 %start LINE
 %%
 
-
 LINE        :                                               { ; }
             | LINE EXITSTMT ENDOFSTMT                       { exit(EXIT_SUCCESS); }
-            | LINE VARDECL ENDOFSTMT                        { ; }
+            | LINE VARDECL ENDOFSTMT                        { insert($2); }
+            | LINE VARDECL SEMICOLON                        { if($1 != NULL){$1->next = $2;}else{$$ = $2;} }
             | LINE EXPR ENDOFSTMT                           { printNode($2); }
             | LINE LOGICEXPR ENDOFSTMT                      { printNode($2); }
             | LINE IFSTMT ENDOFSTMT                         { ; }
             | LINE LOOPSTMT ENDOFSTMT                       { ; }
             | LINE FUNCTION ENDOFSTMT                       { ; }
-            | LINE ID LPAREN RPAREN ENDOFSTMT               { ; }
+            | LINE ID LPAREN RPAREN ENDOFSTMT               { Scope* fun = getScope($2); printTable(fun->symtab);}
             | LINE ID LPAREN TYPEKEYWORD RPAREN ENDOFSTMT   { ; }
             ;
 
 
 VARDECL     : VAR ID COLON INTKEYWORD ASSIGNMENT EXPR       {   
                                                                 typeCheck($6, INTEGER);
-                                                                insert(construct($2, $6));
+                                                                $$ = construct($2, $6);
                                                             }
             | VAR ID COLON FLOATKEYWORD ASSIGNMENT EXPR     { 
                                                                 typeCheck($6, FLOAT);
@@ -132,8 +133,8 @@ LOOPSTMT    : LOOP STARTOFSCOPE LINE ENDOFSCOPE         { /*insert number of tim
             ;
 
 
-FUNCTION    : FUNCTIONDECL ID LPAREN TYPEKEYWORD ID RPAREN STARTOFSCOPE LINE ENDOFSCOPE       { /*insert($8);*/ } 
-            | FUNCTIONDECL ID LPAREN RPAREN STARTOFSCOPE LINE ENDOFSCOPE                      { /*insert($6, nestedTable, $2);*/ }
+FUNCTION    : FUNCTIONDECL ID LPAREN TYPEKEYWORD ID RPAREN STARTOFSCOPE LINE ENDOFSCOPE       { ; } 
+            | FUNCTIONDECL ID LPAREN RPAREN STARTOFSCOPE LINE ENDOFSCOPE                      { enterScope($2); insert($6);}
             ;
 
 TYPEKEYWORD : INTKEYWORD
@@ -166,6 +167,7 @@ int main(void) {
     currentScope -> symtab = NULL;
     currentScope -> name = "global";
     currentScope -> parent = NULL;
+
     return yyparse();
 }
 

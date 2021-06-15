@@ -41,44 +41,45 @@
    enum yytokentype {
      VAR = 258,
      COLON = 259,
-     IF = 260,
-     ELSE = 261,
-     LOOP = 262,
-     STARTOFSCOPE = 263,
-     ENDOFSCOPE = 264,
-     ASSIGNMENT = 265,
-     LPAREN = 266,
-     RPAREN = 267,
-     ENDOFSTMT = 268,
-     PLUS = 269,
-     MINUS = 270,
-     PER = 271,
-     DIV = 272,
-     MOD = 273,
-     GREATEREQUAL = 274,
-     LOWEREQUAL = 275,
-     GREATER = 276,
-     LOWER = 277,
-     NOTEQUAL = 278,
-     NOT = 279,
-     EQUAL = 280,
-     OR = 281,
-     AND = 282,
-     TRUEVAL = 283,
-     FALSEVAL = 284,
-     INTKEYWORD = 285,
-     FLOATKEYWORD = 286,
-     BOOLEANKEYWORD = 287,
-     STRINGKEYWORD = 288,
-     SCALEKEYWORD = 289,
-     FUNCTIONDECL = 290,
-     RETURNSTMT = 291,
-     EXITSTMT = 292,
-     ID = 293,
-     INTEGERTYPE = 294,
-     FLOATTYPE = 295,
-     BOOLEANTYPE = 296,
-     STRINGTYPE = 297
+     SEMICOLON = 260,
+     IF = 261,
+     ELSE = 262,
+     LOOP = 263,
+     STARTOFSCOPE = 264,
+     ENDOFSCOPE = 265,
+     ASSIGNMENT = 266,
+     LPAREN = 267,
+     RPAREN = 268,
+     ENDOFSTMT = 269,
+     PLUS = 270,
+     MINUS = 271,
+     PER = 272,
+     DIV = 273,
+     MOD = 274,
+     GREATEREQUAL = 275,
+     LOWEREQUAL = 276,
+     GREATER = 277,
+     LOWER = 278,
+     NOTEQUAL = 279,
+     NOT = 280,
+     EQUAL = 281,
+     OR = 282,
+     AND = 283,
+     TRUEVAL = 284,
+     FALSEVAL = 285,
+     INTKEYWORD = 286,
+     FLOATKEYWORD = 287,
+     BOOLEANKEYWORD = 288,
+     STRINGKEYWORD = 289,
+     SCALEKEYWORD = 290,
+     FUNCTIONDECL = 291,
+     RETURNSTMT = 292,
+     EXITSTMT = 293,
+     ID = 294,
+     INTEGERTYPE = 295,
+     FLOATTYPE = 296,
+     BOOLEANTYPE = 297,
+     STRINGTYPE = 298
    };
 #endif
 
@@ -89,7 +90,7 @@ typedef union YYSTYPE
 {
 
 /* Line 1676 of yacc.c  */
-#line 59 "mozart-parser.y"
+#line 66 "mozart-parser.y"
 
     char* LEXEME;
     struct Node* NODE;
@@ -98,7 +99,7 @@ typedef union YYSTYPE
 
 
 /* Line 1676 of yacc.c  */
-#line 102 "mozart-parser.tab.h"
+#line 103 "mozart-parser.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

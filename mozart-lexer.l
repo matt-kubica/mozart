@@ -23,6 +23,7 @@ LOOP        \*({INTEGER}|{ID})\:\|
 [ ]         { ; }
 note        { return VAR; }
 \:          { return COLON; }
+\;          { return SEMICOLON; }
 
 \$          { return IF; }
 \@          { return ELSE; }

@@ -5,7 +5,9 @@
     #include "helpers.h"
 
     void printNode(Node*);
+    Scope* getScope(const char*);
     void printTable(Node* n);
+    void printAllTables();
     Node* construct(const char*, Node*);
     Node *constructInteger(const char*, int);
     Node *constructFloat(const char*, float);
@@ -15,15 +17,13 @@
     void enterScope(const char*);
     void leaveScope();
     Node* getNode(const char*);
-
     
     Scope* currentScope;
 
     void printNode(Node* node) {
-
         switch (node -> type) {
             case INTEGER:
-                printf("\nID: %s\nVALUE: %d\nTYPE: %s\n", 
+                printf("ID: %s\nVALUE: %d\nTYPE: %s\n", 
                     node -> id, 
                     node -> value.i, 
                     typeToString(node -> type)
@@ -53,11 +53,29 @@
             }
     }
     
+    Scope* getScope(const char * name){
+        Scope* scopePointer = currentScope;
+        while(scopePointer != NULL){
+            if(strcmp(scopePointer->name, name)){
+                return scopePointer;
+            }
+            scopePointer = scopePointer -> parent;
+        }
+    }
     void printTable(Node* head) {
         Node* node = head;
         while(node != NULL) {
             printNode(node);
             node = node -> next;
+        }
+    }
+
+    void printAllTables(){
+        Scope* pointer = currentScope;
+        while(pointer != NULL){
+            printf("\nTABLE NAME: %s\n", pointer->name);
+            printTable(pointer->symtab);
+            pointer = pointer->parent;
         }
     }
 
@@ -151,6 +169,8 @@
         }
         return NULL;
     }
+
+
 
 #endif
 
