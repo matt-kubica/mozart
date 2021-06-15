@@ -7,9 +7,9 @@
 
 
     void yyerror(const char*);
-    Type getType(Node*);
-    char* enumToString(Type);
-    void typeCheck(Node*, Type);
+    ValueType getType(Node*);
+    char* enumToString(ValueType);
+    void typeCheck(Node*, ValueType);
     int getIntValue(Node*);
     float getFloatValue(Node*);
     bool getBoolValue(Node*);
@@ -25,11 +25,11 @@
         exit(EXIT_FAILURE);
     }
 
-    Type getType(Node* node) {
+    ValueType getType(Node* node) {
         return node -> type;
     }
 
-    char* typeToString(Type type) {   
+    char* typeToString(ValueType type) {
         switch (type) {
             case INTEGER: return "integer";
             case FLOAT:   return "float";
@@ -38,7 +38,7 @@
         }
     }
 
-    void typeCheck(Node* node, Type type) {
+    void typeCheck(Node* node, ValueType type) {
         if (node -> type != type)
             yyerror("type declaration does not match!");
     }

@@ -8,7 +8,7 @@
 #include "utils/logicexpr.h"
 
 extern int yylex();
-extern SymbTable* parentTable;
+extern Scope* currentScope;
 %}
 
 %token VAR
@@ -73,30 +73,19 @@ extern SymbTable* parentTable;
 %type <NODE> LOGICEXPR 
 %type <NODE> TYPEVAL IFSTMT FUNCTION VARDECL
 %start LINE
-/*
-| EXITSTMT ENDOFSTMT                            { exit(EXIT_SUCCESS); }
-| VARDECL ENDOFSTMT                             { ; }
-| EXPR ENDOFSTMT                                { printNode($1); }
-| LOGICEXPR ENDOFSTMT                           { printNode($1); }
-| IFSTMT ENDOFSTMT                              { ; }
-| LOOPSTMT ENDOFSTMT                            { ; }
-| FUNCTION ENDOFSTMT                            { ; }
-*/
-
 %%
 
 
-LINE        : 
-                                                            {;}
+LINE        :                                               { ; }
             | LINE EXITSTMT ENDOFSTMT                       { exit(EXIT_SUCCESS); }
-            | LINE VARDECL ENDOFSTMT                        { ;}
-            | LINE EXPR ENDOFSTMT                           { printNode($2);}
+            | LINE VARDECL ENDOFSTMT                        { ; }
+            | LINE EXPR ENDOFSTMT                           { printNode($2); }
             | LINE LOGICEXPR ENDOFSTMT                      { printNode($2); }
             | LINE IFSTMT ENDOFSTMT                         { ; }
             | LINE LOOPSTMT ENDOFSTMT                       { ; }
             | LINE FUNCTION ENDOFSTMT                       { ; }
-            | LINE ID LPAREN RPAREN ENDOFSTMT               { ;}
-            | LINE ID LPAREN TYPEKEYWORD RPAREN ENDOFSTMT   { ;}
+            | LINE ID LPAREN RPAREN ENDOFSTMT               { ; }
+            | LINE ID LPAREN TYPEKEYWORD RPAREN ENDOFSTMT   { ; }
             ;
 
 
@@ -135,7 +124,7 @@ LOGICEXPR   : EXPR GREATER EXPR                             { $$ = greater($1, $
             ;
 
 IFSTMT      : IF LPAREN LOGICEXPR RPAREN STARTOFSCOPE LINE ELSE LINE ENDOFSCOPE     { /**/ }
-            | IF LPAREN LOGICEXPR RPAREN STARTOFSCOPE LINE ENDOFSCOPE               {newScope("if");}    
+            | IF LPAREN LOGICEXPR RPAREN STARTOFSCOPE LINE ENDOFSCOPE               { printf("Executed IFSTMT\n"); }
             ;
 
 
@@ -173,9 +162,10 @@ TYPEVAL     : INTEGERTYPE                                   { $$ = constructInte
 %%
  
 int main(void) {
-    parentTable = (SymbTable *) malloc(sizeof(SymbTable));
-    parentTable->scope = "global";
-    parentTable->parentSym = NULL;
+    currentScope = (Scope*) malloc(sizeof(Scope));
+    currentScope -> symtab = NULL;
+    currentScope -> name = "global";
+    currentScope -> parent = NULL;
     return yyparse();
 }
 

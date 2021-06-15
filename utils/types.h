@@ -6,12 +6,12 @@
     #include <stdbool.h>
     #include <string.h>
 
-    typedef enum Type {
+    typedef enum ValueType {
         INTEGER,
         FLOAT,
         BOOLEAN,
         STRING
-    } Type;
+    } ValueType;
 
     typedef union Value {
         int i;
@@ -20,17 +20,26 @@
         char *s;
     } Value;
 
+//    typedef enum ExpressionType {
+//
+//    } ExpressionType;
+//
+//    typedef struct Identifier {
+//
+//    };
+
     typedef struct Node {
-        const char* id;  
+        const char* id;
         Value value;
-        enum Type type ;
+        enum ValueType type ;
         struct Node* next;    
     } Node; 
 
-    typedef struct SymbTable{
-        char * scope;
-        Node* head;
-        struct SymbTable* parentSym;
-    }  SymbTable;
+    typedef struct Scope {
+        const char* name;
+        Node* symtab;
+        struct Scope* parent;
+    }  Scope;
+
     
 #endif

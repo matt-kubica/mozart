@@ -11,13 +11,13 @@
     Node *constructFloat(const char*, float);
     Node *constructBoolean(const char*, bool);
     Node *constructString(const char*, char*);
-    void insert(Node* n);
-    void newScope(char* name);
-    void goToParentScope();
-    Node* getNode(const char* id);
+    void insert(Node*);
+    void enterScope(const char*);
+    void leaveScope();
+    Node* getNode(const char*);
 
     
-    SymbTable* parentTable = NULL;
+    Scope* currentScope;
 
     void printNode(Node* node) {
 
@@ -53,8 +53,8 @@
             }
     }
     
-    void printTable(Node * head) {
-        Node * node = head;
+    void printTable(Node* head) {
+        Node* node = head;
         while(node != NULL) {
             printNode(node);
             node = node -> next;
@@ -105,47 +105,49 @@
     }
 
     void insert(Node* newNode) {
-        if (parentTable -> head == NULL) {
-           parentTable -> head = newNode;
+        if (currentScope -> symtab == NULL) {
+            currentScope -> symtab = newNode;
+            return;
         }
-        else {
-            Node * node = parentTable -> head;
-            while (node -> next != NULL) {
-                if (strcmp(newNode -> id, node -> id) == 0) 
-                    yyerror("Variable name already in use!");
-                node = node -> next;
-            }
-            if (strcmp(newNode -> id, node -> id) == 0) 
+
+        Node * node = currentScope -> symtab;
+        while (node -> next != NULL) {
+            printf("Iterating?");
+            if (strcmp(newNode -> id, node -> id) == 0)
                 yyerror("Variable name already in use!");
-            node -> next = newNode;
+            node = node -> next;
         }
+        if (strcmp(newNode -> id, node -> id) == 0)
+            yyerror("Variable name already in use!");
+        node -> next = newNode;
+
     }
 
-    void newScope(char* name){
-        SymbTable* childTable = (SymbTable *) malloc(sizeof(SymbTable));
-        childTable->scope = name;
-        childTable->parentSym = parentTable;
-        childTable ->head = NULL;
+    void enterScope(const char* name) {
+        Scope* newScope = (Scope *) malloc(sizeof(Scope));
+        newScope -> name = name;
+        newScope -> parent = currentScope;
+        newScope -> symtab = NULL;
 
-        parentTable = childTable;
+        currentScope = newScope;
     }
 
-    void goToParentScope(){
-        SymbTable* pointer = parentTable;
-        parentTable = pointer->parentSym;
+    void leaveScope() {
+        Scope* pointer = currentScope;
+        currentScope = pointer -> parent;
         free(pointer);
     }
 
     Node* getNode(const char* id) {
-        SymbTable* pointer = parentTable;
-        while(pointer != NULL){
-            Node *node = pointer -> head;
-            while (node != NULL) {
-                if (strcmp(node -> id, id) == 0)
-                    return node;
-                node = node -> next;
+        Scope* scopePointer = currentScope;
+        while(scopePointer != NULL){
+            Node *nodePointer = scopePointer -> symtab;
+            while (nodePointer != NULL) {
+                if (strcmp(nodePointer -> id, id) == 0)
+                    return nodePointer;
+                nodePointer = nodePointer -> next;
             }
-            pointer = pointer->parentSym;
+            scopePointer = scopePointer -> parent;
         }
         return NULL;
     }
