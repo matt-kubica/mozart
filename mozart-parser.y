@@ -9,6 +9,8 @@
 
 extern int yylex();
 extern Scope* currentScope;
+
+
 %}
 
 %token VAR
@@ -71,7 +73,7 @@ extern Scope* currentScope;
 %token <VALUE> INTEGERTYPE FLOATTYPE BOOLEANTYPE STRINGTYPE
 %type <NODE> EXPR
 %type <NODE> LOGICEXPR 
-%type <NODE> TYPEVAL IFSTMT FUNCTION VARDECL
+%type <NODE> TYPEVAL IFSTMT FUNCTION VARDECL LINE
 %start LINE
 %%
 
@@ -111,6 +113,21 @@ VARDECL     : VAR ID COLON INTKEYWORD ASSIGNMENT EXPR       {
                                                             }
             ;
 
+
+IFSTMT      : IF LPAREN LOGICEXPR RPAREN STARTOFSCOPE LINE ENDOFSCOPE ELSE STARTOFSCOPE LINE ENDOFSCOPE     { $$ = $3 ? $6 : $10; }
+            | IF LPAREN LOGICEXPR RPAREN STARTOFSCOPE LINE ENDOFSCOPE                                       { if ($3 -> value.b) $$ = $6; }
+            ;
+
+
+LOOPSTMT    : LOOP STARTOFSCOPE LINE ENDOFSCOPE         { /*insert number of times loop get executed into symbolTable */ }
+            ;
+
+
+FUNCTION    : FUNCTIONDECL ID LPAREN TYPEKEYWORD ID RPAREN STARTOFSCOPE LINE ENDOFSCOPE       { /*insert($8);*/ }
+            | FUNCTIONDECL ID LPAREN RPAREN STARTOFSCOPE LINE ENDOFSCOPE                      { /*insert($6, nestedTable, $2);*/ }
+            ;
+
+
 LOGICEXPR   : EXPR GREATER EXPR                             { $$ = greater($1, $3); }
             | EXPR GREATEREQUAL EXPR                        { $$ = greaterEqual($1, $3); }  
             | EXPR LOWER EXPR                               { $$ = lower($1, $3); }  
@@ -123,24 +140,6 @@ LOGICEXPR   : EXPR GREATER EXPR                             { $$ = greater($1, $
             | NOT EXPR                                      { $$ = not($2); }
             ;
 
-IFSTMT      : IF LPAREN LOGICEXPR RPAREN STARTOFSCOPE LINE ELSE LINE ENDOFSCOPE     { /**/ }
-            | IF LPAREN LOGICEXPR RPAREN STARTOFSCOPE LINE ENDOFSCOPE               { printf("Executed IFSTMT\n"); }
-            ;
-
-
-LOOPSTMT    : LOOP STARTOFSCOPE LINE ENDOFSCOPE         { /*insert number of times loop get executed into symbolTable */ } 
-            ;
-
-
-FUNCTION    : FUNCTIONDECL ID LPAREN TYPEKEYWORD ID RPAREN STARTOFSCOPE LINE ENDOFSCOPE       { /*insert($8);*/ } 
-            | FUNCTIONDECL ID LPAREN RPAREN STARTOFSCOPE LINE ENDOFSCOPE                      { /*insert($6, nestedTable, $2);*/ }
-            ;
-
-TYPEKEYWORD : INTKEYWORD
-            | FLOATKEYWORD  
-            | BOOLEANKEYWORD
-            | STRINGKEYWORD
-            ;
 
 EXPR        : EXPR PLUS EXPR                                { $$ = add($1, $3); }
             | EXPR MINUS EXPR                               { $$ = subtract($1, $3); }
@@ -157,6 +156,13 @@ TYPEVAL     : INTEGERTYPE                                   { $$ = constructInte
             | FLOATTYPE                                     { $$ = constructFloat(NULL, $1.f); }
             | BOOLEANTYPE                                   { $$ = constructBoolean(NULL, $1.b); } 
             | STRINGTYPE                                    { $$ = constructString(NULL, $1.s); }
+            ;
+
+
+TYPEKEYWORD : INTKEYWORD
+            | FLOATKEYWORD
+            | BOOLEANKEYWORD
+            | STRINGKEYWORD
             ;
             
 %%
