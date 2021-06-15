@@ -27,4 +27,10 @@
         struct Node* next;    
     } Node; 
 
+    typedef struct SymbTable{
+        char * scope;
+        Node* head;
+        struct SymbTable* parentSym;
+    }  SymbTable;
+    
 #endif

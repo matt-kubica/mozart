@@ -5,16 +5,19 @@
     #include "helpers.h"
 
     void printNode(Node*);
-    void printTable();
+    void printTable(Node* n);
     Node* construct(const char*, Node*);
     Node *constructInteger(const char*, int);
     Node *constructFloat(const char*, float);
     Node *constructBoolean(const char*, bool);
     Node *constructString(const char*, char*);
-    void insert(Node*);
+    void insert(Node* n);
+    void newScope(char* name);
+    void goToParentScope();
     Node* getNode(const char* id);
 
-    Node* head = NULL;
+    
+    SymbTable* parentTable = NULL;
 
     void printNode(Node* node) {
 
@@ -50,13 +53,14 @@
             }
     }
     
-    void printTable() {
+    void printTable(Node * head) {
         Node * node = head;
         while(node != NULL) {
             printNode(node);
             node = node -> next;
         }
     }
+
 
     Node* construct(const char* id, Node* node) {
         node -> id = id;
@@ -101,11 +105,11 @@
     }
 
     void insert(Node* newNode) {
-        if (head == NULL) {
-            head = newNode;
+        if (parentTable -> head == NULL) {
+           parentTable -> head = newNode;
         }
         else {
-            Node * node = head;
+            Node * node = parentTable -> head;
             while (node -> next != NULL) {
                 if (strcmp(newNode -> id, node -> id) == 0) 
                     yyerror("Variable name already in use!");
@@ -117,12 +121,31 @@
         }
     }
 
+    void newScope(char* name){
+        SymbTable* childTable = (SymbTable *) malloc(sizeof(SymbTable));
+        childTable->scope = name;
+        childTable->parentSym = parentTable;
+        childTable ->head = NULL;
+
+        parentTable = childTable;
+    }
+
+    void goToParentScope(){
+        SymbTable* pointer = parentTable;
+        parentTable = pointer->parentSym;
+        free(pointer);
+    }
+
     Node* getNode(const char* id) {
-        Node *node = head;
-        while (node != NULL) {
-            if (strcmp(node -> id, id) == 0)
-                return node;
-            node = node -> next;
+        SymbTable* pointer = parentTable;
+        while(pointer != NULL){
+            Node *node = pointer -> head;
+            while (node != NULL) {
+                if (strcmp(node -> id, id) == 0)
+                    return node;
+                node = node -> next;
+            }
+            pointer = pointer->parentSym;
         }
         return NULL;
     }

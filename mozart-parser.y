@@ -8,6 +8,7 @@
 #include "utils/logicexpr.h"
 
 extern int yylex();
+extern SymbTable* parentTable;
 %}
 
 %token VAR
@@ -70,7 +71,7 @@ extern int yylex();
 %token <VALUE> INTEGERTYPE FLOATTYPE BOOLEANTYPE STRINGTYPE
 %type <NODE> EXPR
 %type <NODE> LOGICEXPR 
-%type <NODE> TYPEVAL 
+%type <NODE> TYPEVAL IFSTMT FUNCTION VARDECL
 %start LINE
 /*
 | EXITSTMT ENDOFSTMT                            { exit(EXIT_SUCCESS); }
@@ -84,15 +85,18 @@ extern int yylex();
 
 %%
 
+
 LINE        : 
-            
+                                                            {;}
             | LINE EXITSTMT ENDOFSTMT                       { exit(EXIT_SUCCESS); }
-            | LINE VARDECL ENDOFSTMT                        { ; }
-            | LINE EXPR ENDOFSTMT                           { printNode($2); }
+            | LINE VARDECL ENDOFSTMT                        { ;}
+            | LINE EXPR ENDOFSTMT                           { printNode($2);}
             | LINE LOGICEXPR ENDOFSTMT                      { printNode($2); }
             | LINE IFSTMT ENDOFSTMT                         { ; }
             | LINE LOOPSTMT ENDOFSTMT                       { ; }
             | LINE FUNCTION ENDOFSTMT                       { ; }
+            | LINE ID LPAREN RPAREN ENDOFSTMT               { ;}
+            | LINE ID LPAREN TYPEKEYWORD RPAREN ENDOFSTMT   { ;}
             ;
 
 
@@ -118,21 +122,6 @@ VARDECL     : VAR ID COLON INTKEYWORD ASSIGNMENT EXPR       {
                                                             }
             ;
 
-
-IFSTMT      : IF LPAREN LOGICEXPR RPAREN STARTOFSCOPE LINE ELSE LINE ENDOFSCOPE     { ; }
-            | IF LPAREN LOGICEXPR RPAREN STARTOFSCOPE LINE ENDOFSCOPE               { ; }    
-            ;
-
-
-LOOPSTMT    : LOOP STARTOFSCOPE LINE ENDOFSCOPE         { /*insert number of times loop get executed into symbolTable */ } 
-            ;
-
-
-FUNCTION    : FUNCTIONDECL LPAREN VARDECL RPAREN STARTOFSCOPE LINE ENDOFSCOPE       { ; } 
-            | FUNCTIONDECL LPAREN RPAREN STARTOFSCOPE LINE ENDOFSCOPE               { ; }
-            ;
-
-
 LOGICEXPR   : EXPR GREATER EXPR                             { $$ = greater($1, $3); }
             | EXPR GREATEREQUAL EXPR                        { $$ = greaterEqual($1, $3); }  
             | EXPR LOWER EXPR                               { $$ = lower($1, $3); }  
@@ -144,8 +133,26 @@ LOGICEXPR   : EXPR GREATER EXPR                             { $$ = greater($1, $
             | EXPR AND EXPR                                 { $$ = and($1, $3); }  
             | NOT EXPR                                      { $$ = not($2); }
             ;
- 
-           
+
+IFSTMT      : IF LPAREN LOGICEXPR RPAREN STARTOFSCOPE LINE ELSE LINE ENDOFSCOPE     { /**/ }
+            | IF LPAREN LOGICEXPR RPAREN STARTOFSCOPE LINE ENDOFSCOPE               {newScope("if");}    
+            ;
+
+
+LOOPSTMT    : LOOP STARTOFSCOPE LINE ENDOFSCOPE         { /*insert number of times loop get executed into symbolTable */ } 
+            ;
+
+
+FUNCTION    : FUNCTIONDECL ID LPAREN TYPEKEYWORD ID RPAREN STARTOFSCOPE LINE ENDOFSCOPE       { /*insert($8);*/ } 
+            | FUNCTIONDECL ID LPAREN RPAREN STARTOFSCOPE LINE ENDOFSCOPE                      { /*insert($6, nestedTable, $2);*/ }
+            ;
+
+TYPEKEYWORD : INTKEYWORD
+            | FLOATKEYWORD  
+            | BOOLEANKEYWORD
+            | STRINGKEYWORD
+            ;
+
 EXPR        : EXPR PLUS EXPR                                { $$ = add($1, $3); }
             | EXPR MINUS EXPR                               { $$ = subtract($1, $3); }
             | EXPR PER EXPR                                 { $$ = multiply($1, $3);; }
@@ -166,6 +173,9 @@ TYPEVAL     : INTEGERTYPE                                   { $$ = constructInte
 %%
  
 int main(void) {
+    parentTable = (SymbTable *) malloc(sizeof(SymbTable));
+    parentTable->scope = "global";
+    parentTable->parentSym = NULL;
     return yyparse();
 }
 
