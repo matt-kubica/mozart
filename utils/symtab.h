@@ -5,7 +5,6 @@
     #include "helpers.h"
 
     void printNode(Node*);
-    Scope* getScope(const char*);
     void printTable(Node* n);
     void printAllTables();
     Node* construct(const char*, Node*);
@@ -53,15 +52,6 @@
             }
     }
     
-    Scope* getScope(const char * name){
-        Scope* scopePointer = currentScope;
-        while(scopePointer != NULL){
-            if(strcmp(scopePointer->name, name)){
-                return scopePointer;
-            }
-            scopePointer = scopePointer -> parent;
-        }
-    }
     void printTable(Node* head) {
         Node* node = head;
         while(node != NULL) {

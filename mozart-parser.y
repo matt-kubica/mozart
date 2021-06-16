@@ -68,7 +68,7 @@ extern Scope* currentScope;
     Value VALUE;
 }
 
-%token <LEXEME> ID 
+%token <LEXEME> ID
 %token <VALUE> INTEGERTYPE FLOATTYPE BOOLEANTYPE STRINGTYPE
 %type <NODE> EXPR
 %type <NODE> LOGICEXPR 
@@ -79,14 +79,15 @@ extern Scope* currentScope;
 LINE        :                                               { ; }
             | LINE EXITSTMT ENDOFSTMT                       { exit(EXIT_SUCCESS); }
             | LINE VARDECL ENDOFSTMT                        { insert($2); }
-            | LINE VARDECL SEMICOLON                        { if($1 != NULL){$1->next = $2;}else{$$ = $2;} }
+            | LINE VARDECL SEMICOLON                        { if($1 != NULL){$1->next = $2;} $$ = $2; }
             | LINE EXPR ENDOFSTMT                           { printNode($2); }
             | LINE LOGICEXPR ENDOFSTMT                      { printNode($2); }
-            | LINE IFSTMT ENDOFSTMT                         { ; }
-            | LINE LOOPSTMT ENDOFSTMT                       { ; }
-            | LINE FUNCTION ENDOFSTMT                       { ; }
-            | LINE ID LPAREN RPAREN ENDOFSTMT               { Scope* fun = getScope($2); printTable(fun->symtab);}
-            | LINE ID LPAREN TYPEKEYWORD RPAREN ENDOFSTMT   { ; }
+            | LINE IFSTMT ENDOFSTMT                         { printAllTables(); leaveScope(); }
+            | LINE LOOPSTMT ENDOFSTMT                                                   { printAllTables(); leaveScope(); }
+            | LINE INTKEYWORD FUNCTION EXPR ENDOFSCOPE ENDOFSTMT                        { typeCheck($4, INTEGER); printAllTables();leaveScope(); }
+            | LINE FLOATKEYWORD FUNCTION EXPR ENDOFSCOPE ENDOFSTMT                      { typeCheck($4, FLOAT); printAllTables();leaveScope(); }
+            | LINE BOOLEANKEYWORD FUNCTION EXPR ENDOFSCOPE ENDOFSTMT                    { typeCheck($4, BOOLEAN); printAllTables();leaveScope(); }
+            | LINE STRINGKEYWORD FUNCTION EXPR ENDOFSCOPE ENDOFSTMT                     { typeCheck($4, STRING); printAllTables();leaveScope(); }
             ;
 
 
@@ -96,19 +97,19 @@ VARDECL     : VAR ID COLON INTKEYWORD ASSIGNMENT EXPR       {
                                                             }
             | VAR ID COLON FLOATKEYWORD ASSIGNMENT EXPR     { 
                                                                 typeCheck($6, FLOAT);
-                                                                insert(construct($2, $6));
+                                                                $$ = construct($2, $6);
                                                             }
             | VAR ID COLON BOOLEANKEYWORD ASSIGNMENT EXPR   { 
                                                                 typeCheck($6, BOOLEAN);
-                                                                insert(construct($2, $6)); 
+                                                                $$ = construct($2, $6);
                                                             }
             | VAR ID COLON BOOLEANKEYWORD ASSIGNMENT LOGICEXPR{ 
                                                                 typeCheck($6, BOOLEAN);
-                                                                insert(construct($2, $6)); 
+                                                                $$ = construct($2, $6); 
                                                             }
             | VAR ID COLON STRINGKEYWORD ASSIGNMENT EXPR    { 
                                                                 typeCheck($6, STRING);
-                                                                insert(construct($2, $6)); 
+                                                                $$ = construct($2, $6);
                                                             }
             ;
 
@@ -124,23 +125,16 @@ LOGICEXPR   : EXPR GREATER EXPR                             { $$ = greater($1, $
             | NOT EXPR                                      { $$ = not($2); }
             ;
 
-IFSTMT      : IF LPAREN LOGICEXPR RPAREN STARTOFSCOPE LINE ELSE LINE ENDOFSCOPE     { /**/ }
-            | IF LPAREN LOGICEXPR RPAREN STARTOFSCOPE LINE ENDOFSCOPE               { printf("Executed IFSTMT\n"); }
+IFSTMT      : IF LPAREN LOGICEXPR RPAREN STARTOFSCOPE LINE ELSE LINE ENDOFSCOPE     { if($3->value.b == 1){enterScope("if"); insert($6);} else{enterScope("else"); insert($8);}}
+            | IF LPAREN LOGICEXPR RPAREN STARTOFSCOPE LINE ENDOFSCOPE               { enterScope("if"); insert($6);}
             ;
 
 
-LOOPSTMT    : LOOP STARTOFSCOPE LINE ENDOFSCOPE         { /*insert number of times loop get executed into symbolTable */ } 
+LOOPSTMT    : LOOP STARTOFSCOPE LINE ENDOFSCOPE         { enterScope("loop"); insert($3);} 
             ;
 
 
-FUNCTION    : FUNCTIONDECL ID LPAREN TYPEKEYWORD ID RPAREN STARTOFSCOPE LINE ENDOFSCOPE       { ; } 
-            | FUNCTIONDECL ID LPAREN RPAREN STARTOFSCOPE LINE ENDOFSCOPE                      { enterScope($2); insert($6);}
-            ;
-
-TYPEKEYWORD : INTKEYWORD
-            | FLOATKEYWORD  
-            | BOOLEANKEYWORD
-            | STRINGKEYWORD
+FUNCTION    : FUNCTIONDECL ID LPAREN RPAREN STARTOFSCOPE LINE RETURNSTMT                             {enterScope($2); insert($6);}
             ;
 
 EXPR        : EXPR PLUS EXPR                                { $$ = add($1, $3); }

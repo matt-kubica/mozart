@@ -114,6 +114,6 @@
         }
 
         return res;
-    }  //Just an idea, return a string which is string a without char occurences of b
+    } 
 
 #endif

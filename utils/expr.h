@@ -172,8 +172,4 @@
         return NULL;
     }
 
-    
-
-    /* TODO: definitions of other functions declared above */
-
 #endif
