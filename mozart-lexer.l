@@ -1,6 +1,6 @@
 %{
 #include "utils/types.h"
-#include "mozart-parser.tab.h"
+#include "y.tab.h"
 
 #include <stdio.h>
 #include <stdlib.h> 

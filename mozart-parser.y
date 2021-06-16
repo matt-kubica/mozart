@@ -9,6 +9,8 @@
 
 extern int yylex();
 extern Scope* currentScope;
+
+
 %}
 
 %token VAR
@@ -113,6 +115,7 @@ VARDECL     : VAR ID COLON INTKEYWORD ASSIGNMENT EXPR       {
                                                             }
             ;
 
+
 LOGICEXPR   : EXPR GREATER EXPR                             { $$ = greater($1, $3); }
             | EXPR GREATEREQUAL EXPR                        { $$ = greaterEqual($1, $3); }  
             | EXPR LOWER EXPR                               { $$ = lower($1, $3); }  
@@ -152,6 +155,13 @@ TYPEVAL     : INTEGERTYPE                                   { $$ = constructInte
             | FLOATTYPE                                     { $$ = constructFloat(NULL, $1.f); }
             | BOOLEANTYPE                                   { $$ = constructBoolean(NULL, $1.b); } 
             | STRINGTYPE                                    { $$ = constructString(NULL, $1.s); }
+            ;
+
+
+TYPEKEYWORD : INTKEYWORD
+            | FLOATKEYWORD
+            | BOOLEANKEYWORD
+            | STRINGKEYWORD
             ;
             
 %%

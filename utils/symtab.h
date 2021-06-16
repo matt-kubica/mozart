@@ -157,7 +157,7 @@
             }
             scopePointer = scopePointer -> parent;
         }
-        return NULL;
+        yyerror("Variable not declared");
     }
 
 
