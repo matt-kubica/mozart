@@ -127,18 +127,17 @@ LOGICEXPR   : EXPR GREATER EXPR                             { $$ = greater($1, $
             | TYPEVAL                                       { $$ = $1;  }
             ;
 
-IFSTMT      : IF LPAREN LOGICEXPR RPAREN STARTOFSCOPE LINE ELSE LINE ENDOFSCOPE      { if($3->value.b == 1){enterScope("if"); insert($6);} 
-                                                                                       else{enterScope("else"); insert($8);}
-                                                                                    }
-            | IF LPAREN LOGICEXPR RPAREN STARTOFSCOPE LINE ENDOFSCOPE                { enterScope("if"); insert($6);}
+IFSTMT      : IF LPAREN LOGICEXPR RPAREN STARTOFSCOPE LINE ENDOFSCOPE     { if ($3->value.b == 1)
+                                                                              { enterScope("if"); insert($6); }
+                                                                          }
             ;
 
 
-LOOPSTMT    : LOOP STARTOFSCOPE LINE ENDOFSCOPE                                      { enterScope("loop"); insert($3);}    
+LOOPSTMT    : LOOP STARTOFSCOPE LINE ENDOFSCOPE                                      { ; }
             ;
 
 
-FUNCTION    : FUNCTIONDECL ID LPAREN RPAREN STARTOFSCOPE LINE RETURNSTMT             { enterScope($2); insert($6);    }
+FUNCTION    : FUNCTIONDECL ID LPAREN RPAREN STARTOFSCOPE LINE RETURNSTMT             { enterScope($2); insert($6); }
             ;
 
 EXPR        : EXPR PLUS EXPR                                { $$ = add($1, $3); }
