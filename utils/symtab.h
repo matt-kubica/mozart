@@ -22,32 +22,64 @@
     void printNode(Node* node) {
         switch (node -> type) {
             case INTEGER:
-                printf("ID: %s\nVALUE: %d\nTYPE: %s\n", 
-                    node -> id, 
-                    node -> value.i, 
-                    typeToString(node -> type)
-                );
+                if(node ->id != NULL){
+                    printf("ID: %s\nVALUE: %d\nTYPE: %s\n", 
+                        node -> id, 
+                        node -> value.i, 
+                        typeToString(node -> type)
+                    );
+                }
+                else{
+                    printf("\nResult:\nVALUE: %d\nTYPE: %s\n", 
+                        node -> value.i, 
+                        typeToString(node -> type)
+                    );
+                }
                 break;
             case FLOAT:
-                printf("\nID: %s\nVALUE: %f\nTYPE: %s\n", 
-                    node -> id, 
-                    node -> value.f, 
-                    typeToString(node -> type)
-                );
+                if(node ->id != NULL){
+                    printf("ID: %s\nVALUE: %f\nTYPE: %s\n", 
+                        node -> id, 
+                        node -> value.f, 
+                        typeToString(node -> type)
+                    );
+                }
+                else{
+                    printf("\nResult:\nVALUE: %f\nTYPE: %s\n", 
+                        node -> value.f, 
+                        typeToString(node -> type)
+                    );
+                }
                 break;
             case BOOLEAN:
-                printf("\nID: %s\nVALUE: %d\nTYPE: %s\n", 
-                    node -> id, 
-                    node -> value.b, 
-                    typeToString(node -> type)
-                );
+                if(node -> id != NULL){
+                    printf("ID: %s\nVALUE: %d\nTYPE: %s\n", 
+                        node -> id, 
+                        node -> value.b, 
+                        typeToString(node -> type)
+                    );
+                }
+                else{
+                    printf("\nResult:\nVALUE: %d\nTYPE: %s\n", 
+                        node -> value.b, 
+                        typeToString(node -> type)
+                    );
+                }
                 break;
             case STRING:
-                printf("\nID: %s\nVALUE: %s\nTYPE: %s\n", 
-                    node -> id, 
-                    node -> value.s, 
-                    typeToString(node -> type)
-                );
+                if(node -> id != NULL){
+                    printf("ID: %s\nVALUE: %s\nTYPE: %s\n", 
+                        node -> id, 
+                        node -> value.s, 
+                        typeToString(node -> type)
+                    );
+                }
+                else{
+                    printf("\nResult:\nVALUE: %s\nTYPE: %s\n", 
+                        node -> value.s, 
+                        typeToString(node -> type)
+                    );
+                }
                 break;
             }
     }
@@ -64,7 +96,12 @@
         Scope* pointer = currentScope;
         while(pointer != NULL){
             printf("\nTABLE NAME: %s\n", pointer->name);
-            printTable(pointer->symtab);
+            if(pointer->symtab != NULL){
+                printTable(pointer->symtab);
+            }
+            else{
+                printf("Table is empty !\n");
+            }
             pointer = pointer->parent;
         }
     }

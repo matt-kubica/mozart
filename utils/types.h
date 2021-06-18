@@ -20,18 +20,6 @@
         char *s;
     } Value;
 
-//    typedef enum IdentifierType {
-//        UNDEFINED,
-//        FUNCTION,
-//        PARAMETER,
-//        VARIABLE
-//    } ExpressionType;
-//
-//    typedef struct Identifier {
-//        enum IdentifierType type;
-//        const char* name;
-//    };
-
     typedef struct Node {
         const char *id;
         union Value value;

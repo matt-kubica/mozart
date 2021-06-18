@@ -8,7 +8,7 @@
 
     void yyerror(const char*);
     ValueType getType(Node*);
-    char* enumToString(ValueType);
+    char* typeToString(ValueType);
     void typeCheck(Node*, ValueType);
     int getIntValue(Node*);
     float getFloatValue(Node*);
@@ -20,7 +20,6 @@
 
 
     void yyerror(const char* msg) { 
-        /* TODO: add line to error message */ 
         fprintf(stderr, "%s\n", msg);
         exit(EXIT_FAILURE);
     }

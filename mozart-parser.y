@@ -34,9 +34,6 @@ extern Scope* currentScope;
 %token DIV
 %token MOD
 
-%left PLUS MINUS 
-%left PER DIV MOD
-
 %token GREATEREQUAL
 %token LOWEREQUAL
 %token GREATER
@@ -47,22 +44,25 @@ extern Scope* currentScope;
 %token OR
 %token AND
 
-%left GREATEREQUAL LOWEREQUAL GREATER LOWER NOTEQUAL EQUAL OR
-%left NOT
+%left OR
 %left AND
+%left GREATEREQUAL LOWEREQUAL GREATER LOWER NOTEQUAL EQUAL 
+%left NOT
 
-%token TRUEVAL
-%token FALSEVAL
+%left PLUS MINUS 
+%left PER DIV MOD
 
 %token INTKEYWORD
 %token FLOATKEYWORD
 %token BOOLEANKEYWORD
 %token STRINGKEYWORD
-%token SCALEKEYWORD
 
 %token FUNCTIONDECL
 %token RETURNSTMT
 %token EXITSTMT
+
+%token <VALUE> INTEGERTYPE FLOATTYPE BOOLEANTYPE STRINGTYPE
+%token <LEXEME> ID
 
 %union{
     char* LEXEME;
@@ -70,19 +70,17 @@ extern Scope* currentScope;
     Value VALUE;
 }
 
-%token <LEXEME> ID
-%token <VALUE> INTEGERTYPE FLOATTYPE BOOLEANTYPE STRINGTYPE
-%type <NODE> EXPR
-%type <NODE> LOGICEXPR 
-%type <NODE> TYPEVAL IFSTMT LINE FUNCTION VARDECL
+%type <NODE> EXPR LOGICEXPR TYPEVAL IFSTMT LINE FUNCTION VARDECL
+
 %start LINE
 %%
 
 LINE        :                                               { ; }
             | LINE EXITSTMT ENDOFSTMT                       { exit(EXIT_SUCCESS); }
             | LINE VARDECL ENDOFSTMT                        { insert($2); }
-            | LINE VARDECL SEMICOLON                        { if($1 != NULL){$1->next = $2;} $$ = $2; }
+            | LINE VARDECL SEMICOLON                        { if($1 != NULL){$2->next = $1;} $$ = $2; }  
             | LINE EXPR ENDOFSTMT                           { printNode($2); }
+            | LINE EXPR SEMICOLON                           { ;}
             | LINE LOGICEXPR ENDOFSTMT                      { printNode($2); }
             | LINE IFSTMT ENDOFSTMT                         { printAllTables(); leaveScope(); }
             | LINE LOOPSTMT ENDOFSTMT                                                   { printAllTables(); leaveScope(); }
@@ -123,21 +121,24 @@ LOGICEXPR   : EXPR GREATER EXPR                             { $$ = greater($1, $
             | EXPR EQUAL EXPR                               { $$ = equal($1, $3); }  
             | EXPR NOTEQUAL EXPR                            { $$ = notEqual($1, $3); } 
             | LPAREN LOGICEXPR RPAREN                       { $$ = $2;}
-            | EXPR OR EXPR                                  { $$ = or($1, $3); } 
-            | EXPR AND EXPR                                 { $$ = and($1, $3); }  
-            | NOT EXPR                                      { $$ = not($2); }
+            | LOGICEXPR OR LOGICEXPR                        { $$ = or($1, $3); } 
+            | LOGICEXPR AND LOGICEXPR                       { $$ = and($1, $3); }  
+            | NOT LOGICEXPR                                 { $$ = not($2); }
+            | TYPEVAL                                       { $$ = $1;  }
             ;
 
-IFSTMT      : IF LPAREN LOGICEXPR RPAREN STARTOFSCOPE LINE ELSE LINE ENDOFSCOPE     { if($3->value.b == 1){enterScope("if"); insert($6);} else{enterScope("else"); insert($8);}}
-            | IF LPAREN LOGICEXPR RPAREN STARTOFSCOPE LINE ENDOFSCOPE               { enterScope("if"); insert($6);}
+IFSTMT      : IF LPAREN LOGICEXPR RPAREN STARTOFSCOPE LINE ELSE LINE ENDOFSCOPE      { if($3->value.b == 1){enterScope("if"); insert($6);} 
+                                                                                       else{enterScope("else"); insert($8);}
+                                                                                    }
+            | IF LPAREN LOGICEXPR RPAREN STARTOFSCOPE LINE ENDOFSCOPE                { enterScope("if"); insert($6);}
             ;
 
 
-LOOPSTMT    : LOOP STARTOFSCOPE LINE ENDOFSCOPE         { enterScope("loop"); insert($3);} 
+LOOPSTMT    : LOOP STARTOFSCOPE LINE ENDOFSCOPE                                      { enterScope("loop"); insert($3);}    
             ;
 
 
-FUNCTION    : FUNCTIONDECL ID LPAREN RPAREN STARTOFSCOPE LINE RETURNSTMT                             {enterScope($2); insert($6);}
+FUNCTION    : FUNCTIONDECL ID LPAREN RPAREN STARTOFSCOPE LINE RETURNSTMT             { enterScope($2); insert($6);    }
             ;
 
 EXPR        : EXPR PLUS EXPR                                { $$ = add($1, $3); }
@@ -151,17 +152,10 @@ EXPR        : EXPR PLUS EXPR                                { $$ = add($1, $3); 
             ;
 
 
-TYPEVAL     : INTEGERTYPE                                   { $$ = constructInteger(NULL, $1.i); /* TODO: memory dealocation */ }
-            | FLOATTYPE                                     { $$ = constructFloat(NULL, $1.f); }
+TYPEVAL     : INTEGERTYPE                                   { $$ = constructInteger(NULL, $1.i); }
+            | FLOATTYPE                                     { $$ = constructFloat(NULL, $1.f);   }
             | BOOLEANTYPE                                   { $$ = constructBoolean(NULL, $1.b); } 
-            | STRINGTYPE                                    { $$ = constructString(NULL, $1.s); }
-            ;
-
-
-TYPEKEYWORD : INTKEYWORD
-            | FLOATKEYWORD
-            | BOOLEANKEYWORD
-            | STRINGKEYWORD
+            | STRINGTYPE                                    { $$ = constructString(NULL, $1.s);  }
             ;
             
 %%

@@ -11,8 +11,8 @@ int convertToBoolean(const char*);
 
 BOOLEAN     (tune|outOfTune)
 DIGIT       [0-9]
-INTEGER     {DIGIT}*
-FLOAT       {INTEGER}\.?{DIGIT}+
+INTEGER     {DIGIT}+
+FLOAT       {INTEGER}\.?{INTEGER}
 STRING      \"(\\.|[^"\\])*\" 
 ID          [A-Za-z][A-Za-z{DIGIT}]*
 LOOP        \*({INTEGER}|{ID})\:\| 
@@ -41,7 +41,6 @@ integer     { return INTKEYWORD; }
 float       { return FLOATKEYWORD; }
 boolean     { return BOOLEANKEYWORD; }
 string      { return STRINGKEYWORD; }
-scale       { return SCALEKEYWORD; }
 
  /* arithmetic operators */
 \+          { return PLUS; }
@@ -59,9 +58,7 @@ minor       { return LOWER; }
 \!\=        { return NOTEQUAL; }
 \!          { return NOT; }
 \^          { return OR; }
-\&         {return AND; }
-
- /* boolean values */
+\&          {return AND; }
 
  /* functions */
 chord       { return FUNCTIONDECL; }
