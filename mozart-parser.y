@@ -128,7 +128,7 @@ LOGICEXPR   : EXPR GREATER EXPR                             { $$ = greater($1, $
             ;
 
 IFSTMT      : IF LPAREN LOGICEXPR RPAREN STARTOFSCOPE LINE ELSE LINE ENDOFSCOPE      { if($3->value.b == 1){enterScope("if"); insert($6);} 
-                                                                                       else{enterScope("else"); insert($8);}
+                                                                                       else{enterScope("else"); printNode($8); insert($8);}
                                                                                     }
             | IF LPAREN LOGICEXPR RPAREN STARTOFSCOPE LINE ENDOFSCOPE                { enterScope("if"); insert($6);}
             ;

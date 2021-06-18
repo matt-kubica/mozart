@@ -100,6 +100,7 @@
                 printTable(pointer->symtab);
             }
             else{
+                printTable(pointer->symtab);
                 printf("Table is empty !\n");
             }
             pointer = pointer->parent;
