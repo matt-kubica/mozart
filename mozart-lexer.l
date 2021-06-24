@@ -14,7 +14,7 @@ DIGIT       [0-9]
 INTEGER     {DIGIT}+
 FLOAT       {INTEGER}\.?{INTEGER}
 STRING      \"(\\.|[^"\\])*\" 
-ID          [A-Za-z][A-Za-z{DIGIT}]*
+ID          [A-Za-z]([A-Za-z]|{INTEGER})*
 LOOP        \*({INTEGER}|{ID})\:\| 
 
 

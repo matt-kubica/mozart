@@ -158,7 +158,6 @@
 
         Node * node = currentScope -> symtab;
         while (node -> next != NULL) {
-            printf("Iterating?");
             if (strcmp(newNode -> id, node -> id) == 0)
                 yyerror("Variable name already in use!");
             node = node -> next;
@@ -181,6 +180,7 @@
     void leaveScope() {
         Scope* pointer = currentScope;
         currentScope = pointer -> parent;
+        
         free(pointer);
     }
 

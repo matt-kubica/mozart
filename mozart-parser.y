@@ -70,26 +70,23 @@ extern Scope* currentScope;
     Value VALUE;
 }
 
-%type <NODE> EXPR LOGICEXPR TYPEVAL IFSTMT LINE FUNCTION VARDECL
+%type <NODE> EXPR LOGICEXPR TYPEVAL IFSTMT LINE FUNCTION VARDECL NESTEDVARDECL
+
 
 %start LINE
 %%
-
-LINE        :                                               { ; }
-            | LINE EXITSTMT ENDOFSTMT                       { exit(EXIT_SUCCESS); }
-            | LINE VARDECL ENDOFSTMT                        { insert($2); }
-            | LINE VARDECL SEMICOLON                        { if($1 != NULL){$2->next = $1;} $$ = $2; }  
-            | LINE EXPR ENDOFSTMT                           { printNode($2); }
-            | LINE EXPR SEMICOLON                           { ;}
-            | LINE LOGICEXPR ENDOFSTMT                      { printNode($2); }
-            | LINE IFSTMT ENDOFSTMT                         { printAllTables(); leaveScope(); }
+LINE        :                                                                           { ; }
+            | LINE EXITSTMT ENDOFSTMT                                                   { exit(EXIT_SUCCESS); }
+            | LINE VARDECL ENDOFSTMT                                                    { insert($2); }
+            | LINE EXPR ENDOFSTMT                                                       { printNode($2); }
+            | LINE LOGICEXPR ENDOFSTMT                                                  { printNode($2); }
+            | LINE IFSTMT ENDOFSTMT                                                     { ;}
             | LINE LOOPSTMT ENDOFSTMT                                                   { printAllTables(); leaveScope(); }
             | LINE INTKEYWORD FUNCTION EXPR ENDOFSCOPE ENDOFSTMT                        { typeCheck($4, INTEGER); printAllTables();leaveScope(); }
             | LINE FLOATKEYWORD FUNCTION EXPR ENDOFSCOPE ENDOFSTMT                      { typeCheck($4, FLOAT); printAllTables();leaveScope(); }
             | LINE BOOLEANKEYWORD FUNCTION EXPR ENDOFSCOPE ENDOFSTMT                    { typeCheck($4, BOOLEAN); printAllTables();leaveScope(); }
             | LINE STRINGKEYWORD FUNCTION EXPR ENDOFSCOPE ENDOFSTMT                     { typeCheck($4, STRING); printAllTables();leaveScope(); }
             ;
-
 
 VARDECL     : VAR ID COLON INTKEYWORD ASSIGNMENT EXPR       {   
                                                                 typeCheck($6, INTEGER);
@@ -125,19 +122,50 @@ LOGICEXPR   : EXPR GREATER EXPR                             { $$ = greater($1, $
             | LOGICEXPR AND LOGICEXPR                       { $$ = and($1, $3); }  
             | NOT LOGICEXPR                                 { $$ = not($2); }
             | TYPEVAL                                       { $$ = $1;  }
+            | ID                                            { $$ = getNode($1);}
             ;
 
-IFSTMT      : IF LPAREN LOGICEXPR RPAREN STARTOFSCOPE LINE ENDOFSCOPE     { if ($3->value.b == 1)
-                                                                              { enterScope("if"); insert($6); }
-                                                                          }
+NESTEDVARDECL : SEMICOLON {$$ = NULL;}
+                |VARDECL SEMICOLON                                                                   {$$ = $1;}
+                | VARDECL VARDECL                                                                    {$1-> next = $2;}
+
+IFSTMT      : IF LPAREN LOGICEXPR RPAREN STARTOFSCOPE NESTEDVARDECL ELSE NESTEDVARDECL ENDOFSCOPE     {
+                                                                                                        if ($3->value.b == 1)
+                                                                                                        { enterScope("if"); insert($6); }
+
+                                                                                                        else
+                                                                                                        {
+                                                                                                            enterScope("else"); insert($8);
+                                                                                                        }
+                                                                                                        printAllTables();
+                                                                                                        leaveScope();
+                                                                                                        }
+
+            |IF LPAREN LOGICEXPR RPAREN STARTOFSCOPE NESTEDVARDECL ENDOFSCOPE                           {
+                                                                                                            if ($3->value.b == 1)
+                                                                                                            {
+                                                                                                                enterScope("if"); insert($6);
+                                                                                                                printAllTables();
+                                                                                                                leaveScope(); 
+                                                                                                            }
+                                                                                                        }
+                                                                                                        
+            |IF LPAREN LOGICEXPR RPAREN STARTOFSCOPE NESTEDVARDECL IFSTMT ENDOFSCOPE                    {if ($3->value.b == 1)
+                                                                                                            { enterScope("if"); insert($6); 
+                                                                                                            printAllTables();
+                                                                                                            leaveScope();
+                                                                                                        }
+                                                                                                        }
+              
             ;
 
 
-LOOPSTMT    : LOOP STARTOFSCOPE LINE ENDOFSCOPE                                      { ; }
+LOOPSTMT    : LOOP STARTOFSCOPE LINE ENDOFSCOPE                                                { enterScope("loop"); }
             ;
 
 
-FUNCTION    : FUNCTIONDECL ID LPAREN RPAREN STARTOFSCOPE LINE RETURNSTMT             { enterScope($2); insert($6); }
+FUNCTION    : 
+              FUNCTIONDECL ID LPAREN RPAREN STARTOFSCOPE NESTEDVARDECL LINE NESTEDVARDECL RETURNSTMT             { enterScope($2); insert($6); insert($8);}
             ;
 
 EXPR        : EXPR PLUS EXPR                                { $$ = add($1, $3); }

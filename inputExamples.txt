@@ -1,0 +1,79 @@
+Input examples:
+
+EXPR:
+for int
+10%6.
+
+for float
+6.7 + 9.3.
+7.3 / 2.0.
+
+for boolean types arithmetic expression are not supported.
+
+for strings
+"ciao" + " a te".
+"panettone" - "et".
+
+ASSOCIATIVITY
+3+3*5.
+tune & !tune ^ tune.
+tune & !tune ^ outOfTune.
+
+note a : integer := 90.
+note b : integer := 53.
+a minor b ^ a major b & !outOfTune.
+
+
+VARDECL
+note music : integer := 9.
+note piano : float := 4.5.
+note g : boolean := tune.
+note key : boolean := tune.
+note guitar : string := "guitar".
+note pianoS : string := "piano".
+
+INVALID TYPES FOR VALDECL
+note bacon : integer := tune.
+
+music.
+piano.
+g.
+key.
+guitar.
+
+LOGICAL EXPRESSIONS
+g & key.
+g ^ key.
+!g.
+guitar major pianoS.
+guitar minor pianoS.
+
+
+ 
+
+INCOMPATIBLE TYPES EXAMPLES
+music + piano.
+
+IF STMT
+$(tune & outOfTune ^ 5 major 3) play
+note f : string := "f";
+@
+note b : string := "b";
+stop.
+
+$(tune & outOfTune)play
+note f : string := "f";
+@
+note b : string := "b";
+stop.
+
+FUNCTION DECLARATION
+boolean chord isTune() play note l : boolean := tune; note p : boolean := outOfTune; #l stop.
+
+TYPECHECK ON FUNCTION
+boolean chord isTune() play note l : boolean := tune; note p : boolean := outOfTune; #6 stop.
+
+
+
+
+
