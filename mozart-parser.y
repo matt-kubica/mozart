@@ -80,93 +80,83 @@ LINE        :                                                                   
             | LINE VARDECL ENDOFSTMT                                                    { insert($2); }
             | LINE EXPR ENDOFSTMT                                                       { printNode($2); }
             | LINE LOGICEXPR ENDOFSTMT                                                  { printNode($2); }
-            | LINE IFSTMT ENDOFSTMT                                                     { ;}
+            | LINE IFSTMT ENDOFSTMT                                                     { ; }
             | LINE LOOPSTMT ENDOFSTMT                                                   { printAllTables(); leaveScope(); }
-            | LINE INTKEYWORD FUNCTION EXPR ENDOFSCOPE ENDOFSTMT                        { typeCheck($4, INTEGER); printAllTables();leaveScope(); }
-            | LINE FLOATKEYWORD FUNCTION EXPR ENDOFSCOPE ENDOFSTMT                      { typeCheck($4, FLOAT); printAllTables();leaveScope(); }
-            | LINE BOOLEANKEYWORD FUNCTION EXPR ENDOFSCOPE ENDOFSTMT                    { typeCheck($4, BOOLEAN); printAllTables();leaveScope(); }
-            | LINE STRINGKEYWORD FUNCTION EXPR ENDOFSCOPE ENDOFSTMT                     { typeCheck($4, STRING); printAllTables();leaveScope(); }
-            ;
-
-VARDECL     : VAR ID COLON INTKEYWORD ASSIGNMENT EXPR       {   
-                                                                typeCheck($6, INTEGER);
-                                                                $$ = construct($2, $6);
-                                                            }
-            | VAR ID COLON FLOATKEYWORD ASSIGNMENT EXPR     { 
-                                                                typeCheck($6, FLOAT);
-                                                                $$ = construct($2, $6);
-                                                            }
-            | VAR ID COLON BOOLEANKEYWORD ASSIGNMENT EXPR   { 
-                                                                typeCheck($6, BOOLEAN);
-                                                                $$ = construct($2, $6);
-                                                            }
-            | VAR ID COLON BOOLEANKEYWORD ASSIGNMENT LOGICEXPR{ 
-                                                                typeCheck($6, BOOLEAN);
-                                                                $$ = construct($2, $6); 
-                                                            }
-            | VAR ID COLON STRINGKEYWORD ASSIGNMENT EXPR    { 
-                                                                typeCheck($6, STRING);
-                                                                $$ = construct($2, $6);
-                                                            }
+            | LINE INTKEYWORD FUNCTION EXPR ENDOFSCOPE ENDOFSTMT                        { typeCheck($4, INTEGER); printAllTables(); leaveScope(); }
+            | LINE FLOATKEYWORD FUNCTION EXPR ENDOFSCOPE ENDOFSTMT                      { typeCheck($4, FLOAT); printAllTables(); leaveScope(); }
+            | LINE BOOLEANKEYWORD FUNCTION EXPR ENDOFSCOPE ENDOFSTMT                    { typeCheck($4, BOOLEAN); printAllTables(); leaveScope(); }
+            | LINE STRINGKEYWORD FUNCTION EXPR ENDOFSCOPE ENDOFSTMT                     { typeCheck($4, STRING); printAllTables(); leaveScope(); }
             ;
 
 
-LOGICEXPR   : EXPR GREATER EXPR                             { $$ = greater($1, $3); }
-            | EXPR GREATEREQUAL EXPR                        { $$ = greaterEqual($1, $3); }  
-            | EXPR LOWER EXPR                               { $$ = lower($1, $3); }  
-            | EXPR LOWEREQUAL EXPR                          { $$ = lowerEqual($1, $3); }  
-            | EXPR EQUAL EXPR                               { $$ = equal($1, $3); }  
-            | EXPR NOTEQUAL EXPR                            { $$ = notEqual($1, $3); } 
-            | LPAREN LOGICEXPR RPAREN                       { $$ = $2;}
-            | LOGICEXPR OR LOGICEXPR                        { $$ = or($1, $3); } 
-            | LOGICEXPR AND LOGICEXPR                       { $$ = and($1, $3); }  
-            | NOT LOGICEXPR                                 { $$ = not($2); }
-            | TYPEVAL                                       { $$ = $1;  }
-            | ID                                            { $$ = getNode($1);}
+VARDECL     : VAR ID COLON INTKEYWORD ASSIGNMENT EXPR                                   {
+                                                                                            typeCheck($6, INTEGER);
+                                                                                            $$ = construct($2, $6);
+                                                                                        }
+            | VAR ID COLON FLOATKEYWORD ASSIGNMENT EXPR                                 {
+                                                                                            typeCheck($6, FLOAT);
+                                                                                            $$ = construct($2, $6);
+                                                                                        }
+            | VAR ID COLON BOOLEANKEYWORD ASSIGNMENT EXPR                               {
+                                                                                            typeCheck($6, BOOLEAN);
+                                                                                            $$ = construct($2, $6);
+                                                                                        }
+            | VAR ID COLON BOOLEANKEYWORD ASSIGNMENT LOGICEXPR                          {
+                                                                                            typeCheck($6, BOOLEAN);
+                                                                                            $$ = construct($2, $6);
+                                                                                        }
+            | VAR ID COLON STRINGKEYWORD ASSIGNMENT EXPR                                {
+                                                                                            typeCheck($6, STRING);
+                                                                                            $$ = construct($2, $6);
+                                                                                        }
             ;
 
-NESTEDVARDECL : SEMICOLON {$$ = NULL;}
-                |VARDECL SEMICOLON                                                                   {$$ = $1;}
-                | VARDECL VARDECL                                                                    {$1-> next = $2;}
 
-IFSTMT      : IF LPAREN LOGICEXPR RPAREN STARTOFSCOPE NESTEDVARDECL ELSE NESTEDVARDECL ENDOFSCOPE     {
-                                                                                                        if ($3->value.b == 1)
-                                                                                                        { enterScope("if"); insert($6); }
+NESTEDVARDECL : SEMICOLON                                                               { $$ = NULL; }
+              | VARDECL SEMICOLON                                                       { $$ = $1; }
+              | VARDECL VARDECL                                                         { $1 -> next = $2; }
+              ;
 
-                                                                                                        else
-                                                                                                        {
-                                                                                                            enterScope("else"); insert($8);
-                                                                                                        }
-                                                                                                        printAllTables();
-                                                                                                        leaveScope();
+
+IFSTMT      : IF LPAREN LOGICEXPR RPAREN STARTOFSCOPE NESTEDVARDECL ELSE NESTEDVARDECL ENDOFSCOPE       {
+                                                                                                            if ($3 -> value.b == 1) { enterScope("if"); insert($6); }
+                                                                                                            else { enterScope("else"); insert($8); }
+                                                                                                            printAllTables();
+                                                                                                            leaveScope();
                                                                                                         }
 
-            |IF LPAREN LOGICEXPR RPAREN STARTOFSCOPE NESTEDVARDECL ENDOFSCOPE                           {
-                                                                                                            if ($3->value.b == 1)
-                                                                                                            {
+            | IF LPAREN LOGICEXPR RPAREN STARTOFSCOPE NESTEDVARDECL ENDOFSCOPE                          {
+                                                                                                            if ($3->value.b == 1) {
                                                                                                                 enterScope("if"); insert($6);
                                                                                                                 printAllTables();
                                                                                                                 leaveScope(); 
                                                                                                             }
                                                                                                         }
-                                                                                                        
-            |IF LPAREN LOGICEXPR RPAREN STARTOFSCOPE NESTEDVARDECL IFSTMT ENDOFSCOPE                    {if ($3->value.b == 1)
-                                                                                                            { enterScope("if"); insert($6); 
-                                                                                                            printAllTables();
-                                                                                                            leaveScope();
-                                                                                                        }
-                                                                                                        }
-              
             ;
 
 
-LOOPSTMT    : LOOP STARTOFSCOPE LINE ENDOFSCOPE                                                { enterScope("loop"); }
+LOOPSTMT    : LOOP STARTOFSCOPE LINE ENDOFSCOPE                                                         { enterScope("loop"); }
             ;
 
 
-FUNCTION    : 
-              FUNCTIONDECL ID LPAREN RPAREN STARTOFSCOPE NESTEDVARDECL LINE NESTEDVARDECL RETURNSTMT             { enterScope($2); insert($6); insert($8);}
+FUNCTION    : FUNCTIONDECL ID LPAREN RPAREN STARTOFSCOPE NESTEDVARDECL LINE NESTEDVARDECL RETURNSTMT    { enterScope($2); insert($6); insert($8);}
             ;
+
+
+LOGICEXPR   : EXPR GREATER EXPR                             { $$ = greater($1, $3); }
+            | EXPR GREATEREQUAL EXPR                        { $$ = greaterEqual($1, $3); }
+            | EXPR LOWER EXPR                               { $$ = lower($1, $3); }
+            | EXPR LOWEREQUAL EXPR                          { $$ = lowerEqual($1, $3); }
+            | EXPR EQUAL EXPR                               { $$ = equal($1, $3); }
+            | EXPR NOTEQUAL EXPR                            { $$ = notEqual($1, $3); }
+            | LPAREN LOGICEXPR RPAREN                       { $$ = $2;}
+            | LOGICEXPR OR LOGICEXPR                        { $$ = or($1, $3); }
+            | LOGICEXPR AND LOGICEXPR                       { $$ = and($1, $3); }
+            | NOT LOGICEXPR                                 { $$ = not($2); }
+            | TYPEVAL                                       { $$ = $1;  }
+            | ID                                            { $$ = getNode($1);}
+            ;
+
 
 EXPR        : EXPR PLUS EXPR                                { $$ = add($1, $3); }
             | EXPR MINUS EXPR                               { $$ = subtract($1, $3); }
